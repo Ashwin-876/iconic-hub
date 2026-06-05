@@ -1967,68 +1967,107 @@ export default function AnalyticsDashboard() {
             {/* VIEWPORT: SETTINGS & FEATURE FLAGS */}
             {activeTab === 'settings' && (
               <div className="space-y-6 animate-fadeIn">
-                
-                {/* Feature flags viewport */}
+                             {/* Feature flags viewport */}
                 {activeSubTab === 'flags' && (
-                  <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 text-left space-y-6">
-                    <div>
-                      <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">LMS Platform Feature Flags</h4>
-                      <p className="text-xs text-slate-500">Activate or deactivate specific platform modules dynamically in production</p>
+                  <div className="space-y-6 text-left">
+                    {/* Stat summaries */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Active Features</span>
+                        <h3 className="text-2xl font-extrabold text-white mt-1">
+                          {Object.values(featureFlags).filter(Boolean).length} / {Object.keys(featureFlags).length}
+                        </h3>
+                        <p className="text-[10px] text-emerald-400 mt-1.5 font-semibold">Live modules running</p>
+                      </div>
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Experimental Modules</span>
+                        <h3 className="text-2xl font-extrabold text-amber-500 mt-1">2 Pending</h3>
+                        <p className="text-[10px] text-slate-500 mt-1.5">Awaiting sandbox verification</p>
+                      </div>
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Deployment Status</span>
+                        <h3 className="text-2xl font-extrabold text-emerald-400 mt-1">Optimal</h3>
+                        <p className="text-[10px] text-slate-500 mt-1.5">No critical flags overrides</p>
+                      </div>
                     </div>
 
-                    <div className="divide-y divide-slate-900">
+                    {/* Redesigned grid list */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       
-                      <div className="py-4 flex justify-between items-center gap-4">
-                        <div>
-                          <p className="text-xs font-bold text-slate-200">AI Coding Sandbox & Playground</p>
-                          <p className="text-[10px] text-slate-500">Enables dynamic workspace compilers and Gemini code repair agents</p>
+                      {/* Flag 1 */}
+                      <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 flex flex-col justify-between gap-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-start">
+                            <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 text-[9px] font-bold uppercase tracking-wider">Workspace Integration</span>
+                            <span className={`w-2 h-2 rounded-full ${featureFlags.aiSandboxPlayground ? 'bg-emerald-400' : 'bg-slate-700'}`}></span>
+                          </div>
+                          <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">AI Sandbox & Playground</h4>
+                          <p className="text-[11px] text-slate-500 leading-relaxed">Enables dynamic client-side node compilers and auto-completing Gemini workspace coaches.</p>
                         </div>
-                        <button 
-                          onClick={() => handleToggleFlag('aiSandboxPlayground')}
-                          className={`w-12 h-6.5 rounded-full p-1 transition-colors duration-300 relative ${
-                            featureFlags.aiSandboxPlayground ? 'bg-orange-500' : 'bg-slate-900'
-                          }`}
-                        >
-                          <span className={`w-4.5 h-4.5 rounded-full bg-white block transition-transform duration-300 ${
-                            featureFlags.aiSandboxPlayground ? 'translate-x-5.5' : 'translate-x-0'
-                          }`} />
-                        </button>
+                        <div className="pt-4 border-t border-slate-900 flex justify-between items-center">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Status: {featureFlags.aiSandboxPlayground ? 'Active' : 'Disabled'}</span>
+                          <button 
+                            onClick={() => handleToggleFlag('aiSandboxPlayground')}
+                            className={`flex items-center gap-1 px-3.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all ${
+                              featureFlags.aiSandboxPlayground 
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20' 
+                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" /> Toggle Flag
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="py-4 flex justify-between items-center gap-4">
-                        <div>
-                          <p className="text-xs font-bold text-slate-200">Real-Time Peer Collaboration</p>
-                          <p className="text-[10px] text-slate-500">Allows multiple students to code together in the same editor sandbox</p>
+                      {/* Flag 2 */}
+                      <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 flex flex-col justify-between gap-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-start">
+                            <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[9px] font-bold uppercase tracking-wider">Collaboration Node</span>
+                            <span className={`w-2 h-2 rounded-full ${featureFlags.realtimeCollaboration ? 'bg-emerald-400' : 'bg-slate-700'}`}></span>
+                          </div>
+                          <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">Real-Time Peer Collaboration</h4>
+                          <p className="text-[11px] text-slate-500 leading-relaxed">Allows multiple learners to synchronize code blocks inside the editor using operational transforms.</p>
                         </div>
-                        <button 
-                          onClick={() => handleToggleFlag('realtimeCollaboration')}
-                          className={`w-12 h-6.5 rounded-full p-1 transition-colors duration-300 relative ${
-                            featureFlags.realtimeCollaboration ? 'bg-orange-500' : 'bg-slate-900'
-                          }`}
-                        >
-                          <span className={`w-4.5 h-4.5 rounded-full bg-white block transition-transform duration-300 ${
-                            featureFlags.realtimeCollaboration ? 'translate-x-5.5' : 'translate-x-0'
-                          }`} />
-                        </button>
+                        <div className="pt-4 border-t border-slate-900 flex justify-between items-center">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Status: {featureFlags.realtimeCollaboration ? 'Active' : 'Disabled'}</span>
+                          <button 
+                            onClick={() => handleToggleFlag('realtimeCollaboration')}
+                            className={`flex items-center gap-1 px-3.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all ${
+                              featureFlags.realtimeCollaboration 
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20' 
+                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" /> Toggle Flag
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="py-4 flex justify-between items-center gap-4">
-                        <div>
-                          <p className="text-xs font-bold text-slate-200">Automatic Payout Verification</p>
-                          <p className="text-[10px] text-slate-500">Bypasses admin approval for monthly instructor payout transactions</p>
+                      {/* Flag 3 */}
+                      <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 flex flex-col justify-between gap-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-start">
+                            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[9px] font-bold uppercase tracking-wider">Finance Automation</span>
+                            <span className={`w-2 h-2 rounded-full ${featureFlags.payoutAutoApprove ? 'bg-emerald-400' : 'bg-slate-700'}`}></span>
+                          </div>
+                          <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">Automatic Payout Verification</h4>
+                          <p className="text-[11px] text-slate-500 leading-relaxed">Bypasses manual auditor confirmations for monthly recurring instructor transactions.</p>
                         </div>
-                        <button 
-                          onClick={() => handleToggleFlag('payoutAutoApprove')}
-                          className={`w-12 h-6.5 rounded-full p-1 transition-colors duration-300 relative ${
-                            featureFlags.payoutAutoApprove ? 'bg-orange-500' : 'bg-slate-900'
-                          }`}
-                        >
-                          <span className={`w-4.5 h-4.5 rounded-full bg-white block transition-transform duration-300 ${
-                            featureFlags.payoutAutoApprove ? 'translate-x-5.5' : 'translate-x-0'
-                          }`} />
-                        </button>
+                        <div className="pt-4 border-t border-slate-900 flex justify-between items-center">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Status: {featureFlags.payoutAutoApprove ? 'Active' : 'Disabled'}</span>
+                          <button 
+                            onClick={() => handleToggleFlag('payoutAutoApprove')}
+                            className={`flex items-center gap-1 px-3.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all ${
+                              featureFlags.payoutAutoApprove 
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20' 
+                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" /> Toggle Flag
+                          </button>
+                        </div>
                       </div>
-
                     </div>
                   </div>
                 )}
