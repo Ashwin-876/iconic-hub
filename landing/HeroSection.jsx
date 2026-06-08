@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Play, ArrowRight } from 'lucide-react';
+import { Play, ArrowRight, Users, BookOpen, Star, Award, Globe, Code, Headphones } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -204,11 +204,11 @@ export default function HeroSection() {
       <div className="w-full max-w-6xl mx-auto px-6 mt-16 z-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 bg-white/80 backdrop-blur-md border border-slate-200/50 p-6 rounded-[32px] shadow-sm">
           {[
-            { value: '50,000+', label: 'Active Learners', icon: '👥', color: 'bg-purple-100 text-purple-600' },
-            { value: '1,500+', label: 'Expert Courses', icon: '📖', color: 'bg-emerald-100 text-emerald-600' },
-            { value: '4.8/5', label: 'Learner Rating', icon: '⭐', color: 'bg-amber-100 text-amber-600' },
-            { value: '25,000+', label: 'Certifications Issued', icon: '📜', color: 'bg-blue-100 text-blue-600' },
-            { value: '120+', label: 'Countries Reached', icon: '🌐', color: 'bg-pink-100 text-pink-600' }
+            { value: '50,000+', label: 'Active Learners', icon: <Users className="w-4 h-4 text-purple-600" />, color: 'bg-purple-100' },
+            { value: '1,500+', label: 'Expert Courses', icon: <BookOpen className="w-4 h-4 text-emerald-600" />, color: 'bg-emerald-100' },
+            { value: '4.8/5', label: 'Learner Rating', icon: <Star className="w-4 h-4 text-amber-600 fill-current" />, color: 'bg-amber-100' },
+            { value: '25,000+', label: 'Certifications Issued', icon: <Award className="w-4 h-4 text-blue-600" />, color: 'bg-blue-100' },
+            { value: '120+', label: 'Countries Reached', icon: <Globe className="w-4 h-4 text-pink-600" />, color: 'bg-pink-100' }
           ].map((stat, i) => (
             <div key={i} className="flex items-center gap-3 justify-start md:border-r last:border-0 border-slate-200/50 last:pr-0 pr-2">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0 ${stat.color}`}>
@@ -227,10 +227,10 @@ export default function HeroSection() {
       <div className="w-full max-w-6xl mx-auto px-6 mt-6 z-10">
         <div className="bg-gradient-to-r from-[#4F46E5] to-[#6E2ED8] p-6 rounded-[32px] shadow-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-white text-left">
           {[
-            { title: 'Industry Expert Mentors', desc: 'Learn from professionals with real-world experience.', icon: '👥' },
-            { title: 'Hands-on Projects', desc: 'Build real projects and strengthen your portfolio.', icon: '💻' },
-            { title: 'Recognized Certificates', desc: 'Earn certificates that boost your career.', icon: '🏆' },
-            { title: '24/7 Learning Support', desc: 'Get help anytime with our dedicated support team.', icon: '📞' }
+            { title: 'Industry Expert Mentors', desc: 'Learn from professionals with real-world experience.', icon: <Users className="w-4 h-4 text-white/90" /> },
+            { title: 'Hands-on Projects', desc: 'Build real projects and strengthen your portfolio.', icon: <Code className="w-4 h-4 text-white/90" /> },
+            { title: 'Recognized Certificates', desc: 'Earn certificates that boost your career.', icon: <Award className="w-4 h-4 text-white/90" /> },
+            { title: '24/7 Learning Support', desc: 'Get help anytime with our dedicated support team.', icon: <Headphones className="w-4 h-4 text-white/90" /> }
           ].map((info, i) => (
             <div key={i} className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-sm shrink-0 mt-0.5">
