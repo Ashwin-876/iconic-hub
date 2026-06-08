@@ -27,12 +27,6 @@ export default function AdminLogin() {
     }, 800);
   };
 
-  const prefillCredentials = () => {
-    setEmail('admin@iconichub.io');
-    setPassword('admin');
-    setError('');
-  };
-
   return (
     <PageTransition>
       <div className="min-h-screen bg-[#060814] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
