@@ -731,13 +731,42 @@ function evaluatePrint(line, vars, funcs) {
       return evaluateExpr(expression, vars, funcs);
     });
   }
-  
-  // Regular string literal
-  if ((content.startsWith('"') && content.endsWith('"')) || (content.startsWith("'") && content.endsWith("'"))) {
-    return content.substring(1, content.length - 1);
+
+  // Parse comma-separated arguments safely (handling quotes)
+  let args = [];
+  let current = "";
+  let inQuotes = false;
+  let quoteChar = "";
+  for (let i = 0; i < content.length; i++) {
+    let char = content[i];
+    if ((char === '"' || char === "'") && (i === 0 || content[i - 1] !== '\\')) {
+      if (!inQuotes) {
+        inQuotes = true;
+        quoteChar = char;
+      } else if (char === quoteChar) {
+        inQuotes = false;
+      }
+    }
+    if (char === ',' && !inQuotes) {
+      args.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
   }
-  
-  return evaluateExpr(content, vars, funcs);
+  if (current.trim()) {
+    args.push(current.trim());
+  }
+
+  let evaluatedArgs = args.map(arg => {
+    arg = arg.trim();
+    if ((arg.startsWith('"') && arg.endsWith('"')) || (arg.startsWith("'") && arg.endsWith("'"))) {
+      return arg.substring(1, arg.length - 1);
+    }
+    return String(evalExpressionInJS(arg, vars));
+  });
+
+  return evaluatedArgs.join(' ');
 }
 
 // Helper function to safely evaluate expressions involving sandbox variables
@@ -1205,6 +1234,26 @@ function runInterpreter(lang, code) {
         // Bash: echo "..."
         else if (trimmed.startsWith('echo "') && trimmed.endsWith('"')) {
           outputs.push(trimmed.substring(6, trimmed.length - 1));
+        }
+        // Python-like print in C/Java/other tabs
+        else if (trimmed.startsWith('print(') && trimmed.endsWith(')')) {
+          let vars = {};
+          let prevLines = lines.slice(0, lines.indexOf(line));
+          for (let prev of prevLines) {
+            let pTrimmed = prev.trim();
+            if (pTrimmed.includes('=') && !pTrimmed.includes('==') && !pTrimmed.startsWith('if ')) {
+              let eqIdx = pTrimmed.indexOf('=');
+              let varName = pTrimmed.substring(0, eqIdx).trim();
+              let varVal = pTrimmed.substring(eqIdx + 1).trim();
+              if (!isNaN(varVal)) {
+                vars[varName] = Number(varVal);
+              } else if ((varVal.startsWith('"') && varVal.endsWith('"')) || (varVal.startsWith("'") && varVal.endsWith("'"))) {
+                vars[varName] = varVal.slice(1, -1);
+              }
+            }
+          }
+          let printVal = evaluatePrint(trimmed, vars, {});
+          outputs.push(printVal);
         }
       }
     }
