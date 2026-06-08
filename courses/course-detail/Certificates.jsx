@@ -1,7 +1,8 @@
 import React from 'react';
 import { Award, Printer, Share2, ShieldCheck, Terminal } from 'lucide-react';
 
-export default function Certificates({ studentName = 'Ashwin', courseTitle = 'Advanced React Architecture: State & Performance' }) {
+export default function Certificates({ studentName, courseTitle = 'Advanced React Architecture: State & Performance' }) {
+  const finalStudentName = localStorage.getItem('userName') || studentName || 'Ashwin';
   const handlePrint = () => {
     window.print();
   };
@@ -93,7 +94,7 @@ export default function Certificates({ studentName = 'Ashwin', courseTitle = 'Ad
           <span className="text-xs font-semibold tracking-widest text-slate-400 uppercase">Certificate of Completion</span>
           <p className="text-xs text-slate-500">This is officially verified to certify that</p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-on-background font-sans italic border-b border-surface-stroke pb-3 px-8 w-fit mx-auto">
-            {studentName}
+            {finalStudentName}
           </h2>
           <p className="text-xs text-slate-500 max-w-lg leading-relaxed mx-auto">
             has successfully completed the coursework requirements and practical sandbox evaluator labs for the verified syllabus

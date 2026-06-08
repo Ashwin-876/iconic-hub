@@ -1,3 +1,14 @@
+const MOCK_ANSWERS = [
+  {
+    q: 'Review React performance optimization rules',
+    ans: 'React optimizes rendering using 3 core concepts:\n1. useMemo & useCallback to cache values/functions.\n2. React.memo for component shallow comparison.\n3. Virtualization (e.g. react-window) for handling long lists efficiently.'
+  },
+  {
+    q: 'Interview Prep: Explain database indexing B-Trees',
+    ans: 'B-Trees keep data sorted and allow search, sequential access, insertion, and deletion in logarithmic O(log N) time. The database scans nodes hierarchically without scanning the entire disk block.'
+  }
+];
+
 export async function callOpenRouter(messages, systemPrompt = '') {
   try {
     const formattedMessages = [];
@@ -23,6 +34,17 @@ export async function callOpenRouter(messages, systemPrompt = '') {
     });
 
     const apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY || '';
+
+    // If API key is missing, return fallback or mock answers immediately
+    if (!apiKey || apiKey === 'YOUR_API_KEY' || apiKey.trim() === '') {
+      const lastUserMessage = messages[messages.length - 1];
+      const queryText = typeof lastUserMessage === 'string' ? lastUserMessage : (lastUserMessage?.content || lastUserMessage?.text || '');
+      const match = MOCK_ANSWERS.find(m => queryText.toLowerCase().includes(m.q.toLowerCase()) || m.q.toLowerCase().includes(queryText.toLowerCase()));
+      if (match) return match.ans;
+
+      return "I am currently running in offline sandbox mode (OpenRouter API key is missing or invalid). Please configure your `OPENROUTER_API_KEY` in environment variables to enable real-time AI responses!";
+    }
+
     const headers = {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
@@ -65,13 +87,20 @@ export async function callOpenRouter(messages, systemPrompt = '') {
 
     if (!fallbackResponse.ok) {
       const errorText = await fallbackResponse.text();
-      throw new Error(`OpenRouter API error: ${fallbackResponse.status} - ${errorText}`);
+      console.error(`OpenRouter API error: ${fallbackResponse.status} - ${errorText}`);
+
+      const lastUserMessage = messages[messages.length - 1];
+      const queryText = typeof lastUserMessage === 'string' ? lastUserMessage : (lastUserMessage?.content || lastUserMessage?.text || '');
+      const match = MOCK_ANSWERS.find(m => queryText.toLowerCase().includes(m.q.toLowerCase()) || m.q.toLowerCase().includes(queryText.toLowerCase()));
+      if (match) return match.ans;
+
+      return "I am currently running in offline sandbox mode (OpenRouter API key is missing or invalid). Please configure your `OPENROUTER_API_KEY` in environment variables to enable real-time AI responses!";
     }
 
     const data = await fallbackResponse.json();
     return data.choices?.[0]?.message?.content || 'Sorry, I couldn\'t generate a response.';
   } catch (error) {
     console.error('Error in callOpenRouter:', error);
-    return `Error: ${error.message || 'Failed to contact AI service.'}`;
+    return "I am currently running in offline sandbox mode (OpenRouter API key is missing or invalid). Please configure your `OPENROUTER_API_KEY` in environment variables to enable real-time AI responses!";
   }
 }

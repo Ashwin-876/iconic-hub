@@ -16,10 +16,13 @@ export default function WelcomeBanner({ name = 'Ashwin', streak = 5, goalHours =
         {/* Header Greeting */}
         <div className="space-y-2 text-left">
           <h1 className="text-3xl font-extrabold text-on-background tracking-tight">
-            Welcome back, <span className="text-blue-600">{name}</span>!
+            {streak > 0 ? 'Welcome back, ' : 'Welcome, '}<span className="text-blue-600">{name}</span>!
           </h1>
           <p className="text-sm text-on-surface-variant max-w-xl">
-            "Your consistency in React Hooks challenges this week puts you in the **top 5%** of learners in the region. Keep it up!"
+            {streak > 0 
+              ? "Your consistency in React Hooks challenges this week puts you in the top 5% of learners in the region. Keep it up!"
+              : "Set your learning paths, explore courses, and start learning to build your weekly streak!"
+            }
           </p>
         </div>
 

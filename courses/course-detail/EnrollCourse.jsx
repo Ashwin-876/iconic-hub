@@ -82,7 +82,7 @@ export default function EnrollCourse() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fff8f6] text-[#261812] font-sans pb-20 text-left selection:bg-[#ff6b00]/30 selection:text-white">
+      <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-sans pb-20 text-left selection:bg-blue-500/30 selection:text-white">
         <Header />
 
         <main className="max-w-6xl mx-auto px-6 mt-10">
@@ -90,7 +90,7 @@ export default function EnrollCourse() {
           {step < 3 && (
             <button 
               onClick={() => step === 2 ? setStep(1) : navigate(-1)} 
-              className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#ff6b00] transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>{step === 2 ? 'Back to plan selection' : 'Back to learning path'}</span>
@@ -101,17 +101,17 @@ export default function EnrollCourse() {
           {step < 3 && (
             <div className="flex items-center gap-4 mb-10 max-w-md">
               <div className="flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 1 ? 'bg-[#ff6b00] text-white' : 'bg-slate-200 text-slate-500'}`}>1</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>1</span>
                 <span className="text-xs font-bold">Select Plan</span>
               </div>
               <div className="h-[2px] w-12 bg-slate-200"></div>
               <div className="flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 2 ? 'bg-[#ff6b00] text-white' : 'bg-slate-200 text-slate-500'}`}>2</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>2</span>
                 <span className="text-xs font-bold">Verification</span>
               </div>
               <div className="h-[2px] w-12 bg-slate-200"></div>
               <div className="flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 3 ? 'bg-[#ff6b00] text-white' : 'bg-slate-200 text-slate-500'}`}>3</span>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === 3 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>3</span>
                 <span className="text-xs font-bold">Access</span>
               </div>
             </div>
@@ -132,13 +132,13 @@ export default function EnrollCourse() {
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 bg-blue-50 text-[#ff6b00] rounded text-[10px] font-extrabold uppercase border border-blue-100">
+                      <span className="px-2.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-extrabold uppercase border border-blue-100">
                         {course.level}
                       </span>
                       <span className="text-xs text-slate-500">• Recommended for your path</span>
                     </div>
 
-                    <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#261812]">{course.title}</h1>
+                    <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#0f172a]">{course.title}</h1>
                     <p className="text-sm text-slate-600 leading-relaxed">{course.description}</p>
                   </div>
 
@@ -184,7 +184,7 @@ export default function EnrollCourse() {
               <div className="lg:col-span-5 space-y-6">
                 <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xl space-y-6">
                   <div>
-                    <h3 className="text-lg font-bold text-[#261812]">Choose Enrollment Option</h3>
+                    <h3 className="text-lg font-bold text-[#0f172a]">Choose Enrollment Option</h3>
                     <p className="text-xs text-slate-500 mt-1">Unlock course content in one tap</p>
                   </div>
 
@@ -194,7 +194,7 @@ export default function EnrollCourse() {
                       onClick={() => setSelectedPlan('path')}
                       className={`p-5 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-4 ${
                         selectedPlan === 'path' 
-                          ? 'border-[#ff6b00] bg-blue-500/[0.02] ring-4 ring-[#ff6b00]/5' 
+                          ? 'border-blue-600 bg-blue-500/[0.02] ring-4 ring-blue-600/5' 
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
@@ -203,17 +203,17 @@ export default function EnrollCourse() {
                         name="plan"
                         checked={selectedPlan === 'path'}
                         onChange={() => setSelectedPlan('path')}
-                        className="mt-1 accent-[#ff6b00]" 
+                        className="mt-1 accent-blue-600" 
                       />
                       <div className="space-y-1 text-left">
                         <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-sm text-[#261812]">Learning Path Access</span>
-                          <span className="px-2 py-0.5 bg-[#ff6b00]/10 text-[#ff6b00] rounded text-[8px] font-black uppercase">Included</span>
+                          <span className="font-extrabold text-sm text-[#0f172a]">Learning Path Access</span>
+                          <span className="px-2 py-0.5 bg-blue-600/10 text-blue-600 rounded text-[8px] font-black uppercase">Included</span>
                         </div>
                         <p className="text-xs text-slate-500">
                           Included free under your active AI &amp; Machine Learning Specialist path membership.
                         </p>
-                        <span className="text-lg font-black text-[#ff6b00] block pt-1">$0.00</span>
+                        <span className="text-lg font-black text-blue-600 block pt-1">₹0.00</span>
                       </div>
                     </div>
 
@@ -222,7 +222,7 @@ export default function EnrollCourse() {
                       onClick={() => setSelectedPlan('single')}
                       className={`p-5 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-4 ${
                         selectedPlan === 'single' 
-                          ? 'border-[#ff6b00] bg-blue-500/[0.02] ring-4 ring-[#ff6b00]/5' 
+                          ? 'border-blue-600 bg-blue-500/[0.02] ring-4 ring-blue-600/5' 
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
@@ -231,21 +231,21 @@ export default function EnrollCourse() {
                         name="plan"
                         checked={selectedPlan === 'single'}
                         onChange={() => setSelectedPlan('single')}
-                        className="mt-1 accent-[#ff6b00]" 
+                        className="mt-1 accent-blue-600" 
                       />
                       <div className="space-y-1 text-left">
-                        <span className="font-extrabold text-sm text-[#261812]">Individual Course Pass</span>
+                        <span className="font-extrabold text-sm text-[#0f172a]">Individual Course Pass</span>
                         <p className="text-xs text-slate-500">
                           Lifetime enrollment, certifications, grading, and developer playground compute.
                         </p>
-                        <span className="text-lg font-black text-slate-700 block pt-1">$79.00</span>
+                        <span className="text-lg font-black text-slate-700 block pt-1">₹6,499</span>
                       </div>
                     </div>
                   </div>
 
                   <button 
                     onClick={() => setStep(2)}
-                    className="w-full py-3.5 bg-gradient-to-r from-[#ff6b00] to-indigo-500 text-white rounded-2xl font-extrabold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#ff6b00]/15"
+                    className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-2xl font-extrabold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/15"
                   >
                     <span>Proceed to Verification</span>
                     <ArrowRight className="w-4 h-4" />
@@ -263,19 +263,18 @@ export default function EnrollCourse() {
           {step === 2 && (
             <div className="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xl space-y-6">
               <div className="text-center space-y-2">
-                <Sparkles className="w-10 h-10 text-[#ff6b00] mx-auto animate-bounce" />
-                <h2 className="text-2xl font-extrabold text-[#261812]">Enrollment Verification</h2>
+                <h2 className="text-2xl font-extrabold text-[#0f172a]">Enrollment Verification</h2>
                 <p className="text-xs text-slate-500">Confirming credentials for {course.title}</p>
               </div>
 
               <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-5 space-y-4">
                 <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-3">
                   <span className="text-slate-500 font-semibold">User Account</span>
-                  <span className="text-[#261812] font-bold">ashwin@iconic-hub.io</span>
+                  <span className="text-[#0f172a] font-bold">ashwin@iconic-hub.io</span>
                 </div>
                 <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-3">
                   <span className="text-slate-500 font-semibold">Active Curriculum</span>
-                  <span className="text-[#ff6b00] font-extrabold">AI &amp; ML Specialist</span>
+                  <span className="text-blue-600 font-extrabold">AI &amp; ML Specialist</span>
                 </div>
                 <div className="flex justify-between items-center text-xs border-b border-slate-200 pb-3">
                   <span className="text-slate-500 font-semibold">Target Module</span>
@@ -284,7 +283,7 @@ export default function EnrollCourse() {
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-500 font-semibold">Price</span>
                   <span className="text-emerald-600 font-extrabold text-sm">
-                    {selectedPlan === 'path' ? 'FREE (Path Included)' : '$79.00'}
+                    {selectedPlan === 'path' ? 'FREE (Path Included)' : '₹6,499'}
                   </span>
                 </div>
               </div>
@@ -293,7 +292,7 @@ export default function EnrollCourse() {
                 <button
                   onClick={handleEnroll}
                   disabled={loading}
-                  className="w-full py-4 bg-[#261812] hover:bg-[#ff6b00] disabled:bg-slate-300 text-white rounded-2xl font-extrabold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-[#0f172a] hover:bg-blue-600 disabled:bg-slate-300 text-white rounded-2xl font-extrabold text-sm transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -311,22 +310,22 @@ export default function EnrollCourse() {
 
           {step === 3 && (
             <div className="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl text-center space-y-6 relative overflow-hidden">
-              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 to-[#ff6b00]"></div>
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 to-blue-600"></div>
               
               <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto shadow-md shadow-emerald-500/10">
                 <CheckCircle className="w-8 h-8" />
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-2xl font-black text-[#261812]">You're Enrolled!</h2>
+                <h2 className="text-2xl font-black text-[#0f172a]">You're Enrolled!</h2>
                 <p className="text-sm text-slate-500 max-w-sm mx-auto">
                   Awesome news! <strong>{course.title}</strong> has been successfully added to your course workspace dashboard.
                 </p>
               </div>
 
-              <div className="bg-[#fff8f6] border border-[#ff6b00]/10 rounded-2xl p-5 text-xs text-left space-y-3">
-                <h4 className="font-extrabold text-[#261812] uppercase tracking-wider flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-[#ff6b00]" />
+              <div className="bg-blue-50/50 border border-blue-500/10 rounded-2xl p-5 text-xs text-left space-y-3">
+                <h4 className="font-extrabold text-[#0f172a] uppercase tracking-wider flex items-center gap-1.5">
+                  <Award className="w-4 h-4 text-blue-600" />
                   <span>Curriculum Benefits Activated:</span>
                 </h4>
                 <ul className="space-y-1.5 text-slate-600 pl-5 list-disc">
@@ -339,13 +338,13 @@ export default function EnrollCourse() {
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <button 
                   onClick={() => navigate('/dashboard')} 
-                  className="flex-1 py-3 bg-[#261812] hover:bg-black text-white font-bold rounded-xl text-xs transition-all"
+                  className="flex-1 py-3 bg-[#0f172a] hover:bg-black text-white font-bold rounded-xl text-xs transition-all"
                 >
                   Go to Dashboard
                 </button>
                 <button 
                   onClick={() => navigate('/courses/react-arch')} 
-                  className="flex-1 py-3 bg-gradient-to-r from-[#ff6b00] to-indigo-500 text-white font-bold rounded-xl text-xs transition-all shadow-md shadow-[#ff6b00]/10"
+                  className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-bold rounded-xl text-xs transition-all shadow-md shadow-blue-600/10"
                 >
                   Start Course Material
                 </button>

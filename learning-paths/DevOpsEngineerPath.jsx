@@ -13,7 +13,7 @@ export default function DevOpsEngineerPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(30);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_devops') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
 
   const mentors = [

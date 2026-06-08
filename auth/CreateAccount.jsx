@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { initNewUser } from '../utils/initNewUser';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   User, Mail, Lock, Eye, EyeOff, CheckCircle, Brain, 
@@ -60,6 +61,7 @@ export default function CreateAccount() {
     e.preventDefault();
     if (Object.keys(errors).length > 0) return;
     setLoading(true);
+    initNewUser();
     localStorage.setItem('userName', fullName);
 
     realtimeDb.registerUser({
@@ -95,325 +97,246 @@ export default function CreateAccount() {
 
   return (
     <PageTransition>
-      <div ref={containerRef} className="min-h-screen bg-slate-50 flex flex-col lg:flex-row text-slate-800 font-sans overflow-x-hidden">
+      <div ref={containerRef} className="h-screen bg-[#0b0f1e] text-white flex items-center justify-center p-4 font-sans overflow-hidden relative">
         
-        {/* LEFT COLUMN: Cinematic LMS Onboarding Visuals */}
-        <div 
-          ref={leftSideRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="hidden lg:flex lg:w-[45%] bg-[#0B0F19] text-white flex-col justify-between relative overflow-hidden select-none"
-        >
-          {/* Decorative gradient orbs */}
-          <div className="parallax-bg absolute top-0 left-0 w-full h-full z-0">
-            <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-700/25 rounded-full blur-[130px]" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[100px]" />
-          </div>
-
-          {/* Top bar Logo */}
-          <div className="relative z-10 text-left p-10 pb-0">
-            <Link to="/" className="inline-flex items-center space-x-3">
-              <div className="w-11 h-11 rounded-2xl bg-white shadow-lg shadow-purple-500/20 flex items-center justify-center p-1.5 flex-shrink-0">
-                <img src="/iconic_logo.png" alt="Iconic Hub" className="w-full h-full object-contain" />
-              </div>
-              <span className="text-white font-black text-lg tracking-tight">Iconic Hub</span>
-            </Link>
-          </div>
-
-          {/* Full-size hero developer image */}
-          <div className="parallax-student relative flex-1 flex items-end justify-center overflow-hidden">
-            <img 
-              src="/lms_hero_student.png" 
-              alt="Developer learning on Iconic Hub" 
-              className="w-full h-full object-cover object-center"
-            />
-            {/* Bottom gradient overlay for quote readability */}
-            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/60 to-transparent z-10" />
-          </div>
-
-          {/* Left footer quote */}
-          <div className="relative z-10 text-left space-y-2 p-10 pt-4">
-            <p className="text-sm font-semibold text-slate-300/90 leading-relaxed italic">
-              "The curriculum was practical and aligned perfectly with industry needs. Landing my first developer job felt seamless."
-            </p>
-            <div className="text-xs font-bold text-slate-400">
-              — Jessica K., Full-Stack Graduate
-            </div>
-          </div>
-
+        {/* Background gradient orbs */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-700/20 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[100px]" />
         </div>
 
-        {/* RIGHT COLUMN: Signup Card Form Panel - Dark Premium */}
-        <div className="flex-1 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-[#0b0f1e] overflow-y-auto relative">
-          {/* Background gradient orbs */}
-          <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-purple-700/15 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[-10%] left-[-5%] w-[350px] h-[350px] bg-blue-600/10 rounded-full blur-[80px]" />
-          </div>
-
+        {/* Center Card Panel */}
+        <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 p-5 md:p-6 rounded-[24px] space-y-3.5 shadow-2xl relative z-10 text-left">
+          
           {/* Onboarding Steps Progress Header */}
-          <div className="anim-form-item max-w-xl mx-auto w-full flex items-center justify-between text-[10px] sm:text-xs font-bold text-white/20 select-none pb-8 border-b border-white/10 relative z-10">
-            <div className="flex items-center space-x-1.5 text-purple-400">
-              <span className="w-5 h-5 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-[9px]">1</span>
-              <span>Create Account</span>
+          <div className="anim-form-item flex items-center justify-between text-[9px] font-bold text-white/25 select-none pb-2.5 border-b border-white/10">
+            <div className="flex items-center space-x-1 text-purple-400">
+              <span className="w-4 h-4 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-[8px]">1</span>
+              <span>Account</span>
             </div>
             <ChevronDivider />
-            <div className="flex items-center space-x-1.5">
-              <span className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[9px]">2</span>
+            <div className="flex items-center space-x-1">
+              <span className="w-4 h-4 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[8px]">2</span>
               <span>Personalize</span>
             </div>
             <ChevronDivider />
-            <div className="flex items-center space-x-1.5">
-              <span className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[9px]">3</span>
-              <span>Learning Paths</span>
-            </div>
-            <ChevronDivider />
-            <div className="flex items-center space-x-1.5">
-              <span className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[9px]">4</span>
-              <span>Start Learning</span>
+            <div className="flex items-center space-x-1">
+              <span className="w-4 h-4 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[8px]">3</span>
+              <span>Paths</span>
             </div>
           </div>
 
-          {/* Main Form container card */}
-          <div ref={rightSideRef} className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full py-10 space-y-7 relative z-10">
+          {/* Welcoming Headline */}
+          <div className="space-y-1">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-purple-400 block">Join ICONIC HUB LMS</span>
+            <h2 className="anim-form-item text-xl font-black text-white tracking-tight">
+              Start Your Learning Journey
+            </h2>
+          </div>
+
+          {/* Social login integration buttons */}
+          <div className="space-y-2">
+            <div className="anim-form-item grid grid-cols-3 gap-2">
+              <SocialButton 
+                label="Google" 
+                icon={<GoogleIcon />} 
+                onClick={() => {
+                  setLoading(true);
+                  initNewUser();
+                  localStorage.setItem('userName', 'Google Scholar');
+                  realtimeDb.registerUser({
+                    name: 'Google Scholar',
+                    email: 'google.student@gmail.com',
+                    role: 'Student'
+                  });
+                  setTimeout(() => {
+                    setLoading(false);
+                    navigate('/onboarding/welcome');
+                  }, 1000);
+                }} 
+              />
+              <SocialButton 
+                label="GitHub" 
+                icon={<GithubIcon />} 
+                onClick={() => {
+                  setLoading(true);
+                  initNewUser();
+                  localStorage.setItem('userName', 'GitHub Octocat');
+                  realtimeDb.registerUser({
+                    name: 'GitHub Octocat',
+                    email: 'octocat@github.com',
+                    role: 'Student'
+                  });
+                  setTimeout(() => {
+                    setLoading(false);
+                    navigate('/onboarding/welcome');
+                  }, 1000);
+                }} 
+              />
+              <SocialButton 
+                label="LinkedIn" 
+                icon={<LinkedinIcon />} 
+                onClick={() => {
+                  setLoading(true);
+                  initNewUser();
+                  localStorage.setItem('userName', 'LinkedIn Professional');
+                  realtimeDb.registerUser({
+                    name: 'LinkedIn Professional',
+                    email: 'professional@linkedin.com',
+                    role: 'Student'
+                  });
+                  setTimeout(() => {
+                    setLoading(false);
+                    navigate('/onboarding/welcome');
+                  }, 1000);
+                }} 
+              />
+            </div>
+          </div>
+
+          {/* Separator row */}
+          <div className="anim-form-item flex items-center space-x-3 select-none py-0.5">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-[9px] text-white/30 font-extrabold uppercase tracking-wider">or sign up with email</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          {/* Form input elements */}
+          <form onSubmit={handleRegister} className="space-y-2.5">
             
-            {/* Welcoming Headline */}
-            <div className="text-left space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-purple-400 block">Join Iconic Hub</span>
-              <h2 className="anim-form-item text-3xl font-black text-white tracking-tight">
-                Start Your Learning Journey
-              </h2>
-              <p className="anim-form-item text-white/50 font-medium text-sm leading-relaxed">
-                Gain job-ready coding skills, earn verification certificates, and receive personalized AI mentorship.
-              </p>
-            </div>
-
-            {/* Social login integration buttons */}
-            <div className="space-y-3">
-              <span className="anim-form-item text-[10px] uppercase font-extrabold text-white/30 block tracking-wider text-left">
-                Register with social account
-              </span>
-              <div className="anim-form-item grid grid-cols-3 gap-3">
-                <SocialButton 
-                  label="Google" 
-                  icon={<GoogleIcon />} 
-                  onClick={() => {
-                    setLoading(true);
-                    localStorage.setItem('userName', 'Google Scholar');
-                    realtimeDb.registerUser({
-                      name: 'Google Scholar',
-                      email: 'google.student@gmail.com',
-                      role: 'Student'
-                    });
-                    setTimeout(() => {
-                      setLoading(false);
-                      navigate('/onboarding/welcome');
-                    }, 1000);
-                  }} 
-                />
-                <SocialButton 
-                  label="GitHub" 
-                  icon={<GithubIcon />} 
-                  onClick={() => {
-                    setLoading(true);
-                    localStorage.setItem('userName', 'GitHub Octocat');
-                    realtimeDb.registerUser({
-                      name: 'GitHub Octocat',
-                      email: 'octocat@github.com',
-                      role: 'Student'
-                    });
-                    setTimeout(() => {
-                      setLoading(false);
-                      navigate('/onboarding/welcome');
-                    }, 1000);
-                  }} 
-                />
-                <SocialButton 
-                  label="LinkedIn" 
-                  icon={<LinkedinIcon />} 
-                  onClick={() => {
-                    setLoading(true);
-                    localStorage.setItem('userName', 'LinkedIn Professional');
-                    realtimeDb.registerUser({
-                      name: 'LinkedIn Professional',
-                      email: 'professional@linkedin.com',
-                      role: 'Student'
-                    });
-                    setTimeout(() => {
-                      setLoading(false);
-                      navigate('/onboarding/welcome');
-                    }, 1000);
-                  }} 
-                />
-              </div>
-            </div>
-
-            {/* Separator row */}
-            <div className="anim-form-item flex items-center space-x-4 select-none">
-              <div className="flex-1 h-px bg-white/10" />
-              <span className="text-[10px] text-white/30 font-extrabold uppercase tracking-wider">or sign up with email</span>
-              <div className="flex-1 h-px bg-white/10" />
-            </div>
-
-            {/* Form input elements */}
-            <form onSubmit={handleRegister} className="space-y-4">
-              
-              {/* Full Name */}
-              <div className="anim-form-item relative">
-                <label 
-                  className={`absolute left-4 transition-all duration-300 pointer-events-none font-bold text-xs ${
-                    focusName || fullName ? 'top-1.5 text-purple-400 text-[9px]' : 'top-3.5 text-white/30'
-                  }`}
-                >
-                  Full Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    onFocus={() => setFocusName(true)}
-                    onBlur={() => setFocusName(false)}
-                    className="w-full bg-white/5 border border-white/10 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 rounded-xl pt-5 pb-2 px-4 text-xs font-bold text-white placeholder-transparent outline-none transition-all"
-                  />
-                  <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Email Address */}
-              <div className="anim-form-item relative">
-                <label 
-                  className={`absolute left-4 transition-all duration-300 pointer-events-none font-bold text-xs ${
-                    focusEmail || email ? 'top-1.5 text-purple-400 text-[9px]' : 'top-3.5 text-white/30'
-                  }`}
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={() => setFocusEmail(true)}
-                    onBlur={() => setFocusEmail(false)}
-                    className="w-full bg-white/5 border border-white/10 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 rounded-xl pt-5 pb-2 px-4 text-xs font-bold text-white placeholder-transparent outline-none transition-all"
-                  />
-                  <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div className="anim-form-item relative text-left">
-                <label 
-                  className={`absolute left-4 transition-all duration-300 pointer-events-none font-bold text-xs ${
-                    focusPass || password ? 'top-1.5 text-purple-400 text-[9px]' : 'top-3.5 text-white/30'
-                  }`}
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onFocus={() => setFocusPass(true)}
-                    onBlur={() => setFocusPass(false)}
-                    className={`w-full bg-white/5 border focus:ring-1 rounded-xl pt-5 pb-2 px-4 text-xs font-bold text-white placeholder-transparent outline-none transition-all ${
-                      errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : 'border-white/10 focus:border-purple-500 focus:ring-purple-500/20'
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {errors.password && (
-                  <span className="text-[10px] text-red-400 font-bold mt-1 block">{errors.password}</span>
-                )}
-              </div>
-
-              {/* Confirm Password */}
-              <div className="anim-form-item relative text-left">
-                <label 
-                  className={`absolute left-4 transition-all duration-300 pointer-events-none font-bold text-xs ${
-                    focusConfirmPass || confirmPassword ? 'top-1.5 text-purple-400 text-[9px]' : 'top-3.5 text-white/30'
-                  }`}
-                >
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    onFocus={() => setFocusConfirmPass(true)}
-                    onBlur={() => setFocusConfirmPass(false)}
-                    className={`w-full bg-white/5 border focus:ring-1 rounded-xl pt-5 pb-2 px-4 text-xs font-bold text-white placeholder-transparent outline-none transition-all ${
-                      errors.confirmPassword ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : 'border-white/10 focus:border-purple-500 focus:ring-purple-500/20'
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                {errors.confirmPassword && (
-                  <span className="text-[10px] text-red-400 font-bold mt-1 block">{errors.confirmPassword}</span>
-                )}
-              </div>
-
-              {/* Submit CTA button */}
-              <button
-                type="submit"
-                disabled={loading || Object.keys(errors).length > 0}
-                className="anim-form-item w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all active:scale-[0.99] disabled:opacity-50 text-sm flex items-center justify-center space-x-2"
+            {/* Full Name */}
+            <div className="anim-form-item relative">
+              <label 
+                className={`absolute left-3 transition-all duration-300 pointer-events-none font-bold text-[10px] ${
+                  focusName || fullName ? 'top-1 text-purple-400 text-[8px]' : 'top-3 text-white/30'
+                }`}
               >
-                <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
-                {!loading && <ArrowRight className="w-4 h-4" />}
-              </button>
-            </form>
-
-            {/* SignIn Link */}
-            <div className="anim-form-item text-center pt-2 border-t border-white/10">
-              <p className="text-xs text-white/40 font-semibold">
-                Already have an account?{' '}
-                <Link to="/login" className="text-purple-400 font-bold hover:text-purple-300 hover:underline">
-                  Sign In
-                </Link>
-              </p>
+                Full Name
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  onFocus={() => setFocusName(true)}
+                  onBlur={() => setFocusName(false)}
+                  className="w-full bg-white/5 border border-white/10 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 rounded-xl pt-4 pb-1.5 px-3 text-xs font-bold text-white placeholder-transparent outline-none transition-all"
+                />
+                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20 pointer-events-none" />
+              </div>
             </div>
 
-          </div>
-
-          {/* Footer trust checkmarks */}
-          <div className="anim-form-item max-w-xl mx-auto w-full pt-6 border-t border-white/10 select-none relative z-10">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-2.5 gap-x-4 text-[10px] font-bold text-white/30">
-              {[
-                "Active Learning Community",
-                "Industry Certifications",
-                "AI Learning Assistant",
-                "Expert Mentorship",
-                "Career-Focused Learning",
-                "Hands-On Projects"
-              ].map((trust) => (
-                <div key={trust} className="flex items-center space-x-1.5">
-                  <span className="p-0.5 bg-emerald-500/20 text-emerald-400 rounded">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </span>
-                  <span>{trust}</span>
-                </div>
-              ))}
+            {/* Email Address */}
+            <div className="anim-form-item relative">
+              <label 
+                className={`absolute left-3 transition-all duration-300 pointer-events-none font-bold text-[10px] ${
+                  focusEmail || email ? 'top-1 text-purple-400 text-[8px]' : 'top-3 text-white/30'
+                }`}
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocusEmail(true)}
+                  onBlur={() => setFocusEmail(false)}
+                  className="w-full bg-white/5 border border-white/10 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 rounded-xl pt-4 pb-1.5 px-3 text-xs font-bold text-white placeholder-transparent outline-none transition-all"
+                />
+                <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20 pointer-events-none" />
+              </div>
             </div>
+
+            {/* Password */}
+            <div className="anim-form-item relative text-left">
+              <label 
+                className={`absolute left-3 transition-all duration-300 pointer-events-none font-bold text-[10px] ${
+                  focusPass || password ? 'top-1 text-purple-400 text-[8px]' : 'top-3 text-white/30'
+                }`}
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusPass(true)}
+                  onBlur={() => setFocusPass(false)}
+                  className={`w-full bg-white/5 border focus:ring-1 rounded-xl pt-4 pb-1.5 px-3 text-xs font-bold text-white placeholder-transparent outline-none transition-all ${
+                    errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : 'border-white/10 focus:border-purple-500 focus:ring-purple-500/20'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+              {errors.password && (
+                <span className="text-[9px] text-red-400 font-bold mt-0.5 block">{errors.password}</span>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="anim-form-item relative text-left">
+              <label 
+                className={`absolute left-3 transition-all duration-300 pointer-events-none font-bold text-[10px] ${
+                  focusConfirmPass || confirmPassword ? 'top-1 text-purple-400 text-[8px]' : 'top-3 text-white/30'
+                }`}
+              >
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onFocus={() => setFocusConfirmPass(true)}
+                  onBlur={() => setFocusConfirmPass(false)}
+                  className={`w-full bg-white/5 border focus:ring-1 rounded-xl pt-4 pb-1.5 px-3 text-xs font-bold text-white placeholder-transparent outline-none transition-all ${
+                    errors.confirmPassword ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : 'border-white/10 focus:border-purple-500 focus:ring-purple-500/20'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <span className="text-[9px] text-red-400 font-bold mt-0.5 block">{errors.confirmPassword}</span>
+              )}
+            </div>
+
+            {/* Submit CTA button */}
+            <button
+              type="submit"
+              disabled={loading || Object.keys(errors).length > 0}
+              className="anim-form-item w-full py-2.5 mt-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all active:scale-[0.99] disabled:opacity-50 text-xs flex items-center justify-center space-x-2"
+            >
+              <span>{loading ? 'Creating Account...' : 'Create Account'}</span>
+              {!loading && <ArrowRight className="w-3.5 h-3.5" />}
+            </button>
+          </form>
+
+          {/* SignIn Link */}
+          <div className="anim-form-item text-center pt-2 border-t border-white/10">
+            <p className="text-xs text-white/40 font-semibold">
+              Already have an account?{' '}
+              <Link to="/login" className="text-purple-400 font-bold hover:text-purple-300 hover:underline">
+                Sign In
+              </Link>
+            </p>
           </div>
 
         </div>

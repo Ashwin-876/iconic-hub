@@ -13,7 +13,7 @@ export default function FullStackDeveloperPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(40);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_fullstack') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
 
   const mentors = [

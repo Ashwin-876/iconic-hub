@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { realtimeDb } from '../utils/store';
 import { 
   Terminal, Search, Star, Clock, User, ArrowRight, Shield, Laptop, Layers, 
   ChevronLeft, ChevronRight, Grid, Sliders, ChevronDown, Zap, Sparkles 
@@ -83,6 +84,7 @@ const FACULTY = [
 ];
 
 export default function AllCourses() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeLevelFilter, setActiveLevelFilter] = useState('All');
   const [activeDurationFilter, setActiveDurationFilter] = useState('All');
@@ -346,7 +348,13 @@ export default function AllCourses() {
                         <span className="font-bold">{course.rating}</span>
                         <span className="text-slate-500 font-normal ml-1">({course.students} students)</span>
                       </div>
-                      <button className="w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] border-2 border-[#2563EB] text-white font-bold hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.99] transition-all rounded-lg text-xs">
+                      <button
+                        onClick={() => {
+                          const slug = course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                          navigate(`/enroll/${slug}`);
+                        }}
+                        className="w-full py-3 bg-[#2563EB] hover:bg-[#1D4ED8] border-2 border-[#2563EB] text-white font-bold hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.99] transition-all rounded-lg text-xs"
+                      >
                         Enroll
                       </button>
                     </div>
@@ -427,7 +435,13 @@ export default function AllCourses() {
                       </div>
                       <div className="text-slate-500 text-[10px] font-semibold">{course.students} students</div>
                     </div>
-                    <button className="w-full py-2.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] border-2 border-[#2563EB] text-white font-bold text-xs hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.99] transition-all">
+                    <button
+                      onClick={() => {
+                        const slug = course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        navigate(`/enroll/${slug}`);
+                      }}
+                      className="w-full py-2.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] border-2 border-[#2563EB] text-white font-bold text-xs hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.99] transition-all"
+                    >
                       Enroll
                     </button>
                   </div>

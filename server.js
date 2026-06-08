@@ -59,7 +59,7 @@ const DEFAULT_EVENTS = [
 const DEFAULT_NOTIFICATIONS = [
   { id: 'n1', text: "Ashwin Kumar selected career goal: AI & ML Engineer", time: "Just now", type: "info" },
   { id: 'n2', text: "AI Tutor generated code playground project: Vector Embeddings Masterclass", time: "4m ago", type: "ai" },
-  { id: 'n3', text: "Subscription transaction approved for Nisha Mehta ($19.99/mo)", time: "12m ago", type: "finance" }
+  { id: 'n3', text: "Subscription transaction approved for Nisha Mehta (₹1,659/mo)", time: "12m ago", type: "finance" }
 ];
 
 async function addNotification(db, text, type) {

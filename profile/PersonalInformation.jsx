@@ -1058,7 +1058,7 @@ export default function PersonalInformation() {
                         <span className="text-[10px] font-extrabold text-blue-600 uppercase tracking-wide">Active Subscription</span>
                         <h4 className="text-base font-bold text-[#261812]">Iconic Hub Pro</h4>
                       </div>
-                      <span className="text-lg font-black text-blue-600">$29<span className="text-[10px] font-bold text-slate-500">/mo</span></span>
+                      <span className="text-lg font-black text-blue-600">₹2,399<span className="text-[10px] font-bold text-slate-500">/mo</span></span>
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed">

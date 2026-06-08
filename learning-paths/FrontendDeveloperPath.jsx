@@ -13,7 +13,7 @@ export default function FrontendDeveloperPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(72);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_frontend') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
 
   const mentors = [

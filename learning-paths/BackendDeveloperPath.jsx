@@ -13,9 +13,9 @@ export default function BackendDeveloperPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(48);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_backend') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
-  const [activeStage, setActiveStage] = useState(2);
+  const [activeStage, setActiveStage] = useState(() => Number(localStorage.getItem('stage_backend') ?? 0));
 
   const mentors = [
     {

@@ -14,7 +14,7 @@ export default function CareerAndResume() {
   const careerPaths = {
     frontend: {
       title: "Frontend Developer",
-      salary: "$85,000 - $140,000",
+      salary: "₹8 LPA - ₹18 LPA",
       roadmap: [
         { step: "HTML & Semantic structure markup", status: "Done" },
         { step: "CSS layouts (Flexbox, Grid, container queries)", status: "Done" },
@@ -24,7 +24,7 @@ export default function CareerAndResume() {
     },
     backend: {
       title: "Backend Engineer",
-      salary: "$95,000 - $160,000",
+      salary: "₹10 LPA - ₹22 LPA",
       roadmap: [
         { step: "SQL Database architectures, isolation levels", status: "Done" },
         { step: "REST & gRPC service configurations", status: "Next" },

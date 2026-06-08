@@ -13,7 +13,7 @@ export default function DataScientistPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(55);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_data_scientist') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
 
   const mentors = [

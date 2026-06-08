@@ -13,7 +13,7 @@ export default function ProductDesignerPath() {
     document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const [progress, setProgress] = useState(80);
+  const [progress, setProgress] = useState(() => Number(localStorage.getItem('progress_product_designer') ?? 0));
   const [enrolled, setEnrolled] = useState(false);
 
   const mentors = [

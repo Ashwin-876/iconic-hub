@@ -2123,17 +2123,17 @@ export default function AnalyticsDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-slate-950/40 text-left">
                     <span className="text-[9px] uppercase font-bold tracking-widest text-slate-500">Monthly Recurring Revenue (MRR)</span>
-                    <h3 className="text-3xl font-extrabold text-white mt-2">$24,910</h3>
+                    <h3 className="text-3xl font-extrabold text-white mt-2">₹20,67,530</h3>
                     <p className="text-[10px] text-emerald-400 font-semibold mt-2">+5.2% vs last month</p>
                   </div>
                   <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-slate-950/40 text-left">
                     <span className="text-[9px] uppercase font-bold tracking-widest text-slate-500">Payouts to Instructors</span>
-                    <h3 className="text-3xl font-extrabold text-white mt-2">$8,520</h3>
+                    <h3 className="text-3xl font-extrabold text-white mt-2">₹7,07,160</h3>
                     <p className="text-[10px] text-slate-500 mt-2">Next payment cycle: June 15th</p>
                   </div>
                   <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-slate-950/40 text-left">
                     <span className="text-[9px] uppercase font-bold tracking-widest text-slate-500">Outstanding Refunds</span>
-                    <h3 className="text-3xl font-extrabold text-white mt-2">$0.00</h3>
+                    <h3 className="text-3xl font-extrabold text-white mt-2">₹0.00</h3>
                     <p className="text-[10px] text-emerald-400 font-semibold mt-2">0 queries open</p>
                   </div>
                 </div>
@@ -2152,7 +2152,7 @@ export default function AnalyticsDashboard() {
                         <p className="text-[10px] text-slate-500">ashwin@gmail.com</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-emerald-400">+$19.99</p>
+                        <p className="font-bold text-emerald-400">+₹1,659</p>
                         <p className="text-[10px] text-slate-600 font-mono">ID: tr_8204b</p>
                       </div>
                     </div>
@@ -2163,7 +2163,7 @@ export default function AnalyticsDashboard() {
                         <p className="text-[10px] text-slate-500">nisha@gmail.com</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-emerald-400">+$19.99</p>
+                        <p className="font-bold text-emerald-400">+₹1,659</p>
                         <p className="text-[10px] text-slate-600 font-mono">ID: tr_4910f</p>
                       </div>
                     </div>
@@ -2174,7 +2174,7 @@ export default function AnalyticsDashboard() {
                         <p className="text-[10px] text-slate-500">devon.w@gmail.com</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-emerald-400">+$19.99</p>
+                        <p className="font-bold text-emerald-400">+₹1,659</p>
                         <p className="text-[10px] text-slate-600 font-mono">ID: tr_3910c</p>
                       </div>
                     </div>

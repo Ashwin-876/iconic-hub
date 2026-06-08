@@ -36,7 +36,7 @@ export default function RecommendedCourses() {
   const navigate = useNavigate();
 
   const handleEnroll = (id) => {
-    navigate(`/courses/${id}`);
+    navigate(`/enroll/${id}`);
   };
 
   return (

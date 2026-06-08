@@ -23,6 +23,14 @@ export default function Dashboard() {
     setCareerGoal(localStorage.getItem('onboarding_career_goal') || 'Full-Stack Developer');
   }, []);
 
+  const isDemoUser = userName.toLowerCase() === 'ashwin';
+  const streak = isDemoUser ? 5 : 0;
+  const completedHours = isDemoUser ? 3.5 : 0;
+  const completedPaths = isDemoUser ? 2 : 0;
+  const learningHours = isDemoUser ? 24.5 : 0;
+  const certificatesEarned = isDemoUser ? 3 : 0;
+  const skillGrowth = isDemoUser ? 15 : 0;
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-[#f5f7fa] text-[#1a1f2e] font-sans pb-20 selection:bg-blue-600 selection:text-white">
@@ -34,10 +42,10 @@ export default function Dashboard() {
         <main className="max-w-7xl mx-auto px-6 mt-8 space-y-7 text-left">
 
           {/* Welcome Banner */}
-          <WelcomeBanner name={userName} streak={5} goalHours={5} completedHours={3.5} />
+          <WelcomeBanner name={userName} streak={streak} goalHours={5} completedHours={completedHours} />
 
           {/* Stat Cards Row */}
-          <LearningProgress completedPaths={2} learningHours={24.5} certificatesEarned={3} skillGrowth={15} />
+          <LearningProgress completedPaths={completedPaths} learningHours={learningHours} certificatesEarned={certificatesEarned} skillGrowth={skillGrowth} />
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
@@ -78,35 +86,39 @@ export default function Dashboard() {
               {[
                 { 
                   icon: <Flame className="w-5 h-5 fill-current" />, 
-                  color: 'border-blue-500/10 hover:border-blue-500/30 hover:shadow-blue-500/5 text-blue-600', 
-                  iconBg: 'bg-blue-600/10 border-blue-600/20',
+                  color: isDemoUser ? 'border-blue-500/10 hover:border-blue-500/30 hover:shadow-blue-500/5 text-blue-600' : 'border-slate-200 text-slate-400', 
+                  iconBg: isDemoUser ? 'bg-blue-600/10 border-blue-600/20' : 'bg-slate-100 border-slate-200',
                   label: '5 Day Streak', 
                   sub: 'Consistent study habit',
-                  xp: '+250 XP'
+                  xp: '+250 XP',
+                  unlocked: isDemoUser
                 },
                 { 
                   icon: <Terminal className="w-5 h-5" />, 
-                  color: 'border-violet-500/10 hover:border-violet-500/30 hover:shadow-violet-500/5 text-violet-600', 
-                  iconBg: 'bg-violet-600/10 border-violet-600/20',
+                  color: isDemoUser ? 'border-violet-500/10 hover:border-violet-500/30 hover:shadow-violet-500/5 text-violet-600' : 'border-slate-200 text-slate-400', 
+                  iconBg: isDemoUser ? 'bg-violet-600/10 border-violet-600/20' : 'bg-slate-100 border-slate-200',
                   label: 'First Lab Done', 
                   sub: 'Sandbox success',
-                  xp: '+500 XP'
+                  xp: '+500 XP',
+                  unlocked: false
                 },
                 { 
                   icon: <Compass className="w-5 h-5" />, 
-                  color: 'border-cyan-500/10 hover:border-cyan-500/30 hover:shadow-cyan-500/5 text-cyan-600', 
-                  iconBg: 'bg-cyan-600/10 border-cyan-600/20',
+                  color: isDemoUser ? 'border-cyan-500/10 hover:border-cyan-500/30 hover:shadow-cyan-500/5 text-cyan-600' : 'border-slate-200 text-slate-400', 
+                  iconBg: isDemoUser ? 'bg-cyan-600/10 border-cyan-600/20' : 'bg-slate-100 border-slate-200',
                   label: 'Path Finder', 
                   sub: 'Custom roadmap set',
-                  xp: '+150 XP'
+                  xp: '+150 XP',
+                  unlocked: isDemoUser
                 },
                 { 
                   icon: <Award className="w-5 h-5" />, 
-                  color: 'border-emerald-500/10 hover:border-emerald-500/30 hover:shadow-emerald-500/5 text-emerald-600', 
-                  iconBg: 'bg-emerald-600/10 border-emerald-600/20',
+                  color: isDemoUser ? 'border-emerald-500/10 hover:border-emerald-500/30 hover:shadow-emerald-500/5 text-emerald-600' : 'border-slate-200 text-slate-400', 
+                  iconBg: isDemoUser ? 'bg-emerald-600/10 border-emerald-600/20' : 'bg-slate-100 border-slate-200',
                   label: 'Verified Graduate', 
                   sub: 'Official certs earned',
-                  xp: '+1000 XP'
+                  xp: '+1000 XP',
+                  unlocked: false
                 },
               ].map((badge, i) => (
                 <div 
@@ -114,7 +126,11 @@ export default function Dashboard() {
                   className={`relative flex flex-col items-center text-center p-6 bg-slate-50/50 border rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-300 group cursor-pointer ${badge.color}`}
                 >
                   {/* Top-right XP floating badge */}
-                  <div className="absolute top-3 right-3 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-colors">
+                  <div className={`absolute top-3 right-3 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border transition-colors ${
+                    badge.unlocked 
+                      ? 'bg-slate-100 border-slate-200 text-slate-500 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600' 
+                      : 'bg-slate-100 border-slate-200 text-slate-400'
+                  }`}>
                     {badge.xp}
                   </div>
                   
@@ -124,7 +140,7 @@ export default function Dashboard() {
                   </div>
                   
                   {/* Label & Details */}
-                  <h4 className="text-xs font-bold text-[#1a1f2e] group-hover:text-blue-600 transition-colors">{badge.label}</h4>
+                  <h4 className={`text-xs font-bold transition-colors ${badge.unlocked ? 'text-[#1a1f2e] group-hover:text-blue-600' : 'text-slate-400'}`}>{badge.label}</h4>
                   <p className="text-[10px] text-slate-500 mt-1 leading-normal">{badge.sub}</p>
                 </div>
               ))}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Terminal, Shield, Award, Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Award, Play } from 'lucide-react';
 
 const CHALLENGES = [
   {
@@ -7,29 +8,41 @@ const CHALLENGES = [
     title: 'Custom Hooks Masterclass',
     difficulty: 'Medium',
     points: 150,
-    type: 'React Coding Playground'
+    type: 'React Coding Playground',
+    diffColor: 'bg-blue-50 text-blue-600'
   },
   {
     id: 'ch2',
     title: 'Implement OAuth Middleware',
     difficulty: 'Hard',
     points: 300,
-    type: 'Backend Security Lab'
+    type: 'Backend Security Lab',
+    diffColor: 'bg-red-50 text-red-500'
   }
 ];
 
 export default function DeveloperChallenges() {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-4 text-left">
-      <h2 className="text-xl font-bold text-on-background">Developer Challenges</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-on-background">Developer Challenges</h2>
+        <button
+          onClick={() => navigate('/developer-hub')}
+          className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
+        >
+          View All →
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {CHALLENGES.map((ch) => (
-          <div key={ch.id} className="bg-white border border-surface-stroke p-5 rounded-2xl shadow-sm flex items-center justify-between gap-4">
+          <div key={ch.id} className="bg-white border border-surface-stroke p-5 rounded-2xl shadow-sm flex items-center justify-between gap-4 hover:shadow-md transition-shadow">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">{ch.type}</span>
-                <span className="px-2 py-0.5 bg-purple-50 text-[9px] font-bold text-purple-600 rounded">
+                <span className={`px-2 py-0.5 text-[9px] font-bold rounded ${ch.diffColor}`}>
                   {ch.difficulty}
                 </span>
               </div>
@@ -39,7 +52,11 @@ export default function DeveloperChallenges() {
                 <span>Earn {ch.points} XP / Points</span>
               </p>
             </div>
-            <button className="p-3 bg-blue-600 hover:bg-blue-600 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0">
+            <button
+              onClick={() => navigate('/developer-hub')}
+              className="p-3 bg-blue-600 hover:bg-blue-500 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0"
+              title={`Start: ${ch.title}`}
+            >
               <Play className="w-4 h-4 fill-current" />
             </button>
           </div>
