@@ -101,13 +101,6 @@ export default function HeroSection() {
         {/* Centered Hero Content Block */}
         <div className="max-w-2xl mx-auto text-center space-y-6 relative z-20 px-4">
           
-          {/* Top Tag Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-purple-100 rounded-full mb-2 shadow-sm">
-            <span className="text-purple-600 text-xs">💻</span>
-            <span className="text-[10px] font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent uppercase tracking-wider">
-              Empowering the Future of Learning
-            </span>
-          </div>
 
           {/* Large Premium Headline */}
           <h1 
@@ -197,10 +190,6 @@ export default function HeroSection() {
         {/* Card 4: Right Card Container */}
         <div className="hidden md:block absolute right-[1%] lg:right-[3%] top-[10%] z-10">
           <div className="relative">
-            {/* Floating Lightbulb */}
-            <div className="absolute -top-7 -right-5 w-11 h-11 bg-white rounded-2xl shadow-md flex items-center justify-center border border-yellow-50 text-lg">
-              💡
-            </div>
             {/* Card Frame */}
             <div 
               ref={el => cardsRef.current[3] = el}
