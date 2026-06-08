@@ -13,10 +13,7 @@ export default function LoginCTA() {
           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-indigo-500/30 rounded-full blur-[80px]"></div>
 
           <div className="relative space-y-6 max-w-2xl">
-            <div className="inline-flex items-center space-x-2 bg-white/10 border border-white/20 rounded-full py-1 px-3">
-              <Sparkles className="w-4 h-4 text-white animate-pulse" />
-              <span className="text-xs font-bold text-white">Join the Future of Learning</span>
-            </div>
+
 
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight">
               Ready to Upgrade <br />
