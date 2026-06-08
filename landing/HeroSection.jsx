@@ -176,14 +176,6 @@ export default function HeroSection() {
                 />
               </div>
             </div>
-            {/* Floating Badge Left */}
-            <div className="absolute -bottom-6 -left-7 bg-white border border-purple-50 rounded-2xl py-2 px-3.5 shadow-md flex items-center gap-2 whitespace-nowrap">
-              <span className="text-purple-600 text-sm">👥</span>
-              <div className="text-left">
-                <div className="text-xs font-black text-slate-900">50K+</div>
-                <div className="text-[9px] font-bold text-slate-500 leading-none">Active Learners</div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -201,14 +193,6 @@ export default function HeroSection() {
                   className="w-full h-full object-cover rounded-t-[105px] rounded-b-[105px] transform group-hover:scale-105 transition-transform duration-500"
                   src="/student_4.png"
                 />
-              </div>
-            </div>
-            {/* Floating Badge Right */}
-            <div className="absolute -bottom-6 -right-7 bg-white border border-rose-50 rounded-2xl py-2 px-3.5 shadow-md flex items-center gap-2 whitespace-nowrap">
-              <span className="text-yellow-600 text-sm">🏆</span>
-              <div className="text-left">
-                <div className="text-xs font-black text-slate-900">1,500+</div>
-                <div className="text-[9px] font-bold text-slate-500 leading-none">Courses & Projects</div>
               </div>
             </div>
           </div>
