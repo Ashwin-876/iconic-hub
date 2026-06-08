@@ -95,7 +95,7 @@ app.get('/api/db', async (req, res) => {
 
     let stats = await statsCol.findOne({ id: 'platform_stats' });
     if (!stats) {
-      stats = { id: 'platform_stats', revenue: 82561, ai_queries: 4822 };
+      stats = { id: 'platform_stats', revenue: 0, ai_queries: 4822 };
       await statsCol.insertOne(stats);
     }
 
@@ -152,7 +152,7 @@ app.post('/api/db', async (req, res) => {
     if (action === 'makePayment') {
       const { amount, details } = payload;
       await statsCol.updateOne({ id: 'platform_stats' }, { $inc: { revenue: amount } });
-      await addNotification(db, `Payment of $${amount} received from ${details}`, 'finance');
+      await addNotification(db, `Payment of ₹${amount} received from ${details}`, 'finance');
       return res.status(200).json({ success: true });
     }
 

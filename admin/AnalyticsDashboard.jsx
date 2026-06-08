@@ -690,7 +690,7 @@ export default function AnalyticsDashboard() {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <DollarSign className="w-4 h-4" />
+                  <span className="font-extrabold text-[11px] w-4 text-center">₹</span>
                   {sidebarExpanded && <span>Finance</span>}
                 </div>
                 {sidebarExpanded && <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${expandedGroups.finance ? 'rotate-180' : ''}`} />}
@@ -869,10 +869,10 @@ export default function AnalyticsDashboard() {
                     <div className="flex justify-between items-start">
                       <div className="space-y-2 text-left">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Gross Revenue</p>
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight">${grossRevenue.toLocaleString()}</h3>
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight">₹{grossRevenue.toLocaleString()}</h3>
                       </div>
-                      <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400 border border-purple-500/20">
-                        <DollarSign className="w-4 h-4" />
+                      <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400 border border-purple-500/20 flex items-center justify-center w-8 h-8">
+                        <span className="font-extrabold text-sm">₹</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 mt-4 text-[10px] text-emerald-400 font-semibold text-left">

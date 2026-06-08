@@ -70,7 +70,7 @@ export default async function handler(req, res) {
       
       let stats = await statsCol.findOne({ id: 'platform_stats' });
       if (!stats) {
-        stats = { id: 'platform_stats', revenue: 82561, ai_queries: 4822 };
+        stats = { id: 'platform_stats', revenue: 0, ai_queries: 4822 };
         await statsCol.insertOne(stats);
       }
 

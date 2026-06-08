@@ -71,7 +71,7 @@ export default function EnrollCourse() {
     realtimeDb.enrollCourse(courseId || 'genai-llm-agents', email);
     
     if (selectedPlan === 'single') {
-      realtimeDb.makePayment(79.00, email);
+      realtimeDb.makePayment(0, email);
     }
 
     setTimeout(() => {
@@ -238,7 +238,7 @@ export default function EnrollCourse() {
                         <p className="text-xs text-slate-500">
                           Lifetime enrollment, certifications, grading, and developer playground compute.
                         </p>
-                        <span className="text-lg font-black text-slate-700 block pt-1">₹6,499</span>
+                        <span className="text-lg font-black text-slate-700 block pt-1">FREE</span>
                       </div>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export default function EnrollCourse() {
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-500 font-semibold">Price</span>
                   <span className="text-emerald-600 font-extrabold text-sm">
-                    {selectedPlan === 'path' ? 'FREE (Path Included)' : '₹6,499'}
+                    FREE (Path Included)
                   </span>
                 </div>
               </div>

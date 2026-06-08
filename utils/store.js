@@ -119,9 +119,9 @@ class RealtimeDatabase {
   }
 
   getRevenue() {
-    if (!IS_CLIENT) return 82561;
+    if (!IS_CLIENT) return 0;
     const val = localStorage.getItem('db_revenue');
-    return val ? Number(val) : 82561;
+    return val ? Number(val) : 0;
   }
 
   getAIQueries() {
@@ -186,7 +186,7 @@ class RealtimeDatabase {
     localStorage.setItem('db_revenue', String(next));
 
     this.addNotification({
-      text: `Payment of $${amount} received from ${details}`,
+      text: `Payment of ₹${amount} received from ${details}`,
       type: 'finance'
     });
 
