@@ -170,10 +170,6 @@ export default function HeroSection() {
         {/* Card 1: Left Card Container */}
         <div className="hidden md:block absolute left-[1%] lg:left-[3%] top-[10%] z-10">
           <div className="relative">
-            {/* Floating Mortarboard Hat */}
-            <div className="absolute -top-7 -left-5 w-11 h-11 bg-white rounded-2xl shadow-md flex items-center justify-center border border-purple-50 text-lg">
-              🎓
-            </div>
             {/* Card Frame */}
             <div 
               ref={el => cardsRef.current[0] = el}
