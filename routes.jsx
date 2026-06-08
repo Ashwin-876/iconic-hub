@@ -22,6 +22,7 @@ import Dashboard from './dashboard/index';
 // Courses
 import AllCourses from './courses/AllCourses';
 import CourseDetails from './courses/course-detail/CourseDetails';
+import EnrollCourse from './courses/course-detail/EnrollCourse';
 
 // Community
 import DiscussionForums from './community/DiscussionForums';
@@ -38,10 +39,13 @@ import AdminLogin from './admin/AdminLogin';
 
 // Developer Hub
 import DeveloperHub from './developer-hub/index';
+import ProgramEnroll from './developer-hub/ProgramEnroll';
+import JoinProject from './developer-hub/JoinProject';
 
 // Events Hub
 import EventsHub from './events/index';
 import EventDetails from './events/EventDetails';
+import RegisterEvent from './events/RegisterEvent';
 
 // Learning Paths
 import LearningPathsDispatcher from './learning-paths/index';
@@ -82,14 +86,18 @@ export const router = createBrowserRouter([
       { path: '/dashboard', element: <Dashboard /> },
       { path: '/courses', element: <AllCourses /> },
       { path: '/courses/:id', element: <CourseDetails /> },
+      { path: '/enroll/:courseId', element: <EnrollCourse /> },
       { path: '/community', element: <DiscussionForums /> },
       { path: '/ai-tutor', element: <AskAI /> },
       { path: '/profile', element: <PersonalInformation /> },
       { path: '/admin', element: <AnalyticsDashboard /> },
       { path: '/admin/login', element: <AdminLogin /> },
       { path: '/developer-hub', element: <DeveloperHub /> },
+      { path: '/developer-hub/program/:programId', element: <ProgramEnroll /> },
+      { path: '/developer-hub/join/:id', element: <JoinProject /> },
       { path: '/events', element: <EventsHub /> },
       { path: '/events/:id', element: <EventDetails /> },
+      { path: '/events/register/:id', element: <RegisterEvent /> },
       { path: '/learning-paths', element: <LearningPathsDispatcher /> },
     ]
   }

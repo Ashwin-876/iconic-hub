@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Terminal, Cpu, Award, Github, Users, Bell, User, Star, Search, Code, 
   Layout, Database, Shield, Zap, Sparkles, Brain, Smartphone, Gamepad2, 
@@ -37,12 +37,16 @@ const PROJECTS = [
 ];
 
 export default function DeveloperHub() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('hub'); // hub, playground, challenges, portfolio, github
+  const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [compilerLang, setCompilerLang] = useState('Python 3.11');
+
+  const isPlayground = activeTab === 'playground';
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fff8f6] text-[#261812] font-sans pb-16 selection:bg-vibrant-orange selection:text-white">
+      <div className={`${isPlayground ? 'h-screen overflow-hidden flex flex-col bg-white' : 'min-h-screen pb-16 bg-[#f8fafc]'} text-[#261812] font-sans selection:bg-[#2563EB] selection:text-white`}>
         <style dangerouslySetInnerHTML={{ __html: `
           @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -61,43 +65,45 @@ export default function DeveloperHub() {
           }
           .glass-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(255, 107, 0, 0.08);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.08);
           }
           .vibrant-shadow {
-            box-shadow: 0 10px 30px -10px rgba(255, 107, 0, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.5);
           }
           .vibrant-shadow:hover {
-            box-shadow: 0 15px 35px -5px rgba(255, 107, 0, 0.6);
+            box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.6);
           }
         `}} />
 
         {/* Navigation Bar */}
         <Header />
 
-        <main className="max-w-7xl mx-auto px-6 mt-8 space-y-12 text-left">
+        <main className={`${isPlayground ? 'flex-1 min-h-0 w-full flex flex-col' : 'max-w-7xl mx-auto px-6 mt-8 space-y-12'} text-left`}>
           
-          {/* Internal Hub Tab Selection Banner */}
-          <div className="bg-white border border-surface-stroke rounded-[24px] p-4 shadow-sm flex flex-wrap gap-2">
-            {[
-              { id: 'hub', label: 'Developer Hub Home' },
-              { id: 'playground', label: 'Coding Playground' },
-              { id: 'challenges', label: 'Coding Challenges' },
-              { id: 'portfolio', label: 'Portfolio Builder' },
-              { id: 'github', label: 'GitHub Sync' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-2.5 text-xs font-bold transition-all rounded-xl ${
-                  activeTab === tab.id
-                    ? 'bg-vibrant-orange text-white shadow-md shadow-vibrant-orange/10'
-                    : 'bg-slate-50 hover:bg-slate-100 border border-surface-stroke text-[#5a4136]'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          {/* Internal Hub Tab Selection Banner - Hidden in Playground Mode */}
+          {!isPlayground && (
+            <div className="bg-white border border-surface-stroke rounded-[24px] p-4 shadow-sm flex flex-wrap gap-2">
+              {[
+                { id: 'hub', label: 'Developer Hub Home' },
+                { id: 'playground', label: 'Coding Playground' },
+                { id: 'challenges', label: 'Coding Challenges' },
+                { id: 'portfolio', label: 'Portfolio Builder' },
+                { id: 'github', label: 'GitHub Sync' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-5 py-2.5 text-xs font-bold transition-all rounded-xl ${
+                    activeTab === tab.id
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/10'
+                      : 'bg-slate-50 hover:bg-slate-100 border border-surface-stroke text-[#5a4136]'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Subpages rendering */}
           {activeTab === 'hub' && (
@@ -107,16 +113,16 @@ export default function DeveloperHub() {
               <section className="relative pt-8 pb-12 overflow-visible">
                 {/* Floating Tech Background */}
                 <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
-                  <div className="tech-float stagger-1 absolute top-10 left-4 opacity-20 text-[#a04100]">
+                  <div className="tech-float stagger-1 absolute top-10 left-4 opacity-20 text-[#2563EB]">
                     <Code className="w-16 h-16" />
                   </div>
-                  <div className="tech-float stagger-2 absolute top-24 right-12 opacity-20 text-[#a04100]">
+                  <div className="tech-float stagger-2 absolute top-24 right-12 opacity-20 text-[#2563EB]">
                     <Terminal className="w-20 h-20" />
                   </div>
-                  <div className="tech-float stagger-3 absolute bottom-8 left-1/4 opacity-15 text-[#a04100]">
+                  <div className="tech-float stagger-3 absolute bottom-8 left-1/4 opacity-15 text-[#2563EB]">
                     <Database className="w-24 h-24" />
                   </div>
-                  <div className="tech-float stagger-1 absolute top-1/2 right-1/4 opacity-15 text-[#a04100]">
+                  <div className="tech-float stagger-1 absolute top-1/2 right-1/4 opacity-15 text-[#2563EB]">
                     <Cpu className="w-14 h-14" />
                   </div>
                 </div>
@@ -124,23 +130,23 @@ export default function DeveloperHub() {
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                   <div className="space-y-8">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-low border border-surface-stroke">
-                      <span className="w-2 h-2 rounded-full bg-vibrant-orange animate-pulse"></span>
+                      <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse"></span>
                       <span className="text-xs font-semibold uppercase tracking-wider text-[#5a4136]">
                         AI-Powered Learning Platform
                       </span>
                     </div>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#261812] leading-tight">
-                      Learn, Build & <span className="text-vibrant-orange">Deploy</span> Code Faster
+                      Learn, Build & <span className="text-[#2563EB]">Deploy</span> Code Faster
                     </h1>
                     <p className="text-lg text-[#5c5f60] max-w-lg">
                       Master programming through hands-on projects, live coding environments, and AI-powered mentorship. The ultimate sandbox for the next generation of creators.
                     </p>
                     <div className="flex flex-wrap gap-4 pt-4">
-                      <button onClick={() => setActiveTab('playground')} className="px-8 py-4 bg-vibrant-orange text-white rounded-full vibrant-shadow hover:scale-105 active:scale-95 transition-all text-sm font-bold">
-                        Start Coding Free
+                      <button onClick={() => setActiveTab('playground')} className="px-8 py-4 bg-[#2563EB] text-white rounded-full vibrant-shadow hover:scale-105 active:scale-95 transition-all text-sm font-bold">
+                        Open IDE Playground
                       </button>
-                      <button className="px-8 py-4 bg-white border border-vibrant-orange text-vibrant-orange rounded-full hover:bg-surface-container-low transition-all text-sm font-bold">
-                        Join Community
+                      <button onClick={() => setActiveTab('challenges')} className="px-8 py-4 border border-surface-stroke text-[#5a4136] rounded-full hover:bg-slate-50 transition-all text-sm font-bold">
+                        Browse Challenges
                       </button>
                     </div>
                     <div className="flex items-center gap-6 pt-8">
@@ -155,7 +161,7 @@ export default function DeveloperHub() {
 
                   {/* Floating Code Editor Visual */}
                   <div className="relative group">
-                    <div className="absolute -inset-4 bg-vibrant-orange/10 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute -inset-4 bg-[#2563EB]/10 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
                     <div className="relative glass-card rounded-[24px] overflow-hidden border border-surface-stroke shadow-2xl">
                       <div className="bg-[#1A1A1B] p-4 flex items-center justify-between border-b border-white/10">
                         <div className="flex gap-2">
@@ -171,7 +177,7 @@ export default function DeveloperHub() {
                       <div className="bg-[#1A1A1B]/95 p-6 min-h-[320px] font-mono text-xs leading-relaxed text-left">
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">1</span>
-                          <span className="text-white"><span className="text-[#ff6b00]">import</span> kinetic_glass</span>
+                          <span className="text-white"><span className="text-[#2563EB]">import</span> kinetic_glass</span>
                         </div>
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">2</span>
@@ -179,15 +185,15 @@ export default function DeveloperHub() {
                         </div>
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">3</span>
-                          <span className="text-white"><span className="text-[#ff6b00]">def</span> <span className="text-[#0984E3]">initialize_success</span>(developer):</span>
+                          <span className="text-white"><span className="text-[#2563EB]">def</span> <span className="text-[#0984E3]">initialize_success</span>(developer):</span>
                         </div>
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">4</span>
-                          <span className="text-white pl-4"><span className="text-[#ff6b00]">print</span>(<span className="text-[#00B894]">f"Welcome to the Lab, {"{"}developer{"}"}!"</span>)</span>
+                          <span className="text-white pl-4"><span className="text-[#2563EB]">print</span>(<span className="text-[#00B894]">f"Welcome to the Lab, {"{"}developer{"}"}!"</span>)</span>
                         </div>
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">5</span>
-                          <span className="text-white pl-4"><span className="text-[#ff6b00]">return</span> kinetic_glass.<span class="text-[#0984E3]">launch</span>()</span>
+                          <span className="text-white pl-4"><span className="text-[#2563EB]">return</span> kinetic_glass.<span className="text-[#0984E3]">launch</span>()</span>
                         </div>
                         <div className="flex gap-4">
                           <span className="text-white/20 select-none w-4">6</span>
@@ -201,10 +207,10 @@ export default function DeveloperHub() {
                           <span className="text-white/20 select-none w-4">8</span>
                           <span className="text-white"><span className="text-[#0984E3]">initialize_success</span>(<span className="text-[#00B894]">"Future Pro"</span>)</span>
                         </div>
-
+ 
                         {/* Compiler Output Mockup */}
                         <div className="mt-8 p-4 bg-white/5 rounded-lg border border-white/10">
-                          <div className="text-vibrant-orange font-bold text-[10px] uppercase tracking-widest mb-2">Live Compiler Output</div>
+                          <div className="text-[#2563EB] font-bold text-[10px] uppercase tracking-widest mb-2">Live Compiler Output</div>
                           <div className="text-[#00B894]">&gt; Welcome to the Lab, Future Pro!</div>
                           <div className="text-[#00B894]">&gt; Deployment sequence initialized...</div>
                           <div className="text-white/40">&gt; Done in 0.4s</div>
@@ -228,8 +234,8 @@ export default function DeveloperHub() {
                     const IconComponent = p.icon;
                     return (
                       <div key={idx} className="glass-card p-6 rounded-[24px] flex flex-col h-full group">
-                        <div className="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center mb-6 group-hover:bg-vibrant-orange transition-colors duration-300">
-                          <IconComponent className="w-6 h-6 text-vibrant-orange group-hover:text-white transition-colors duration-300" />
+                        <div className="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center mb-6 group-hover:bg-[#2563EB] transition-colors duration-300">
+                          <IconComponent className="w-6 h-6 text-[#2563EB] group-hover:text-white transition-colors duration-300" />
                         </div>
                         <h3 className="text-lg font-bold text-[#261812] mb-2">{p.name}</h3>
                         <div className="space-y-2 mb-6 flex-grow">
@@ -245,9 +251,12 @@ export default function DeveloperHub() {
                             {p.diff}
                           </div>
                         </div>
-                        <button className="w-full text-xs font-bold py-3 rounded-xl border border-vibrant-orange text-vibrant-orange hover:bg-vibrant-orange hover:text-white transition-all">
+                        <Link 
+                          to={`/developer-hub/program/${p.name.toLowerCase().replace(/ /g, '-')}`}
+                          className="w-full text-center text-xs font-bold py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition-all shadow-md shadow-blue-500/5 hover:shadow-lg hover:shadow-blue-500/10 block"
+                        >
                           Join Program
-                        </button>
+                        </Link>
                       </div>
                     );
                   })}
@@ -281,12 +290,12 @@ export default function DeveloperHub() {
                   <div className="lg:w-2/3 w-full">
                     <div className="glass-card rounded-[24px] overflow-hidden shadow-xl border-surface-stroke">
                       {/* Editor Header */}
-                      <div className="bg-[#f8ddd2] px-6 py-4 flex flex-wrap gap-4 items-center justify-between border-b border-surface-stroke">
+                      <div className="bg-[#e6f0ff] px-6 py-4 flex flex-wrap gap-4 items-center justify-between border-b border-surface-stroke">
                         <div className="flex items-center gap-4">
                           <select 
                             value={compilerLang}
                             onChange={(e) => setCompilerLang(e.target.value)}
-                            className="bg-white border border-surface-stroke rounded-lg px-4 py-1.5 text-xs font-mono outline-none focus:ring-2 focus:ring-vibrant-orange text-[#261812]"
+                            className="bg-white border border-surface-stroke rounded-lg px-4 py-1.5 text-xs font-mono outline-none focus:ring-2 focus:ring-[#2563EB] text-[#261812]"
                           >
                             <option>Python 3.11</option>
                             <option>JavaScript (Node.js)</option>
@@ -302,7 +311,7 @@ export default function DeveloperHub() {
                           <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-surface-stroke rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors text-[#261812]">
                             <Share2 className="w-3.5 h-3.5" /> Share
                           </button>
-                          <button onClick={() => setActiveTab('playground')} className="flex items-center gap-1.5 px-4 py-1.5 bg-vibrant-orange text-white rounded-lg text-xs font-bold vibrant-shadow active:scale-95 transition-all">
+                          <button onClick={() => setActiveTab('playground')} className="flex items-center gap-1.5 px-4 py-1.5 bg-[#2563EB] text-white rounded-lg text-xs font-bold vibrant-shadow active:scale-95 transition-all">
                             <Play className="w-3.5 h-3.5 fill-white" /> Run Code
                           </button>
                         </div>
@@ -315,16 +324,16 @@ export default function DeveloperHub() {
                             1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10
                           </div>
                           <div className="flex-grow whitespace-pre text-[#261812]">
-                            <span className="text-[#a04100] font-bold">class</span> <span className="text-[#0984E3]">CodeLabChallenge</span>:<br/>
-                            {"    "}<span className="text-[#a04100] font-bold">def</span> <span className="text-[#0984E3]">__init__</span>(self, name):<br/>
+                            <span className="text-[#2563EB] font-bold">class</span> <span className="text-[#0984E3]">CodeLabChallenge</span>:<br/>
+                            {"    "}<span className="text-[#2563EB] font-bold">def</span> <span className="text-[#0984E3]">__init__</span>(self, name):<br/>
                             {"        "}self.name = name<br/>
                             {"        "}self.points = 0<br/>
                             {"    "}<br/>
-                            {"    "}<span className="text-[#a04100] font-bold">def</span> <span className="text-[#0984E3]">solve</span>(self):<br/>
+                            {"    "}<span className="text-[#2563EB] font-bold">def</span> <span className="text-[#0984E3]">solve</span>(self):<br/>
                             {"        "}self.points += 100<br/>
-                            {"        "}<span className="text-[#a04100] font-bold">print</span>(f<span className="text-[#00B894]">"Challenge completed by {'{'}self.name{'}'}!"</span>)<br/>
+                            {"        "}<span className="text-[#2563EB] font-bold">print</span>(f<span className="text-[#00B894]">"Challenge completed by {'{'}self.name{'}'}!"</span>)<br/>
                             <br/>
-                            user = <span className="text-[#0984E3]">CodeLabChallenge</span>(<span class="text-[#00B894]">"Nexus_Dev"</span>)<br/>
+                            user = <span className="text-[#0984E3]">CodeLabChallenge</span>(<span className="text-[#00B894]">"Nexus_Dev"</span>)<br/>
                             user.<span className="text-[#0984E3]">solve</span>()
                           </div>
                         </div>
@@ -354,7 +363,7 @@ export default function DeveloperHub() {
                       Don't just learn syntax. Build production-grade applications that hiring managers actually care about.
                     </p>
                   </div>
-                  <button className="text-xs font-bold text-vibrant-orange flex items-center gap-2 group shrink-0">
+                  <button className="text-xs font-bold text-[#2563EB] flex items-center gap-2 group shrink-0">
                     Browse all projects <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -377,7 +386,10 @@ export default function DeveloperHub() {
                       <div className="p-6 flex-grow flex flex-col justify-between text-left">
                         <h4 className="text-lg font-bold text-[#261812] mb-6">{proj.title}</h4>
                         <div className="flex gap-3">
-                          <button className="flex-1 text-xs font-bold py-2.5 rounded-xl bg-vibrant-orange text-white vibrant-shadow">
+                          <button 
+                            onClick={() => navigate(`/developer-hub/join/${idx}`)}
+                            className="flex-1 text-xs font-bold py-2.5 rounded-xl bg-[#2563EB] text-white vibrant-shadow"
+                          >
                             Join Project
                           </button>
                           <button className="px-4 py-2.5 rounded-xl border border-surface-stroke text-[#5c5f60] hover:bg-surface-container-low transition-colors">
@@ -393,8 +405,20 @@ export default function DeveloperHub() {
             </div>
           )}
 
-          {activeTab === 'playground' && <CodingPlayground />}
-          {activeTab === 'challenges' && <CodingChallenges />}
+          {activeTab === 'playground' && (
+            <CodingPlayground 
+              onExit={() => setActiveTab('hub')} 
+              challenge={selectedChallenge} 
+            />
+          )}
+          {activeTab === 'challenges' && (
+            <CodingChallenges 
+              onSelectChallenge={(prob) => {
+                setSelectedChallenge(prob);
+                setActiveTab('playground');
+              }} 
+            />
+          )}
           {activeTab === 'portfolio' && <DeveloperPortfolio />}
           {activeTab === 'github' && <GitHubIntegration />}
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Star, Clock, User, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const RECOMMENDED = [
   {
-    id: 'c1',
+    id: 'react-arch',
     title: 'Advanced React Architecture: State & Performance',
     instructor: 'Marcus Holloway',
     rating: 4.9,
@@ -12,7 +13,7 @@ const RECOMMENDED = [
     tag: 'Highly Recommended'
   },
   {
-    id: 'c2',
+    id: 'next-edge',
     title: 'NextJS Server Components & Edge Architectures',
     instructor: 'Dr. Sarah Chen',
     rating: 4.8,
@@ -21,7 +22,7 @@ const RECOMMENDED = [
     tag: 'Skill Match'
   },
   {
-    id: 'c3',
+    id: 'tailwind-premium',
     title: 'Tailwind CSS Premium Production Workflows',
     instructor: 'David Sterling',
     rating: 5.0,
@@ -32,15 +33,17 @@ const RECOMMENDED = [
 ];
 
 export default function RecommendedCourses() {
-  const handleEnroll = (title) => {
-    alert(`Enrolled in: ${title}!`);
+  const navigate = useNavigate();
+
+  const handleEnroll = (id) => {
+    navigate(`/courses/${id}`);
   };
 
   return (
     <div className="space-y-4 text-left">
       <div className="flex justify-between items-end">
         <h2 className="text-xl font-bold text-on-background">Recommended for You</h2>
-        <button className="text-xs font-bold text-vibrant-orange hover:underline flex items-center gap-1">
+        <button className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
           <span>View all paths</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
@@ -55,7 +58,7 @@ export default function RecommendedCourses() {
                 alt={course.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
               />
-              <span className="absolute top-3 left-3 px-2 py-0.5 bg-white/90 backdrop-blur text-[10px] font-bold text-vibrant-orange rounded-md shadow-sm border border-slate-100">
+              <span className="absolute top-3 left-3 px-2 py-0.5 bg-white/90 backdrop-blur text-[10px] font-bold text-blue-600 rounded-md shadow-sm border border-slate-100">
                 {course.tag}
               </span>
             </div>
@@ -63,7 +66,7 @@ export default function RecommendedCourses() {
             <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs text-slate-500 font-semibold">
-                  <div className="flex items-center gap-1 text-amber-500">
+                  <div className="flex items-center gap-1 text-blue-500">
                     <Star className="w-3.5 h-3.5 fill-current" />
                     <span>{course.rating}</span>
                   </div>
@@ -86,8 +89,8 @@ export default function RecommendedCourses() {
                 </div>
 
                 <button
-                  onClick={() => handleEnroll(course.title)}
-                  className="w-full py-2.5 bg-vibrant-orange hover:bg-orange-600 text-white text-xs font-bold rounded-xl active:scale-[0.99] transition-all"
+                  onClick={() => handleEnroll(course.id)}
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-600 text-white text-xs font-bold rounded-xl active:scale-[0.99] transition-all"
                 >
                   Enroll Now
                 </button>

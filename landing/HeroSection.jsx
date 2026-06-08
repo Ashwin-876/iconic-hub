@@ -1,135 +1,180 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Terminal, Award, BrainCircuit, ArrowRight } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { Play, ArrowRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function HeroSection() {
+  const heroRef = useRef(null);
+  const headlineRef = useRef(null);
+  const descRef = useRef(null);
+  const ctasRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  const handleWatchVideo = () => {
+    alert('Playing introductory video...');
+  };
+
+  const handleGetStarted = () => {
+    alert('Getting started...');
+  };
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Initial Entry Animations
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      tl.fromTo(headlineRef.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 1, delay: 0.2 }
+      );
+
+      tl.fromTo(descRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        '-=0.6'
+      );
+
+      tl.fromTo(ctasRef.current,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.8 },
+        '-=0.6'
+      );
+
+      // Filter out any null/undefined references in array
+      const validCards = cardsRef.current.filter(Boolean);
+
+      // Stagger reveal student cards with slight rotate/scale
+      tl.fromTo(validCards,
+        { opacity: 0, y: 80, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 1.2, stagger: 0.15, ease: 'power4.out' },
+        '-=0.8'
+      );
+
+      // 2. Continuous Idle Floating Animation for Cards
+      validCards.forEach((card, idx) => {
+        gsap.to(card, {
+          y: idx % 2 === 0 ? '-=15' : '+=15',
+          rotation: idx % 2 === 0 ? -1.5 : 1.5,
+          duration: 3 + idx * 0.4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: idx * 0.25
+        });
+      });
+
+      // 3. Parallax scroll effect
+      validCards.forEach((card, idx) => {
+        gsap.to(card, {
+          y: idx % 2 === 0 ? '-=80' : '-=50',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+      });
+
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-16 px-4 md:px-8 overflow-hidden bg-radial-glow">
-      {/* Dynamic background accents */}
-      <div className="absolute top-[20%] left-[10%] w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-[100px] animate-pulse"></div>
-      <div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] bg-orange-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-      <div className="absolute inset-0 bg-grid-pattern opacity-40"></div>
+    <div 
+      ref={heroRef}
+      className="relative min-h-[calc(100vh-73px)] w-full bg-gradient-to-b from-[#F8FAFC] via-[#F1F5F9] to-[#F8FAFC] text-[#0F172A] font-sans antialiased overflow-hidden flex items-center justify-center py-12"
+    >
+      {/* Background Gradients for Depth */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-purple-200/20 to-blue-200/20 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-br from-emerald-100/15 to-indigo-200/25 blur-[140px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left column: Text content */}
-        <div className="lg:col-span-7 flex flex-col space-y-6 text-center lg:text-left">
-          <div className="inline-flex items-center space-x-2 bg-slate-800/60 border border-slate-700/50 rounded-full py-1 px-4 self-center lg:self-start backdrop-blur-md">
-            <span className="flex h-2 w-2 rounded-full bg-orange-500 animate-ping"></span>
-            <span className="text-xs font-semibold tracking-wider uppercase text-orange-400">Introducing Iconic Hub 2.0</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            The Ultimate Hub for <br />
-            <span className="text-gradient-orange">Modern Developers</span> & <br />
-            <span className="text-gradient-cyan">AI Pioneers</span>
+      {/* Main Container */}
+      <div className="relative w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center justify-center z-10 min-h-[75vh]">
+        
+        {/* Centered Hero Content Block */}
+        <div className="max-w-2xl mx-auto text-center space-y-6 relative z-25 -mt-16 md:-mt-24 px-4">
+          
+          {/* Large Premium Headline */}
+          <h1 
+            ref={headlineRef} 
+            className="font-black text-3xl sm:text-4xl lg:text-5xl text-[#0B1530] tracking-tight leading-[1.2] max-w-2xl mx-auto whitespace-pre-line"
+          >
+            Let's Learn about new{'\n'}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6E2ED8] to-[#4F46E5]">
+              Knowledge and abilities.
+            </span>
           </h1>
-
-          <p className="text-lg text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            Accelerate your learning, build real-world developer portfolios, tackle live code playgrounds, and master skills with your personalized 24/7 AI Tutor.
+          
+          {/* Short Supporting Description */}
+          <p 
+            ref={descRef} 
+            className="text-[#64748B] font-medium text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto"
+          >
+            Empowering learners with industry-ready courses, real-world projects, expert guidance, and certifications that open new opportunities.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-            <Link 
-              to="/login"
-              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all duration-350 flex items-center justify-center space-x-2"
+          {/* Primary and Secondary CTA Buttons */}
+          <div ref={ctasRef} className="flex flex-wrap items-center justify-center gap-5 pt-2">
+            <button
+              onClick={handleGetStarted}
+              className="group flex items-center gap-2 px-8 py-4 bg-[#6E2ED8] text-white font-bold rounded-full hover:bg-[#5921B6] active:scale-95 transition-all shadow-lg shadow-purple-600/25 text-sm sm:text-base"
             >
-              <span>Get Started Free</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <a 
-              href="#features"
-              className="w-full sm:w-auto px-8 py-4 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 font-semibold rounded-xl border border-slate-700/50 transition-all flex items-center justify-center"
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            
+            <button
+              onClick={handleWatchVideo}
+              className="flex items-center gap-3 px-6 py-4 bg-white/85 backdrop-blur-md border border-slate-200/80 hover:bg-slate-50/90 rounded-full transition-all group shadow-sm"
             >
-              Explore Features
-            </a>
-          </div>
-
-          {/* Quick Stats banner */}
-          <div className="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800 max-w-md mx-auto lg:mx-0">
-            <div>
-              <div className="text-2xl font-bold text-white">50k+</div>
-              <div className="text-xs text-slate-500 uppercase tracking-wider">Developers</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">120+</div>
-              <div className="text-xs text-slate-500 uppercase tracking-wider">Guided Paths</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">99%</div>
-              <div className="text-xs text-slate-500 uppercase tracking-wider">Success Rate</div>
-            </div>
+              <span className="w-8 h-8 bg-[#6E2ED8]/10 text-[#6E2ED8] rounded-full flex items-center justify-center group-hover:bg-[#6E2ED8] group-hover:text-white transition-all">
+                <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              </span>
+              <span className="font-bold text-sm sm:text-base text-[#0B1530] group-hover:text-[#6E2ED8] transition-colors">
+                Watch Video
+              </span>
+            </button>
           </div>
         </div>
 
-        {/* Right column: Interactive UI mockups dashboard */}
-        <div className="lg:col-span-5 relative w-full flex justify-center">
-          <div className="relative w-full max-w-[500px] aspect-[4/3] glass-panel rounded-2xl p-4 shadow-2xl border border-white/10 hover:border-white/20 transition-all duration-500 group overflow-hidden">
-            {/* Glossy overlay effect */}
-            <div className="absolute -inset-y-12 -inset-x-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-
-            {/* Mock IDE Headers */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex space-x-2">
-                <span className="w-3 h-3 rounded-full bg-red-500/80"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                <span className="w-3 h-3 rounded-full bg-green-500/80"></span>
-              </div>
-              <span className="text-xs text-slate-500 font-mono">iconic-hub-dashboard.jsx</span>
-              <Terminal className="w-4 h-4 text-slate-500" />
-            </div>
-
-            {/* Mock Dashboard Body */}
-            <div className="space-y-4 pt-4 text-left font-sans">
-              <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800/80">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-semibold text-orange-400 uppercase tracking-wider">AI TUTOR SUGGESTION</span>
-                  <span className="text-[10px] text-slate-500">Just now</span>
-                </div>
-                <p className="text-xs text-slate-300">
-                  "Based on your interest in <span className="text-cyan-400 font-mono">React Hooks</span>, I recommend the coding playground challenge 'Custom Hooks Masterclass'!"
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-800/50 flex flex-col justify-between">
-                  <span className="text-xs text-slate-400">Total Progress</span>
-                  <div className="flex items-end justify-between mt-2">
-                    <span className="text-lg font-bold text-white">78%</span>
-                    <span className="text-[10px] text-emerald-400 font-semibold">+12% this wk</span>
-                  </div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1">
-                    <div className="bg-orange-500 h-full w-[78%]"></div>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-800/50 flex flex-col justify-between">
-                  <span className="text-xs text-slate-400">Active Path</span>
-                  <span className="text-xs font-bold text-white mt-1 truncate">Full-Stack AI Architect</span>
-                  <span className="text-[10px] text-slate-500 mt-2">Next up: Vector Databases</span>
-                </div>
-              </div>
-
-              {/* Coding challenge completion widget */}
-              <div className="p-3 bg-purple-950/20 rounded-xl border border-purple-500/20 flex items-center space-x-3">
-                <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
-                  <Award className="w-5 h-5 animate-bounce" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-xs font-bold text-slate-200">Achievement Unlocked!</div>
-                  <div className="text-[10px] text-slate-400">Completed 5 day Coding streak</div>
-                </div>
-                <div className="text-xs font-bold text-purple-400">+150 XP</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Floaters for depth */}
-          <div className="absolute -top-4 -right-4 p-3 bg-slate-900/80 rounded-xl border border-slate-800/80 shadow-lg flex items-center space-x-2 animate-bounce" style={{ animationDuration: '6s' }}>
-            <BrainCircuit className="w-4 h-4 text-cyan-400" />
-            <span className="text-[10px] font-mono text-slate-300">AI Tutor Online</span>
+        {/* Distributed Student Cards */}
+        
+        {/* Card 1: Top Left (Large) - Beside headline area */}
+        <div 
+          ref={el => cardsRef.current[0] = el}
+          className="hidden md:block absolute left-[1.5%] lg:left-[4%] top-[3%] w-[140px] lg:w-[190px] aspect-[1/1.5] z-10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-purple-900/10 group"
+        >
+          <div className="relative w-full h-full bg-gradient-to-b from-[#FAF5FF] to-[#E9D5FF] rounded-t-[120px] rounded-b-[120px] shadow-xl shadow-purple-900/5 border border-white/60 p-2.5 flex items-center justify-center overflow-hidden">
+            <img
+              alt="Student portrait"
+              className="w-full h-full object-cover rounded-t-[105px] rounded-b-[105px] transform group-hover:scale-105 transition-transform duration-500"
+              src="/student_1.png"
+            />
           </div>
         </div>
+
+        {/* Card 4: Top Right (Large) - Beside headline area */}
+        <div 
+          ref={el => cardsRef.current[3] = el}
+          className="hidden md:block absolute right-[1.5%] lg:right-[4%] top-[3%] w-[140px] lg:w-[190px] aspect-[1/1.5] z-10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-rose-900/10 group"
+        >
+          <div className="relative w-full h-full bg-gradient-to-b from-[#FFF5F5] to-[#FFE4E6] rounded-t-[120px] rounded-b-[120px] shadow-xl shadow-rose-900/5 border border-white/60 p-2.5 flex items-center justify-center overflow-hidden">
+            <img
+              alt="Student portrait"
+              className="w-full h-full object-cover rounded-t-[105px] rounded-b-[105px] transform group-hover:scale-105 transition-transform duration-500"
+              src="/student_4.png"
+            />
+          </div>
+        </div>
+
       </div>
-    </section>
+    </div>
   );
 }

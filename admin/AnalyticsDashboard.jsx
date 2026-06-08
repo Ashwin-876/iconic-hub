@@ -8,6 +8,7 @@ import {
   CheckCircle, XCircle, ShieldCheck, Mail, ArrowUpRight, PlusCircle
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import { realtimeDb } from '../utils/store';
 
 const PATH_DATA = {
   'ai-engineer': {
@@ -158,23 +159,23 @@ export default function AnalyticsDashboard() {
     }));
   };
 
-  // Mock State Data
-  const [usersList, setUsersList] = useState([
-    { id: '1', name: 'Ashwin Kumar', email: 'ashwin@gmail.com', role: 'Student', status: 'Active', progress: 85, path: 'AI Engineer', joined: '2026-05-01' },
-    { id: '2', name: 'Dr. Elena Volkov', email: 'elena@iconichub.io', role: 'Instructor', status: 'Verified', progress: 100, path: 'Deep Learning', joined: '2025-10-12' },
-    { id: '3', name: 'Sarah Jenkins', email: 'sarah.j@anthropic.com', role: 'Mentor', status: 'Verified', progress: 95, path: 'NLP Specialist', joined: '2026-02-15' },
-    { id: '4', name: 'Marcus Chen', email: 'marcus@nvidia.com', role: 'Instructor', status: 'Verified', progress: 100, path: 'MLOps Architect', joined: '2026-01-20' },
-    { id: '5', name: 'Nisha Mehta', email: 'nisha@gmail.com', role: 'Student', status: 'Pending Verification', progress: 34, path: 'Frontend Developer', joined: '2026-06-02' },
-    { id: '6', name: 'Devon Wright', email: 'devon.w@gmail.com', role: 'Student', status: 'Active', progress: 62, path: 'DevOps Engineer', joined: '2026-04-18' }
-  ]);
+  const [activeUsers, setActiveUsers] = useState(14285);
+  const [grossRevenue, setGrossRevenue] = useState(realtimeDb.getRevenue());
+  const [aiQueries, setAiQueries] = useState(realtimeDb.getAIQueries());
 
-  const [coursesList, setCoursesList] = useState([
-    { id: '101', title: 'Neural Networks & Deep Learning', category: 'AI & Machine Learning', status: 'Approved', instructor: 'Dr. Elena Volkov', students: 1240, rating: 4.9 },
-    { id: '102', title: 'Mastering Kubernetes in Production', category: 'DevOps & Cloud', status: 'Approved', instructor: 'Marcus Chen', students: 850, rating: 4.8 },
-    { id: '103', title: 'Advanced React Architecture Patterns', category: 'Web Development', status: 'Pending Review', instructor: 'Ashwin Kumar', students: 0, rating: 0.0 },
-    { id: '104', title: 'Generative AI Applications with LLMs', category: 'AI & Machine Learning', status: 'Approved', instructor: 'Sarah Jenkins', students: 2310, rating: 4.95 }
-  ]);
+  // Real-time metrics simulation (fluctuates dynamically)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveUsers(prev => prev + (Math.random() > 0.4 ? Math.floor(Math.random() * 3) : 0));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
+  // Sync state variables with realtimeDb
+  const [usersList, setUsersList] = useState(realtimeDb.getUsers());
+  const [coursesList, setCoursesList] = useState(realtimeDb.getCourses());
+  const [eventsList, setEventsList] = useState(realtimeDb.getEvents());
+  const [notifications, setNotifications] = useState(realtimeDb.getNotifications());
   const [moderationQueue, setModerationQueue] = useState([
     { id: '201', user: 'SpamBot99', type: 'Discussion Post', reason: 'Unsolicited promotion link', content: 'Hey guys, check out my crypto trading channel for free BTC signals...', date: '10m ago' },
     { id: '202', user: 'ReactNewbie', type: 'Q&A Thread', reason: 'Harassment/Inappropriate language', content: 'Your answers are completely stupid, you should quit software engineering immediately.', date: '1h ago' },
@@ -185,6 +186,18 @@ export default function AnalyticsDashboard() {
     { id: 'p1', name: 'AI Tutor Code Explainer', model: 'Gemini-1.5-Pro', temperature: 0.2, systemInstruction: 'You are an advanced pair-programming AI coach. Focus on explaining edge-cases and visual breakdowns of algorithms.' },
     { id: 'p2', name: 'ATS Resume Parser', model: 'Gemini-1.5-Flash', temperature: 0.1, systemInstruction: 'Extract technical competencies, experience timelines, and skill matches based on target engineering descriptions.' }
   ]);
+
+  useEffect(() => {
+    const unsubscribe = realtimeDb.subscribe(() => {
+      setUsersList(realtimeDb.getUsers());
+      setCoursesList(realtimeDb.getCourses());
+      setEventsList(realtimeDb.getEvents());
+      setGrossRevenue(realtimeDb.getRevenue());
+      setAiQueries(realtimeDb.getAIQueries());
+      setNotifications(realtimeDb.getNotifications());
+    });
+    return () => unsubscribe();
+  }, []);
 
   // States for interactive UI
   const [searchTerm, setSearchTerm] = useState('');
@@ -207,43 +220,34 @@ export default function AnalyticsDashboard() {
     auditLogExporter: true
   });
 
-  // Events Hub States
-  const [eventsList, setEventsList] = useState([
-    { id: 'ev1', title: 'Global GenAI Hackathon 2026', category: 'Hackathons', date: '2026-06-12', status: 'Upcoming', venue: 'Virtual & SF Campus', attendees: 512, limit: 1000 },
-    { id: 'ev2', title: 'Deep Learning Model Tuning Workshop', category: 'Workshops', date: '2026-06-18', status: 'Upcoming', venue: 'Virtual / Zoom', attendees: 240, limit: 300 },
-    { id: 'ev3', title: 'Agentic Workflows with Gemini API', category: 'Workshops', date: '2026-06-25', status: 'Upcoming', venue: 'Virtual / Google Meet', attendees: 185, limit: 250 },
-    { id: 'ev4', title: 'Scaling LLMs in Production: Guest Lecture', category: 'Guest Lectures', date: '2026-05-28', status: 'Past', venue: 'Auditorium A', attendees: 420, limit: 500 }
-  ]);
-
   const [newEventTitle, setNewEventTitle] = useState('');
   const [newEventCategory, setNewEventCategory] = useState('Hackathons');
   const [newEventDate, setNewEventDate] = useState('');
   const [newEventVenue, setNewEventVenue] = useState('');
   const [newEventLimit, setNewEventLimit] = useState(200);
+  const [newEventImage, setNewEventImage] = useState(null);
 
   const handleAddEvent = (e) => {
     e.preventDefault();
     if (!newEventTitle || !newEventDate || !newEventVenue) return;
-    const newEvent = {
-      id: String(Date.now()),
+    realtimeDb.addEvent({
       title: newEventTitle,
       category: newEventCategory,
       date: newEventDate,
-      status: 'Upcoming',
       venue: newEventVenue,
-      attendees: 0,
-      limit: Number(newEventLimit)
-    };
-    setEventsList([newEvent, ...eventsList]);
+      limit: Number(newEventLimit),
+      image: newEventImage
+    });
     setNewEventTitle('');
     setNewEventDate('');
     setNewEventVenue('');
     setNewEventLimit(200);
+    setNewEventImage(null);
     setActiveSubTab('all-events');
   };
 
   const handleCancelEvent = (id) => {
-    setEventsList(prev => prev.filter(ev => ev.id !== id));
+    realtimeDb.cancelEvent(id);
   };
 
   const handleToggleFlag = (flag) => {
@@ -251,7 +255,7 @@ export default function AnalyticsDashboard() {
   };
 
   const handleApproveCourse = (id) => {
-    setCoursesList(prev => prev.map(c => c.id === id ? { ...c, status: 'Approved' } : c));
+    realtimeDb.approveCourse(id);
   };
 
   const handleModerationAction = (id, action) => {
@@ -261,22 +265,27 @@ export default function AnalyticsDashboard() {
   const handleAddCourse = (e) => {
     e.preventDefault();
     if (!newCourseName) return;
-    const newCourse = {
-      id: String(Date.now()),
+    realtimeDb.createCourse({
       title: newCourseName,
       category: newCourseCategory,
-      status: 'Pending Review',
-      instructor: newCourseInstructor,
-      students: 0,
-      rating: 0.0
-    };
-    setCoursesList([newCourse, ...coursesList]);
+      instructor: newCourseInstructor
+    });
     setNewCourseName('');
     setActiveSubTab('all-courses');
   };
 
   const handleVerifyUser = (id) => {
-    setUsersList(prev => prev.map(u => u.id === id ? { ...u, status: 'Active' } : u));
+    const list = realtimeDb.getUsers();
+    const updated = list.map(u => u.id === id ? { ...u, status: 'Active' } : u);
+    localStorage.setItem('db_users', JSON.stringify(updated));
+    const verifiedUser = list.find(u => u.id === id);
+    if (verifiedUser) {
+      realtimeDb.addNotification({
+        text: `User verified: ${verifiedUser.name}`,
+        type: 'user'
+      });
+    }
+    realtimeDb.broadcastChange();
   };
 
   const handleAddChapter = (e) => {
@@ -289,6 +298,57 @@ export default function AnalyticsDashboard() {
     setNewChapterTitle('');
   };
 
+  // Live Graph Real-Time State
+  const [liveGraphData, setLiveGraphData] = useState({
+    users: [40, 60, 85, 120, 130, 142, 148, 150, 155, 160],
+    aiActions: [20, 35, 50, 80, 100, 125, 130, 140, 135, 130]
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveGraphData(prev => {
+        const nextUsers = [...prev.users.slice(1)];
+        const lastUserVal = prev.users[prev.users.length - 1];
+        const newUserVal = Math.min(240, Math.max(10, lastUserVal + (Math.random() * 16 - 7)));
+        nextUsers.push(newUserVal);
+
+        const nextAi = [...prev.aiActions.slice(1)];
+        const lastAiVal = prev.aiActions[prev.aiActions.length - 1];
+        const newAiVal = Math.min(240, Math.max(10, lastAiVal + (Math.random() * 20 - 9)));
+        nextAi.push(newAiVal);
+
+        return {
+          users: nextUsers,
+          aiActions: nextAi
+        };
+      });
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const getSvgCoordinates = (data, maxVal = 250) => {
+    const height = 180;
+    const width = 475;
+    return data.map((val, idx) => {
+      const x = (idx / (data.length - 1)) * width + 10;
+      const y = height - (val / maxVal) * (height - 20);
+      return { x, y };
+    });
+  };
+
+  const usersPoints = getSvgCoordinates(liveGraphData.users);
+  const aiPoints = getSvgCoordinates(liveGraphData.aiActions);
+
+  const usersLinePath = usersPoints.reduce((acc, p, i) => i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`, '');
+  const aiLinePath = aiPoints.reduce((acc, p, i) => i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`, '');
+
+  const usersFillPath = `${usersLinePath} L ${usersPoints[usersPoints.length - 1].x} 180 L ${usersPoints[0].x} 180 Z`;
+  const aiFillPath = `${aiLinePath} L ${aiPoints[aiPoints.length - 1].x} 180 L ${aiPoints[0].x} 180 Z`;
+
+  const lastUserPoint = usersPoints[usersPoints.length - 1] || { x: 485, y: 40 };
+  const lastAiPoint = aiPoints[aiPoints.length - 1] || { x: 485, y: 70 };
+
   // Filtered Users list
   const filteredUsers = usersList.filter(u => {
     const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || u.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -300,7 +360,146 @@ export default function AnalyticsDashboard() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#060814] text-slate-100 flex font-sans overflow-hidden">
+      <div className="min-h-screen bg-slate-50 text-slate-800 flex font-sans overflow-hidden admin-light-theme">
+        <style dangerouslySetInnerHTML={{__html: `
+          .admin-light-theme {
+            background-color: #f8fafc !important;
+            color: #334155 !important;
+          }
+          .admin-light-theme aside {
+            background-color: #ffffff !important;
+            border-right-color: #e2e8f0 !important;
+          }
+          .admin-light-theme header {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            border-bottom-color: #e2e8f0 !important;
+            backdrop-filter: blur(12px) !important;
+          }
+          .admin-light-theme h1, 
+          .admin-light-theme h2, 
+          .admin-light-theme h3, 
+          .admin-light-theme h4, 
+          .admin-light-theme .text-white {
+            color: #0f172a !important;
+          }
+          .admin-light-theme .glass-panel,
+          .admin-light-theme .glass-card,
+          .admin-light-theme .bg-slate-950\\/40,
+          .admin-light-theme .bg-slate-900\\/40,
+          .admin-light-theme .bg-slate-950\\/20 {
+            background-color: #ffffff !important;
+            border-color: rgba(226, 232, 240, 0.8) !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05) !important;
+          }
+          .admin-light-theme button,
+          .admin-light-theme input,
+          .admin-light-theme select,
+          .admin-light-theme textarea {
+            color: #334155 !important;
+          }
+          .admin-light-theme input,
+          .admin-light-theme select {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+          }
+          .admin-light-theme input::placeholder {
+            color: #94a3b8 !important;
+          }
+          .admin-light-theme main {
+            background-color: #f8fafc !important;
+          }
+          .admin-light-theme .text-slate-400,
+          .admin-light-theme .text-slate-500 {
+            color: #64748b !important;
+          }
+          .admin-light-theme .text-slate-300 {
+            color: #475569 !important;
+          }
+          .admin-light-theme .bg-slate-950 {
+            background-color: #f1f5f9 !important;
+          }
+          .admin-light-theme .border-slate-900,
+          .admin-light-theme .border-slate-800 {
+            border-color: #e2e8f0 !important;
+          }
+          .admin-light-theme .bg-slate-900\\/50:hover {
+            background-color: #f1f5f9 !important;
+          }
+          .admin-light-theme svg {
+            background-color: transparent !important;
+          }
+          .admin-light-theme .text-emerald-400 {
+            color: #10b981 !important;
+          }
+          .admin-light-theme .text-blue-400 {
+            color: #2563eb !important;
+          }
+          .admin-light-theme .text-cyan-400 {
+            color: #0891b2 !important;
+          }
+          .admin-light-theme .text-purple-400 {
+            color: #7c3aed !important;
+          }
+          .admin-light-theme .bg-red-500\\/10 {
+            background-color: rgba(239, 68, 68, 0.08) !important;
+          }
+          .admin-light-theme .text-red-400 {
+            color: #dc2626 !important;
+          }
+          .admin-light-theme .bg-blue-500\\/10 {
+            background-color: rgba(37, 99, 235, 0.08) !important;
+          }
+          .admin-light-theme .bg-cyan-500\\/10 {
+            background-color: rgba(6, 182, 212, 0.08) !important;
+          }
+          .admin-light-theme .bg-purple-500\\/10 {
+            background-color: rgba(168, 85, 247, 0.08) !important;
+          }
+          .admin-light-theme aside span.bg-clip-text {
+            background: none !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+          }
+          .admin-light-theme .border-blue-500\\/20 {
+            border-color: rgba(37, 99, 235, 0.2) !important;
+          }
+          .admin-light-theme .border-cyan-500\\/20 {
+            border-color: rgba(6, 182, 212, 0.2) !important;
+          }
+          .admin-light-theme .border-purple-500\\/20 {
+            border-color: rgba(168, 85, 247, 0.2) !important;
+          }
+          .admin-light-theme thead tr {
+            background-color: #111111 !important;
+          }
+          .admin-light-theme thead tr th {
+            color: #ffffff !important;
+            opacity: 0.9 !important;
+          }
+          .admin-light-theme .bg-slate-950\\/50,
+          .admin-light-theme .bg-slate-950\\/60 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+          }
+          .admin-light-theme .bg-slate-950\\/50 h5,
+          .admin-light-theme .bg-slate-950\\/60 span,
+          .admin-light-theme .text-slate-200 {
+            color: #0f172a !important;
+          }
+          .admin-light-theme .bg-slate-950\\/80 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #334155 !important;
+          }
+          .admin-light-theme .bg-slate-800 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #334155 !important;
+          }
+          .admin-light-theme .bg-slate-800:hover {
+            background-color: #e2e8f0 !important;
+          }
+        `}} />
         
         {/* Collapsible Sidebar Navigation */}
         <aside className={`${sidebarExpanded ? 'w-64' : 'w-20'} bg-slate-950/80 border-r border-slate-900 flex flex-col transition-all duration-300 backdrop-blur-xl shrink-0 z-40 relative`}>
@@ -314,12 +513,12 @@ export default function AnalyticsDashboard() {
 
           {/* Sidebar Header Logo */}
           <div className="p-6 flex items-center gap-3 border-b border-slate-900/50">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 via-blue-500 to-orange-500 flex items-center justify-center text-white shrink-0 shadow-md">
-              <Shield className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center p-1.5 shrink-0 shadow-sm border border-slate-200">
+              <img src="/iconic_logo.png" alt="Iconic Hub Logo" className="w-full h-full object-contain" />
             </div>
             {sidebarExpanded && (
               <span className="text-sm font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
-                Iconic<span className="text-orange-500">Admin</span>
+                Iconic<span className="text-blue-500">Admin</span>
               </span>
             )}
           </div>
@@ -332,7 +531,7 @@ export default function AnalyticsDashboard() {
               onClick={() => { setActiveTab('dashboard'); setActiveSubTab(''); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-xs font-semibold transition-all ${
                 activeTab === 'dashboard'
-                  ? 'bg-gradient-to-r from-orange-500/10 to-purple-500/5 border border-orange-500/20 text-orange-400 shadow-[0_0_15px_rgba(239,68,68,0.03)]'
+                  ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/5 border border-blue-500/20 text-blue-400 shadow-[0_0_15px_rgba(239,68,68,0.03)]'
                   : 'text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 border border-transparent'
               }`}
             >
@@ -356,10 +555,10 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.users && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('all-users'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-users' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>All Users</button>
-                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('students'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'students' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Students</button>
-                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('instructors'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'instructors' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Instructors</button>
-                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('verification'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'verification' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>User Verification</button>
+                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('all-users'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-users' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>All Users</button>
+                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('students'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'students' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Students</button>
+                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('instructors'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'instructors' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Instructors</button>
+                  <button onClick={() => { setActiveTab('users'); setActiveSubTab('verification'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'verification' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>User Verification</button>
                 </div>
               )}
             </div>
@@ -380,9 +579,9 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.courses && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('all-courses'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-courses' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>All Courses</button>
-                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('create-course'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'create-course' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Create Course</button>
-                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('categories'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'categories' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Categories</button>
+                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('all-courses'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-courses' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>All Courses</button>
+                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('create-course'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'create-course' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Create Course</button>
+                  <button onClick={() => { setActiveTab('courses'); setActiveSubTab('categories'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'categories' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Categories</button>
                 </div>
               )}
             </div>
@@ -402,14 +601,14 @@ export default function AnalyticsDashboard() {
               {sidebarExpanded && expandedGroups.paths && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5 text-left">
                   <span className="block text-[10px] text-slate-600 font-bold uppercase tracking-wider mb-1">Paths</span>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('ai-engineer'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'ai-engineer' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>AI Engineer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('frontend'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'frontend' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Frontend Developer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('backend'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'backend' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Backend Developer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('fullstack'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'fullstack' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Full Stack Developer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('data-scientist'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'data-scientist' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Data Scientist</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('devops'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'devops' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>DevOps Engineer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('product-designer'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'product-designer' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Product Designer</button>
-                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('analysis'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'analysis' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Path Analysis</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('ai-engineer'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'ai-engineer' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>AI Engineer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('frontend'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'frontend' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Frontend Developer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('backend'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'backend' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Backend Developer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('fullstack'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'fullstack' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Full Stack Developer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('data-scientist'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'data-scientist' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Data Scientist</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('devops'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'devops' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>DevOps Engineer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('product-designer'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'product-designer' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Product Designer</button>
+                  <button onClick={() => { setActiveTab('paths'); setActiveSubTab('analysis'); }} className={`w-full text-left py-1 text-[10px] font-semibold transition-colors block truncate ${activeSubTab === 'analysis' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Path Analysis</button>
                 </div>
               )}
             </div>
@@ -430,10 +629,10 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.events && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5 text-left">
-                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('all-events'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-events' || !activeSubTab ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>All Events</button>
-                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('create-event'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'create-event' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Create Event</button>
-                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('categories'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'categories' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Categories</button>
-                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('analytics'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'analytics' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Event Analytics</button>
+                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('all-events'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'all-events' || !activeSubTab ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>All Events</button>
+                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('create-event'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'create-event' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Create Event</button>
+                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('categories'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'categories' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Categories</button>
+                  <button onClick={() => { setActiveTab('events'); setActiveSubTab('analytics'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'analytics' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Event Analytics</button>
                 </div>
               )}
             </div>
@@ -454,8 +653,8 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.community && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('community'); setActiveSubTab('reported'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'reported' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Reported Content</button>
-                  <button onClick={() => { setActiveTab('community'); setActiveSubTab('health'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'health' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Community Health</button>
+                  <button onClick={() => { setActiveTab('community'); setActiveSubTab('reported'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'reported' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Reported Content</button>
+                  <button onClick={() => { setActiveTab('community'); setActiveSubTab('health'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'health' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Community Health</button>
                 </div>
               )}
             </div>
@@ -476,8 +675,8 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.aitutor && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('aitutor'); setActiveSubTab('prompts'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'prompts' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Prompt Tuner</button>
-                  <button onClick={() => { setActiveTab('aitutor'); setActiveSubTab('logs'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'logs' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Conversation Logs</button>
+                  <button onClick={() => { setActiveTab('aitutor'); setActiveSubTab('prompts'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'prompts' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Prompt Tuner</button>
+                  <button onClick={() => { setActiveTab('aitutor'); setActiveSubTab('logs'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'logs' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Conversation Logs</button>
                 </div>
               )}
             </div>
@@ -498,7 +697,7 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.finance && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('finance'); setActiveSubTab('revenue'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'revenue' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Revenue Details</button>
+                  <button onClick={() => { setActiveTab('finance'); setActiveSubTab('revenue'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'revenue' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Revenue Details</button>
                 </div>
               )}
             </div>
@@ -519,8 +718,8 @@ export default function AnalyticsDashboard() {
               </button>
               {sidebarExpanded && expandedGroups.settings && (
                 <div className="pl-9 pr-2 py-1 space-y-1 border-l border-slate-900 ml-5">
-                  <button onClick={() => { setActiveTab('settings'); setActiveSubTab('general'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'general' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>General Settings</button>
-                  <button onClick={() => { setActiveTab('settings'); setActiveSubTab('flags'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'flags' ? 'text-orange-400' : 'text-slate-500 hover:text-slate-300'}`}>Feature Flags</button>
+                  <button onClick={() => { setActiveTab('settings'); setActiveSubTab('general'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'general' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>General Settings</button>
+                  <button onClick={() => { setActiveTab('settings'); setActiveSubTab('flags'); }} className={`w-full text-left py-1.5 text-[11px] font-medium transition-colors block ${activeSubTab === 'flags' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>Feature Flags</button>
                 </div>
               )}
             </div>
@@ -530,7 +729,7 @@ export default function AnalyticsDashboard() {
           {/* Admin Profile Footer */}
           <div className="p-4 border-t border-slate-900/80 bg-slate-950/40">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500 font-bold shrink-0 text-xs">
+              <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold shrink-0 text-xs">
                 AD
               </div>
               {sidebarExpanded && (
@@ -608,7 +807,7 @@ export default function AnalyticsDashboard() {
 
             <div className="flex items-center gap-4">
               {/* Quick Reset Option */}
-              <Link to="/dashboard" className="text-xs font-bold text-slate-400 hover:text-orange-500 transition-colors">
+              <Link to="/dashboard" className="text-xs font-bold text-slate-400 hover:text-blue-500 transition-colors">
                 Return to LMS &rarr;
               </Link>
               <div className="h-4 w-px bg-slate-900"></div>
@@ -631,13 +830,13 @@ export default function AnalyticsDashboard() {
                   
                   {/* Card 1 */}
                   <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-500/5 to-red-500/0 rounded-full blur-2xl"></div>
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-red-500/0 rounded-full blur-2xl"></div>
                     <div className="flex justify-between items-start">
                       <div className="space-y-2 text-left">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Active Users</p>
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight">14,285</h3>
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight">{activeUsers.toLocaleString()}</h3>
                       </div>
-                      <div className="p-2 bg-orange-500/10 rounded-lg text-orange-400 border border-orange-500/20">
+                      <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400 border border-blue-500/20">
                         <Users className="w-4 h-4" />
                       </div>
                     </div>
@@ -670,7 +869,7 @@ export default function AnalyticsDashboard() {
                     <div className="flex justify-between items-start">
                       <div className="space-y-2 text-left">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Gross Revenue</p>
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight">$82,490</h3>
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight">${grossRevenue.toLocaleString()}</h3>
                       </div>
                       <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400 border border-purple-500/20">
                         <DollarSign className="w-4 h-4" />
@@ -684,13 +883,13 @@ export default function AnalyticsDashboard() {
 
                   {/* Card 4 */}
                   <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-500/5 to-yellow-500/0 rounded-full blur-2xl"></div>
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-yellow-500/0 rounded-full blur-2xl"></div>
                     <div className="flex justify-between items-start">
                       <div className="space-y-2 text-left">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">AI Queries Today</p>
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight">4,812</h3>
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight">{aiQueries.toLocaleString()}</h3>
                       </div>
-                      <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400 border border-amber-500/20">
+                      <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500 border border-blue-500/20">
                         <Cpu className="w-4 h-4" />
                       </div>
                     </div>
@@ -712,8 +911,8 @@ export default function AnalyticsDashboard() {
                         <p className="text-xs text-slate-500">Platform registrations compared with AI request volumes</p>
                       </div>
                       <div className="flex gap-2">
-                        <span className="flex items-center gap-1 text-[10px] text-orange-400 font-semibold">
-                          <span className="w-2.5 h-2.5 rounded bg-orange-500"></span> Users
+                        <span className="flex items-center gap-1 text-[10px] text-blue-400 font-semibold">
+                          <span className="w-2.5 h-2.5 rounded bg-blue-500"></span> Users
                         </span>
                         <span className="flex items-center gap-1 text-[10px] text-cyan-400 font-semibold">
                           <span className="w-2.5 h-2.5 rounded bg-cyan-500"></span> AI Actions
@@ -726,7 +925,7 @@ export default function AnalyticsDashboard() {
                       <svg viewBox="0 0 500 200" className="w-full h-full overflow-visible">
                         {/* Gradients */}
                         <defs>
-                          <linearGradient id="orangeGrad" x1="0" y1="0" x2="0" y2="1">
+                          <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#ff6b00" stopOpacity="0.3"/>
                             <stop offset="100%" stopColor="#ff6b00" stopOpacity="0.0"/>
                           </linearGradient>
@@ -742,16 +941,17 @@ export default function AnalyticsDashboard() {
                         <line x1="0" y1="140" x2="500" y2="140" stroke="#1A2035" strokeWidth="0.5" strokeDasharray="5,5"/>
 
                         {/* Chart Area Fill */}
-                        <path d="M 0 160 Q 100 130 200 90 T 400 60 T 500 40 L 500 180 L 0 180 Z" fill="url(#orangeGrad)"/>
-                        <path d="M 0 180 Q 80 150 160 140 T 320 80 T 500 70 L 500 180 L 0 180 Z" fill="url(#cyanGrad)"/>
+                        <path d={usersFillPath} fill="url(#blueGrad)" />
+                        <path d={aiFillPath} fill="url(#cyanGrad)" />
 
                         {/* Trend Lines */}
-                        <path d="M 0 160 Q 100 130 200 90 T 400 60 T 500 40" fill="none" stroke="#ff6b00" strokeWidth="3"/>
-                        <path d="M 0 180 Q 80 150 160 140 T 320 80 T 500 70" fill="none" stroke="#00f0ff" strokeWidth="3"/>
+                        <path d={usersLinePath} fill="none" stroke="#ff6b00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d={aiLinePath} fill="none" stroke="#00f0ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
                         {/* Hotspot Dots */}
-                        <circle cx="200" cy="90" r="5" fill="#ff6b00" className="animate-pulse"/>
-                        <circle cx="320" cy="80" r="5" fill="#00f0ff" className="animate-pulse"/>
+                        <circle cx={lastUserPoint.x} cy={lastUserPoint.y} r="5" fill="#ff6b00" />
+                        
+                        <circle cx={lastAiPoint.x} cy={lastAiPoint.y} r="5" fill="#00f0ff" />
                       </svg>
                       {/* X Axis labels */}
                       <div className="flex justify-between text-[10px] text-slate-500 font-bold mt-2">
@@ -770,38 +970,20 @@ export default function AnalyticsDashboard() {
                     <div>
                       <h4 className="text-sm font-extrabold text-white uppercase tracking-wider mb-4">Real-Time Event Stream</h4>
                       
-                      <div className="space-y-4">
-                        <div className="flex gap-3 text-xs">
-                          <div className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0 animate-ping"></div>
-                          <div>
-                            <p className="text-slate-300"><strong>Ashwin Kumar</strong> selected career goal: <strong>AI & ML Engineer</strong></p>
-                            <span className="text-[10px] text-slate-600 font-medium">Just now</span>
+                      <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1 no-scrollbar">
+                        {notifications.map((notif) => (
+                          <div key={notif.id} className="flex gap-3 text-xs border-b border-slate-900/10 pb-2 last:border-0">
+                            <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${
+                              notif.type === 'user' ? 'bg-blue-500' :
+                              notif.type === 'course' ? 'bg-cyan-500' :
+                              notif.type === 'finance' ? 'bg-purple-500' : 'bg-emerald-500'
+                            }`}></div>
+                            <div>
+                              <p className="text-slate-300 font-medium">{notif.text}</p>
+                              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{notif.time}</span>
+                            </div>
                           </div>
-                        </div>
-
-                        <div className="flex gap-3 text-xs">
-                          <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-1.5 shrink-0"></div>
-                          <div>
-                            <p className="text-slate-300">AI Tutor generated code playground project: <strong>Vector Embeddings Masterclass</strong></p>
-                            <span className="text-[10px] text-slate-600 font-medium">4m ago</span>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-3 text-xs">
-                          <div className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0"></div>
-                          <div>
-                            <p className="text-slate-300">Subscription transaction approved for <strong>Nisha Mehta</strong> ($19.99/mo)</p>
-                            <span className="text-[10px] text-slate-600 font-medium">12m ago</span>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-3 text-xs">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div>
-                          <div>
-                            <p className="text-slate-300">Certificate issued: <strong>Kubernetes Deployment Architecture</strong> to Devon Wright</p>
-                            <span className="text-[10px] text-slate-600 font-medium">1h ago</span>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -828,7 +1010,7 @@ export default function AnalyticsDashboard() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Search administrators, students, mentors..."
-                        className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
+                        className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
                       />
                     </div>
                     {activeSubTab !== 'students' && (
@@ -837,7 +1019,7 @@ export default function AnalyticsDashboard() {
                         <select 
                           value={roleFilter}
                           onChange={(e) => setRoleFilter(e.target.value)}
-                          className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-6 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                          className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-6 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                         >
                           <option value="All">All Roles</option>
                           <option value="Student">Students</option>
@@ -848,7 +1030,7 @@ export default function AnalyticsDashboard() {
                     )}
                   </div>
 
-                  <button className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:brightness-110 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5">
+                  <button className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 hover:brightness-110 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5">
                     <Plus className="w-4 h-4" />
                     Invite User
                   </button>
@@ -877,7 +1059,7 @@ export default function AnalyticsDashboard() {
                             <td className="p-4">
                               <span className={`px-2.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider ${
                                 user.role === 'Student' ? 'bg-cyan-500/10 text-cyan-400' :
-                                user.role === 'Instructor' ? 'bg-orange-500/10 text-orange-400' : 'bg-purple-500/10 text-purple-400'
+                                user.role === 'Instructor' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'
                               }`}>
                                 {user.role}
                               </span>
@@ -886,17 +1068,17 @@ export default function AnalyticsDashboard() {
                             <td className="p-4">
                               <div className="flex items-center gap-2">
                                 <div className="w-16 bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                                  <div className="bg-orange-500 h-full" style={{ width: `${user.progress}%` }}></div>
+                                  <div className="bg-blue-500 h-full" style={{ width: `${user.progress}%` }}></div>
                                 </div>
                                 <span className="font-mono text-[10px] text-slate-400">{user.progress}%</span>
                               </div>
                             </td>
                             <td className="p-4">
                               <span className={`inline-flex items-center gap-1.5 ${
-                                user.status === 'Verified' || user.status === 'Active' ? 'text-emerald-400' : 'text-amber-400'
+                                user.status === 'Verified' || user.status === 'Active' ? 'text-emerald-400' : 'text-blue-500'
                               }`}>
                                 <span className={`w-1.5 h-1.5 rounded-full ${
-                                  user.status === 'Verified' || user.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'
+                                  user.status === 'Verified' || user.status === 'Active' ? 'bg-emerald-500' : 'bg-blue-500'
                                 }`}></span>
                                 {user.status}
                               </span>
@@ -946,7 +1128,7 @@ export default function AnalyticsDashboard() {
                             <div className="flex justify-between items-start">
                               <span className="text-[9px] uppercase font-bold tracking-widest text-slate-500">{course.category}</span>
                               <span className={`px-2 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider ${
-                                course.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
+                                course.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-500'
                               }`}>
                                 {course.status}
                               </span>
@@ -996,7 +1178,7 @@ export default function AnalyticsDashboard() {
                               value={newCourseName}
                               onChange={(e) => setNewCourseName(e.target.value)}
                               placeholder="e.g. Advanced System Design Masterclass"
-                              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-3 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-3 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
                             />
                           </div>
 
@@ -1006,7 +1188,7 @@ export default function AnalyticsDashboard() {
                               <select 
                                 value={newCourseCategory}
                                 onChange={(e) => setNewCourseCategory(e.target.value)}
-                                className="w-full bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl px-3 py-3 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                                className="w-full bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl px-3 py-3 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                               >
                                 <option>AI & Machine Learning</option>
                                 <option>Web Development</option>
@@ -1018,7 +1200,7 @@ export default function AnalyticsDashboard() {
                               <select 
                                 value={newCourseInstructor}
                                 onChange={(e) => setNewCourseInstructor(e.target.value)}
-                                className="w-full bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl px-3 py-3 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                                className="w-full bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl px-3 py-3 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                               >
                                 <option>Marcus Chen</option>
                                 <option>Dr. Elena Volkov</option>
@@ -1029,7 +1211,7 @@ export default function AnalyticsDashboard() {
 
                           <button 
                             type="submit"
-                            className="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                            className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-1.5"
                           >
                             <PlusCircle className="w-4 h-4" /> Create Course Draft
                           </button>
@@ -1044,7 +1226,7 @@ export default function AnalyticsDashboard() {
                           {curriculumChapters.map((ch, idx) => (
                             <div key={ch.id} className="flex justify-between items-center bg-slate-950/60 p-4 rounded-xl border border-slate-900">
                               <div className="flex items-center gap-3">
-                                <span className="w-6 h-6 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-[10px] text-orange-400 font-bold font-mono">
+                                <span className="w-6 h-6 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[10px] text-blue-400 font-bold font-mono">
                                   {idx + 1}
                                 </span>
                                 <span className="text-xs font-bold text-slate-200">{ch.title}</span>
@@ -1060,7 +1242,7 @@ export default function AnalyticsDashboard() {
                             value={newChapterTitle}
                             onChange={(e) => setNewChapterTitle(e.target.value)}
                             placeholder="Add new module title..."
-                            className="flex-1 bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
+                            className="flex-1 bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
                           />
                           <button 
                             type="submit"
@@ -1106,7 +1288,7 @@ export default function AnalyticsDashboard() {
                               type="text" 
                               required
                               placeholder="e.g. Mobile Development"
-                              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all"
                             />
                           </div>
 
@@ -1116,13 +1298,13 @@ export default function AnalyticsDashboard() {
                               name="categoryDesc"
                               rows="3"
                               placeholder="e.g. iOS, Android, Flutter, React Native, and cross-platform mobile tools."
-                              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all resize-none"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-700 outline-none transition-all resize-none"
                             ></textarea>
                           </div>
 
                           <button 
                             type="submit"
-                            className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                            className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-1.5"
                           >
                             <PlusCircle className="w-4 h-4" /> Save Category
                           </button>
@@ -1133,14 +1315,14 @@ export default function AnalyticsDashboard() {
                       <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
                           { name: 'AI & Machine Learning', count: coursesList.filter(c => c.category === 'AI & Machine Learning').length, desc: 'Deep learning, neural networks, LLMs, NLP, and model optimization.', color: 'from-purple-500/10 to-blue-500/5 border-purple-500/20' },
-                          { name: 'Web Development', count: coursesList.filter(c => c.category === 'Web Development').length, desc: 'Modern frontend frameworks, responsive UI architecture, state design patterns, and backend microservices.', color: 'from-orange-500/10 to-amber-500/5 border-orange-500/20' },
+                          { name: 'Web Development', count: coursesList.filter(c => c.category === 'Web Development').length, desc: 'Modern frontend frameworks, responsive UI architecture, state design patterns, and backend microservices.', color: 'from-blue-500/10 to-indigo-500/5 border-blue-500/20' },
                           { name: 'DevOps & Cloud', count: coursesList.filter(c => c.category === 'DevOps & Cloud').length, desc: 'Kubernetes, serverless, automated pipelines, orchestration, infrastructure-as-code, and system security.', color: 'from-cyan-500/10 to-emerald-500/5 border-cyan-500/20' }
                         ].map((cat, idx) => (
                           <div key={idx} className={`glass-panel p-6 rounded-2xl border bg-gradient-to-br ${cat.color} flex flex-col justify-between gap-4`}>
                             <div className="space-y-2">
                               <div className="flex justify-between items-center">
                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Category</span>
-                                <span className="px-2.5 py-0.5 rounded-full bg-slate-950 text-orange-400 font-mono text-[10px] font-bold">
+                                <span className="px-2.5 py-0.5 rounded-full bg-slate-950 text-blue-400 font-mono text-[10px] font-bold">
                                   {cat.count} {cat.count === 1 ? 'Course' : 'Courses'}
                                 </span>
                               </div>
@@ -1165,7 +1347,7 @@ export default function AnalyticsDashboard() {
                   {/* Selected Path Header Title */}
                   <div className="flex justify-between items-center border-b border-slate-900 pb-4">
                     <div>
-                      <span className="text-[10px] font-extrabold text-orange-500 uppercase tracking-widest">Selected Command Center</span>
+                      <span className="text-[10px] font-extrabold text-blue-500 uppercase tracking-widest">Selected Command Center</span>
                       <h2 className="text-xl font-extrabold text-white tracking-tight mt-1">{currentPath.title}</h2>
                     </div>
                   </div>
@@ -1182,9 +1364,9 @@ export default function AnalyticsDashboard() {
 
                     <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Avg. Progress Rate</p>
-                      <h3 className="text-2xl font-extrabold text-orange-400 mt-1">{currentPath.progress}</h3>
+                      <h3 className="text-2xl font-extrabold text-blue-400 mt-1">{currentPath.progress}</h3>
                       <div className="w-full bg-slate-900 h-1 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-orange-500 h-full" style={{ width: currentPath.progress }}></div>
+                        <div className="bg-blue-500 h-full" style={{ width: currentPath.progress }}></div>
                       </div>
                     </div>
 
@@ -1218,7 +1400,7 @@ export default function AnalyticsDashboard() {
                               </div>
                             </div>
                             <span className={`px-2 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider ${
-                              stage.status === 'Optimal' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400 animate-pulse'
+                              stage.status === 'Optimal' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-500 animate-pulse'
                             }`}>
                               {stage.status}
                             </span>
@@ -1239,7 +1421,7 @@ export default function AnalyticsDashboard() {
                               <span className="text-xs font-bold text-slate-200">Enforce Stage Gating</span>
                               <p className="text-[9px] text-slate-500">Requires completion of previous stage before proceeding</p>
                             </div>
-                            <button className="w-8 h-4.5 bg-orange-500 rounded-full p-0.5 relative transition-colors"><span className="w-3.5 h-3.5 bg-white rounded-full block translate-x-3.5 transition-transform"></span></button>
+                            <button className="w-8 h-4.5 bg-blue-500 rounded-full p-0.5 relative transition-colors"><span className="w-3.5 h-3.5 bg-white rounded-full block translate-x-3.5 transition-transform"></span></button>
                           </div>
 
                           <div className="flex justify-between items-center bg-slate-950/40 p-3.5 rounded-xl border border-slate-900/60">
@@ -1254,7 +1436,7 @@ export default function AnalyticsDashboard() {
 
                       <button 
                         onClick={() => alert(`Syllabus integrity verification check passed for: ${currentPath.title}`)}
-                        className="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs rounded-xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-1.5"
                       >
                         <ShieldCheck className="w-4 h-4" /> Run Syllabus Integrity Check
                       </button>
@@ -1283,7 +1465,7 @@ export default function AnalyticsDashboard() {
                         <h3 className="text-2xl font-extrabold text-white mt-1">
                           {eventsList.reduce((acc, curr) => acc + curr.attendees, 0)}
                         </h3>
-                        <p className="text-[10px] text-orange-400 mt-1.5 font-semibold">Registered users</p>
+                        <p className="text-[10px] text-blue-400 mt-1.5 font-semibold">Registered users</p>
                       </div>
                       <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 text-left">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Event Success Rate</span>
@@ -1298,7 +1480,7 @@ export default function AnalyticsDashboard() {
                         <h4 className="text-xs font-extrabold text-white uppercase tracking-widest">Active Events Catalog</h4>
                         <button 
                           onClick={() => setActiveSubTab('create-event')}
-                          className="flex items-center gap-1 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-[10px] font-bold transition-all"
+                          className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-[10px] font-bold transition-all"
                         >
                           <Plus className="w-3.5 h-3.5" /> Schedule Event
                         </button>
@@ -1327,7 +1509,7 @@ export default function AnalyticsDashboard() {
                                 <td className="p-4">
                                   <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                                     ev.category === 'Hackathons' ? 'bg-purple-500/10 text-purple-400' :
-                                    ev.category === 'Workshops' ? 'bg-blue-500/10 text-blue-400' : 'bg-amber-500/10 text-amber-400'
+                                    ev.category === 'Workshops' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-500/10 text-blue-500'
                                   }`}>
                                     {ev.category}
                                   </span>
@@ -1342,7 +1524,7 @@ export default function AnalyticsDashboard() {
                                     </div>
                                     <div className="w-24 h-1 bg-slate-900 rounded-full overflow-hidden">
                                       <div 
-                                        className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" 
+                                        className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" 
                                         style={{ width: `${Math.min(100, (ev.attendees / ev.limit) * 100)}%` }}
                                       ></div>
                                     </div>
@@ -1390,7 +1572,7 @@ export default function AnalyticsDashboard() {
                           placeholder="e.g. LLM Fine-Tuning & Quantization Masterclass" 
                           value={newEventTitle}
                           onChange={(e) => setNewEventTitle(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all font-medium"
+                          className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-all font-medium"
                           required
                         />
                       </div>
@@ -1401,7 +1583,7 @@ export default function AnalyticsDashboard() {
                           <select 
                             value={newEventCategory}
                             onChange={(e) => setNewEventCategory(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-orange-500 transition-all font-medium"
+                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-blue-500 transition-all font-medium"
                           >
                             <option value="Hackathons">Hackathon</option>
                             <option value="Workshops">Workshop</option>
@@ -1415,7 +1597,7 @@ export default function AnalyticsDashboard() {
                             type="date" 
                             value={newEventDate}
                             onChange={(e) => setNewEventDate(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-orange-500 transition-all font-medium"
+                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-blue-500 transition-all font-medium"
                             required
                           />
                         </div>
@@ -1429,7 +1611,7 @@ export default function AnalyticsDashboard() {
                             placeholder="e.g. Auditorium C / Virtual Zoom" 
                             value={newEventVenue}
                             onChange={(e) => setNewEventVenue(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all font-medium"
+                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-all font-medium"
                             required
                           />
                         </div>
@@ -1440,17 +1622,55 @@ export default function AnalyticsDashboard() {
                             type="number" 
                             value={newEventLimit}
                             onChange={(e) => setNewEventLimit(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all font-medium"
+                            className="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-all font-medium"
                             min="10"
                             required
                           />
                         </div>
                       </div>
 
+                      <div className="space-y-1">
+                        <label className="font-bold text-slate-300">Event Banner Image</label>
+                        <div className="flex items-center gap-4 mt-1">
+                          <label className="cursor-pointer bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2">
+                            <span>Choose Image File</span>
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              className="hidden" 
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    setNewEventImage(reader.result);
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }} 
+                            />
+                          </label>
+                          {newEventImage ? (
+                            <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shrink-0">
+                              <img src={newEventImage} alt="Preview" className="w-full h-full object-cover" />
+                              <button 
+                                type="button" 
+                                onClick={() => setNewEventImage(null)}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors text-[8px] font-bold"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-[11px] text-slate-400 font-medium">No file selected</span>
+                          )}
+                        </div>
+                      </div>
+
                       <div className="pt-4 flex gap-3">
                         <button 
                           type="submit"
-                          className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-xl shadow-lg hover:brightness-110 transition-all"
+                          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl shadow-lg hover:brightness-110 transition-all"
                         >
                           Publish Event
                         </button>
@@ -1510,10 +1730,10 @@ export default function AnalyticsDashboard() {
 
                       <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-slate-950/40 text-left space-y-4">
                         <div className="flex justify-between items-start">
-                          <span className="p-2.5 bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/20">
+                          <span className="p-2.5 bg-blue-500/10 rounded-xl text-blue-500 border border-blue-500/20">
                             <Cpu className="w-5 h-5" />
                           </span>
-                          <span className="text-[10px] font-bold text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded">Expert Insights</span>
+                          <span className="text-[10px] font-bold text-blue-500 bg-blue-500/5 px-2 py-0.5 rounded">Expert Insights</span>
                         </div>
                         <div>
                           <h4 className="text-sm font-extrabold text-white">Guest Lectures</h4>
@@ -1562,10 +1782,10 @@ export default function AnalyticsDashboard() {
                           <div className="space-y-2">
                             <div className="flex justify-between text-xs font-bold">
                               <span className="text-slate-300">Guest Lecture Retention</span>
-                              <span className="text-amber-400">92.5%</span>
+                              <span className="text-blue-500">92.5%</span>
                             </div>
                             <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                              <div className="h-full bg-amber-500 rounded-full" style={{ width: '92.5%' }}></div>
+                              <div className="h-full bg-blue-500 rounded-full" style={{ width: '92.5%' }}></div>
                             </div>
                           </div>
                         </div>
@@ -1644,7 +1864,7 @@ export default function AnalyticsDashboard() {
                             <div key={item.id} className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:bg-slate-950/25 transition-colors">
                               <div className="space-y-2 max-w-2xl">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <span className="text-xs font-extrabold text-orange-400">@{item.user}</span>
+                                  <span className="text-xs font-extrabold text-blue-400">@{item.user}</span>
                                   <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">{item.type}</span>
                                   <span className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">{item.date}</span>
                                 </div>
@@ -1787,7 +2007,7 @@ export default function AnalyticsDashboard() {
                                 const updated = e.target.value;
                                 setAiPrompts(prev => prev.map(p => p.id === prompt.id ? { ...p, systemInstruction: updated } : p));
                               }}
-                              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 px-3 text-xs text-slate-300 outline-none transition-all h-24 font-mono no-scrollbar"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-xs text-slate-300 outline-none transition-all h-24 font-mono no-scrollbar"
                             />
                           </div>
 
@@ -1804,11 +2024,11 @@ export default function AnalyticsDashboard() {
                                   const updated = parseFloat(e.target.value);
                                   setAiPrompts(prev => prev.map(p => p.id === prompt.id ? { ...p, temperature: updated } : p));
                                 }}
-                                className="accent-orange-500 w-24 h-1 bg-slate-900 rounded-lg appearance-none cursor-pointer"
+                                className="accent-blue-500 w-24 h-1 bg-slate-900 rounded-lg appearance-none cursor-pointer"
                               />
                             </div>
                             
-                            <button className="px-3.5 py-1.5 bg-orange-500/10 border border-orange-500/20 hover:border-orange-500/40 text-orange-400 font-bold text-[10px] rounded-lg transition-all">
+                            <button className="px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 font-bold text-[10px] rounded-lg transition-all">
                               Save Changes
                             </button>
                           </div>
@@ -1851,7 +2071,7 @@ export default function AnalyticsDashboard() {
                               <span className="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-[9px] font-bold">Excellent</span>
                             </td>
                             <td className="p-4 text-right">
-                              <button className="text-[10px] text-orange-400 hover:text-orange-300 font-bold transition-all">Inspect Graph</button>
+                              <button className="text-[10px] text-blue-400 hover:text-blue-300 font-bold transition-all">Inspect Graph</button>
                             </td>
                           </tr>
 
@@ -1867,7 +2087,7 @@ export default function AnalyticsDashboard() {
                               <span className="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-[9px] font-bold">Optimal</span>
                             </td>
                             <td className="p-4 text-right">
-                              <button className="text-[10px] text-orange-400 hover:text-orange-300 font-bold transition-all">Inspect Graph</button>
+                              <button className="text-[10px] text-blue-400 hover:text-blue-300 font-bold transition-all">Inspect Graph</button>
                             </td>
                           </tr>
 
@@ -1880,10 +2100,10 @@ export default function AnalyticsDashboard() {
                             <td className="p-4 text-slate-400 font-mono">602 / 980</td>
                             <td className="p-4 text-slate-400 font-mono">1.4s</td>
                             <td className="p-4 text-center">
-                              <span className="bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded text-[9px] font-bold animate-pulse">Average</span>
+                              <span className="bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded text-[9px] font-bold animate-pulse">Average</span>
                             </td>
                             <td className="p-4 text-right">
-                              <button className="text-[10px] text-orange-400 hover:text-orange-300 font-bold transition-all">Inspect Graph</button>
+                              <button className="text-[10px] text-blue-400 hover:text-blue-300 font-bold transition-all">Inspect Graph</button>
                             </td>
                           </tr>
                         </tbody>
@@ -1981,7 +2201,7 @@ export default function AnalyticsDashboard() {
                       </div>
                       <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Experimental Modules</span>
-                        <h3 className="text-2xl font-extrabold text-amber-500 mt-1">2 Pending</h3>
+                        <h3 className="text-2xl font-extrabold text-blue-500 mt-1">2 Pending</h3>
                         <p className="text-[10px] text-slate-500 mt-1.5">Awaiting sandbox verification</p>
                       </div>
                       <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40">
@@ -2048,7 +2268,7 @@ export default function AnalyticsDashboard() {
                       <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 flex flex-col justify-between gap-4">
                         <div className="space-y-2">
                           <div className="flex justify-between items-start">
-                            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[9px] font-bold uppercase tracking-wider">Finance Automation</span>
+                            <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 text-[9px] font-bold uppercase tracking-wider">Finance Automation</span>
                             <span className={`w-2 h-2 rounded-full ${featureFlags.payoutAutoApprove ? 'bg-emerald-400' : 'bg-slate-700'}`}></span>
                           </div>
                           <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">Automatic Payout Verification</h4>
@@ -2071,28 +2291,175 @@ export default function AnalyticsDashboard() {
                     </div>
                   </div>
                 )}
-
-                {/* Subview: General system settings */}
+                                {/* Subview: General system settings */}
                 {(activeSubTab === 'general' || !activeSubTab) && (
-                  <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 text-left space-y-6">
-                    <div>
-                      <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">General Configuration</h4>
-                      <p className="text-xs text-slate-500 font-semibold">Track database backups, server nodes, and system limits</p>
+                  <div className="space-y-6 text-left">
+                    
+                    {/* Database, Backup, and Telemetry Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 space-y-3">
+                        <div className="flex justify-between items-start">
+                          <span className="p-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg">
+                            <Cpu className="w-4 h-4" />
+                          </span>
+                          <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded">Healthy</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Main Database</span>
+                          <h4 className="text-sm font-extrabold text-white mt-1">PostgreSQL (AWS Aurora)</h4>
+                          <p className="text-[10px] text-slate-400 mt-1">Capacity: 48.5 GB of 100 GB</p>
+                        </div>
+                        <div className="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-purple-500 rounded-full" style={{ width: '48.5%' }}></div>
+                        </div>
+                      </div>
+
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 space-y-3">
+                        <div className="flex justify-between items-start">
+                          <span className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">
+                            <Shield className="w-4 h-4" />
+                          </span>
+                          <button 
+                            onClick={() => alert('Backup snapshot creation triggered successfully!')}
+                            className="text-[9px] font-bold text-blue-400 hover:text-blue-300 uppercase tracking-widest bg-blue-500/10 px-2.5 py-1 rounded border border-blue-500/20 transition-all"
+                          >
+                            Snapshot Now
+                          </button>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Backup Vault</span>
+                          <h4 className="text-sm font-extrabold text-white mt-1">AWS S3 Glacier Archival</h4>
+                          <p className="text-[10px] text-slate-400 mt-1">Last Snapshot: 6 hours ago (Automated)</p>
+                        </div>
+                        <div className="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-blue-500 rounded-full" style={{ width: '100%' }}></div>
+                        </div>
+                      </div>
+
+                      <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 space-y-3">
+                        <div className="flex justify-between items-start">
+                          <span className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-500 rounded-lg">
+                            <Settings className="w-4 h-4" />
+                          </span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">v1.4.2-prod</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Node Host System</span>
+                          <h4 className="text-sm font-extrabold text-white mt-1">Docker Engine on AWS ECS</h4>
+                          <p className="text-[10px] text-slate-400 mt-1">Node cluster size: 4 active instances</p>
+                        </div>
+                        <div className="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 text-xs">
-                      <div className="p-4 bg-slate-950/40 border border-slate-900 rounded-xl space-y-1">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Main database</span>
-                        <p className="font-bold text-slate-200">PostgreSQL (AWS Aurora)</p>
-                        <p className="text-[10px] text-slate-500">Capacity: 48.5 GB of 100 GB</p>
-                      </div>
+                    {/* Platform Configuration Forms */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       
-                      <div className="p-4 bg-slate-950/40 border border-slate-900 rounded-xl space-y-1">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Last Backup</span>
-                        <p className="font-bold text-slate-200">6 hours ago (Automated)</p>
-                        <p className="text-[10px] text-slate-500">AWS S3 Vault</p>
+                      {/* Form block 1: Basic settings */}
+                      <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 space-y-4">
+                        <h4 className="text-xs font-extrabold text-white uppercase tracking-widest">Platform Metadata & Limits</h4>
+                        
+                        <div className="space-y-3 text-xs">
+                          <div className="space-y-1">
+                            <label className="font-bold text-slate-400">Ecosystem Display Name</label>
+                            <input 
+                              type="text" 
+                              defaultValue="ICONIC HUB"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <label className="font-bold text-slate-400">Max Upload Limit (MB)</label>
+                              <input 
+                                type="number" 
+                                defaultValue="50"
+                                className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="font-bold text-slate-400">Session Timeout (Hrs)</label>
+                              <input 
+                                type="number" 
+                                defaultValue="24"
+                                className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="font-bold text-slate-400">System Support Email</label>
+                            <input 
+                              type="email" 
+                              defaultValue="ops@iconichub.io"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                            />
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Form block 2: SMTP / Gateway settings */}
+                      <div className="glass-panel p-6 rounded-3xl border border-white/5 bg-slate-900/15 space-y-4">
+                        <h4 className="text-xs font-extrabold text-white uppercase tracking-widest">SMTP Mail Gateway</h4>
+                        
+                        <div className="space-y-3 text-xs">
+                          <div className="space-y-1">
+                            <label className="font-bold text-slate-400">SMTP Host Server</label>
+                            <input 
+                              type="text" 
+                              defaultValue="smtp.mailgun.org"
+                              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="md:col-span-2 space-y-1">
+                              <label className="font-bold text-slate-400">SMTP Username</label>
+                              <input 
+                                type="text" 
+                                defaultValue="postmaster@iconichub.io"
+                                className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="font-bold text-slate-400">Port</label>
+                              <input 
+                                type="number" 
+                                defaultValue="587"
+                                className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-3 text-white outline-none transition-all font-medium"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="font-bold text-slate-400">TLS Encryption</label>
+                            <div className="flex gap-4 items-center pt-1">
+                              <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-300">
+                                <input type="radio" name="tls" defaultChecked className="accent-blue-500" /> Use STARTTLS (Recommended)
+                              </label>
+                              <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-400">
+                                <input type="radio" name="tls" className="accent-blue-500" /> None
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
+
+                    {/* Actions save block */}
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button 
+                        onClick={() => alert('General platform configuration saved locally!')}
+                        className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg hover:brightness-110 transition-all"
+                      >
+                        Save Configuration
+                      </button>
+                    </div>
+
                   </div>
                 )}
 

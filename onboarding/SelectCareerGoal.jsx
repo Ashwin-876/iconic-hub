@@ -4,12 +4,12 @@ import { Terminal, BrainCircuit, ShieldAlert, Cpu, Database, Layout, Check } fro
 import PageTransition from '../components/PageTransition';
 
 const GOALS = [
-  { id: 'fullstack', title: 'Full-Stack Developer', desc: 'Build end-to-end web apps with Node, React, and databases.', icon: Terminal, color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
-  { id: 'ai', title: 'AI & ML Engineer', desc: 'Deploy neural networks, LLM integrations, and pipeline architectures.', icon: BrainCircuit, color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20' },
-  { id: 'devops', title: 'DevOps & SRE', desc: 'Manage Kubernetes clusters, CI/CD pipelines, and cloud systems.', icon: ShieldAlert, color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
-  { id: 'frontend', title: 'Frontend Specialist', desc: 'Create immersive, smooth interactive UIs with advanced React & NextJS.', icon: Layout, color: 'text-pink-400 bg-pink-500/10 border-pink-500/20' },
-  { id: 'backend', title: 'Backend Architect', desc: 'Design scalable databases, APIs, server architectures, and system backends.', icon: Database, color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
-  { id: 'datascience', title: 'Data Scientist', desc: 'Parse large datasets, build analytical pipelines, and clean statistics.', icon: Cpu, color: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20' }
+  { id: 'fullstack', title: 'Full-Stack Developer', desc: 'Build end-to-end web apps with Node, React, and databases.', icon: Terminal, color: 'text-blue-600 bg-blue-50' },
+  { id: 'ai', title: 'AI & ML Engineer', desc: 'Deploy neural networks, LLM integrations, and pipeline architectures.', icon: BrainCircuit, color: 'text-cyan-600 bg-cyan-50' },
+  { id: 'devops', title: 'DevOps & SRE', desc: 'Manage Kubernetes clusters, CI/CD pipelines, and cloud systems.', icon: ShieldAlert, color: 'text-purple-600 bg-purple-50' },
+  { id: 'frontend', title: 'Frontend Specialist', desc: 'Create immersive, smooth interactive UIs with advanced React & NextJS.', icon: Layout, color: 'text-pink-600 bg-pink-50' },
+  { id: 'backend', title: 'Backend Architect', desc: 'Design scalable databases, APIs, server architectures, and system backends.', icon: Database, color: 'text-emerald-600 bg-emerald-50' },
+  { id: 'datascience', title: 'Data Scientist', desc: 'Parse large datasets, build analytical pipelines, and clean statistics.', icon: Cpu, color: 'text-indigo-600 bg-indigo-50' }
 ];
 
 export default function SelectCareerGoal() {
@@ -24,19 +24,19 @@ export default function SelectCareerGoal() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#060814] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Glow */}
-        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] bg-orange-600/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] bg-purple-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="min-h-screen bg-white text-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Subtle glow */}
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="w-full max-w-4xl relative z-10 space-y-8 text-center">
           {/* Progress Header */}
           <div className="space-y-4">
-            <div className="inline-flex items-center space-x-2 bg-slate-800/80 border border-slate-700/50 rounded-full py-1 px-4 self-center backdrop-blur-md">
-              <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">Step 2 of 6: Career Goal</span>
+            <div className="inline-flex items-center bg-blue-50 border border-blue-200 rounded-full py-1.5 px-4 self-center">
+              <span className="text-xs font-bold tracking-wider uppercase text-blue-600">Step 2 of 6: Career Goal</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white">What is your primary career goal?</h1>
-            <p className="text-sm text-slate-400 max-w-lg mx-auto">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">What is your primary career goal?</h1>
+            <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
               Select the path that matches your professional aspiration. We'll tailor your recommendation.
             </p>
           </div>
@@ -50,15 +50,15 @@ export default function SelectCareerGoal() {
                 <div
                   key={goal.id}
                   onClick={() => setSelected(goal.id)}
-                  className={`relative p-6 rounded-2xl border cursor-pointer hover:-translate-y-0.5 transition-all duration-300 flex flex-col space-y-4 ${
+                  className={`relative p-6 rounded-2xl border cursor-pointer hover:-translate-y-0.5 transition-all duration-200 flex flex-col space-y-4 ${
                     isSelected
-                      ? 'border-orange-500 bg-orange-950/15 shadow-[0_0_20px_rgba(255,107,0,0.2)] ring-1 ring-orange-500/40 scale-[1.02]'
-                      : 'border-white/5 bg-slate-900/20 hover:border-slate-700/60'
+                      ? 'border-blue-500 bg-blue-50/60 shadow-[0_0_0_3px_rgba(37,99,235,0.12)] scale-[1.02]'
+                      : 'border-slate-200 bg-white hover:border-blue-300 hover:shadow-sm'
                   }`}
                 >
                   {/* Circular checkmark in top-right */}
                   {isSelected && (
-                    <div className="absolute top-3.5 right-3.5 w-5 h-5 rounded-full bg-gradient-to-tr from-vibrant-orange to-amber-500 flex items-center justify-center shadow-md animate-scaleUp">
+                    <div className="absolute top-3.5 right-3.5 w-5 h-5 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center shadow animate-scaleUp">
                       <Check className="w-3 h-3 text-white stroke-[3.5px]" />
                     </div>
                   )}
@@ -67,7 +67,7 @@ export default function SelectCareerGoal() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-white">{goal.title}</h3>
+                    <h3 className="text-sm font-bold text-slate-900">{goal.title}</h3>
                     <p className="text-xs text-slate-500 leading-relaxed">{goal.desc}</p>
                   </div>
                 </div>
@@ -76,18 +76,18 @@ export default function SelectCareerGoal() {
           </div>
 
           {/* Navigation controls */}
-          <div className="flex justify-between items-center max-w-3xl mx-auto pt-6 border-t border-slate-900/50">
+          <div className="flex justify-between items-center max-w-3xl mx-auto pt-6 border-t border-slate-100">
             <button
               onClick={() => navigate('/onboarding/welcome')}
-              className="px-6 py-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 font-semibold rounded-xl transition-all"
+              className="px-6 py-3 bg-white border border-slate-200 hover:border-slate-300 text-slate-600 font-semibold rounded-xl transition-all hover:shadow-sm"
             >
               Back
             </button>
             <button
               onClick={handleNext}
               disabled={!selected}
-              className={`px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl shadow-lg transition-all ${
-                !selected ? 'opacity-40 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+              className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md shadow-blue-100 transition-all ${
+                !selected ? 'opacity-40 cursor-not-allowed' : 'hover:scale-105 active:scale-95 hover:shadow-blue-200'
               }`}
             >
               Continue

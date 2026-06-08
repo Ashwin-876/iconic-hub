@@ -14,7 +14,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-[#060814] flex items-center justify-center">
         <div className="relative w-16 h-16">
-          <div className="absolute inset-0 rounded-full border-t-2 border-orange-500 animate-spin"></div>
+          <div className="absolute inset-0 rounded-full border-t-2 border-blue-500 animate-spin"></div>
         </div>
       </div>
     );

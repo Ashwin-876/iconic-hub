@@ -13,13 +13,13 @@ export default function ForgotPassword() {
           <p className="text-xs text-slate-400">Enter your email to receive a reset code</p>
           <button
             onClick={() => navigate('/login')}
-            className="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-xl"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl"
           >
             Send Reset Code
           </button>
           <p className="text-xs text-slate-500">
             Back to{' '}
-            <Link to="/login" className="text-orange-500 hover:underline">Sign In</Link>
+            <Link to="/login" className="text-blue-500 hover:underline">Sign In</Link>
           </p>
         </div>
       </div>

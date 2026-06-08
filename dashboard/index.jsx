@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Terminal, Search, Bell, User, BookOpen, Compass, Award, Flame, RefreshCw, LogOut, MessageSquare, Shield } from 'lucide-react';
+import { Terminal, Compass, Award, Flame, BookOpen } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import Header from '../components/Header';
 
@@ -14,105 +14,120 @@ import DeveloperChallenges from './DeveloperChallenges';
 import AITutorSuggestions from './AITutorSuggestions';
 
 export default function Dashboard() {
+  const [userName, setUserName] = useState('Ashwin');
   const [careerGoal, setCareerGoal] = useState('');
-  const [skillLevel, setSkillLevel] = useState('');
-  const [interests, setInterests] = useState([]);
-  const [techStack, setTechStack] = useState([]);
-  const [timeTarget, setTimeTarget] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Read selections
+    setUserName(localStorage.getItem('userName') || 'Ashwin');
     setCareerGoal(localStorage.getItem('onboarding_career_goal') || 'Full-Stack Developer');
-    setSkillLevel(localStorage.getItem('onboarding_skill_level') || 'Beginner');
-    setTimeTarget(localStorage.getItem('onboarding_study_time') || '30 Mins / day');
-    
-    try {
-      setInterests(JSON.parse(localStorage.getItem('onboarding_interests')) || ['Web Development', 'System Design']);
-      setTechStack(JSON.parse(localStorage.getItem('onboarding_technologies')) || ['React', 'TypeScript', 'Node.js']);
-    } catch (e) {
-      setInterests(['Web Development', 'System Design']);
-      setTechStack(['React', 'TypeScript', 'Node.js']);
-    }
   }, []);
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fff8f6] text-on-background font-sans pb-16 selection:bg-vibrant-orange selection:text-white">
-        
-        {/* Modern Top Navigation Bar */}
+      <div className="min-h-screen bg-[#f5f7fa] text-[#1a1f2e] font-sans pb-20 selection:bg-blue-600 selection:text-white">
+
+        {/* Top Navigation */}
         <Header />
 
-        {/* Dashboard Content Container */}
-        <main className="max-w-7xl mx-auto px-6 mt-8 space-y-8 text-left">
-          
-          {/* Welcome Banner */}
-          <WelcomeBanner name="Ashwin" streak={5} goalHours={5} completedHours={3.5} />
+        {/* Dashboard Body */}
+        <main className="max-w-7xl mx-auto px-6 mt-8 space-y-7 text-left">
 
-          {/* Learning Progress Metric Cards */}
+          {/* Welcome Banner */}
+          <WelcomeBanner name={userName} streak={5} goalHours={5} completedHours={3.5} />
+
+          {/* Stat Cards Row */}
           <LearningProgress completedPaths={2} learningHours={24.5} certificatesEarned={3} skillGrowth={15} />
 
-          {/* Layout Grid: Left Major, Right Minor */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Left 8 columns: Learning and Courses */}
-            <div className="lg:col-span-8 space-y-8">
-              {/* Continue Learning */}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+
+            {/* Left column — 8/12 */}
+            <div className="lg:col-span-8 space-y-7">
               <ContinueLearning />
-
-              {/* Recommended Courses Grid */}
               <RecommendedCourses />
-
-              {/* Developer Challenges */}
               <DeveloperChallenges />
             </div>
 
-            {/* Right 4 columns: Events, Community, AI Tutor */}
-            <div className="lg:col-span-4 space-y-8">
-              {/* AI Tutor suggestion Chat mockup */}
+            {/* Right column — 4/12 */}
+            <div className="lg:col-span-4 space-y-7">
               <AITutorSuggestions />
-
-              {/* Upcoming Events */}
               <UpcomingEvents />
             </div>
-
           </div>
 
-          {/* Achievements badge showcase */}
-          <section className="bg-white border border-surface-stroke rounded-3xl p-6 shadow-sm space-y-6">
-            <h2 className="text-lg font-bold text-on-background">Your Badges & Achievements</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-surface-stroke space-y-2">
-                <div className="w-12 h-12 bg-vibrant-orange/10 rounded-full flex items-center justify-center text-vibrant-orange mx-auto">
-                  <Flame className="w-6 h-6 fill-current" />
-                </div>
-                <div className="text-xs font-bold text-on-background">5 Day Streak</div>
-                <div className="text-[9px] text-slate-500">Consistent study habit</div>
+          {/* Achievements Section */}
+          <section className="bg-white border border-slate-100 rounded-[28px] p-8 shadow-sm">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-lg font-bold text-[#1a1f2e] flex items-center gap-2">
+                  <span>Your Badges &amp; Achievements</span>
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-1">Milestones earned on your path to engineering mastery.</p>
               </div>
-
-              <div className="p-4 bg-slate-50 rounded-2xl border border-surface-stroke space-y-2">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center text-purple-500 mx-auto">
-                  <Terminal className="w-6 h-6" />
+              <span className="text-xs font-bold text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-1 group transition-all">
+                <span>View all</span>
+                <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+              {[
+                { 
+                  icon: <Flame className="w-5 h-5 fill-current" />, 
+                  color: 'border-blue-500/10 hover:border-blue-500/30 hover:shadow-blue-500/5 text-blue-600', 
+                  iconBg: 'bg-blue-600/10 border-blue-600/20',
+                  label: '5 Day Streak', 
+                  sub: 'Consistent study habit',
+                  xp: '+250 XP'
+                },
+                { 
+                  icon: <Terminal className="w-5 h-5" />, 
+                  color: 'border-violet-500/10 hover:border-violet-500/30 hover:shadow-violet-500/5 text-violet-600', 
+                  iconBg: 'bg-violet-600/10 border-violet-600/20',
+                  label: 'First Lab Done', 
+                  sub: 'Sandbox success',
+                  xp: '+500 XP'
+                },
+                { 
+                  icon: <Compass className="w-5 h-5" />, 
+                  color: 'border-cyan-500/10 hover:border-cyan-500/30 hover:shadow-cyan-500/5 text-cyan-600', 
+                  iconBg: 'bg-cyan-600/10 border-cyan-600/20',
+                  label: 'Path Finder', 
+                  sub: 'Custom roadmap set',
+                  xp: '+150 XP'
+                },
+                { 
+                  icon: <Award className="w-5 h-5" />, 
+                  color: 'border-emerald-500/10 hover:border-emerald-500/30 hover:shadow-emerald-500/5 text-emerald-600', 
+                  iconBg: 'bg-emerald-600/10 border-emerald-600/20',
+                  label: 'Verified Graduate', 
+                  sub: 'Official certs earned',
+                  xp: '+1000 XP'
+                },
+              ].map((badge, i) => (
+                <div 
+                  key={i} 
+                  className={`relative flex flex-col items-center text-center p-6 bg-slate-50/50 border rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-300 group cursor-pointer ${badge.color}`}
+                >
+                  {/* Top-right XP floating badge */}
+                  <div className="absolute top-3 right-3 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-500 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-colors">
+                    {badge.xp}
+                  </div>
+                  
+                  {/* Icon Container */}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 border transition-all duration-300 group-hover:scale-110 ${badge.iconBg}`}>
+                    {badge.icon}
+                  </div>
+                  
+                  {/* Label & Details */}
+                  <h4 className="text-xs font-bold text-[#1a1f2e] group-hover:text-blue-600 transition-colors">{badge.label}</h4>
+                  <p className="text-[10px] text-slate-500 mt-1 leading-normal">{badge.sub}</p>
                 </div>
-                <div className="text-xs font-bold text-on-background">First Lab Completed</div>
-                <div className="text-[9px] text-slate-500">Sandbox coding success</div>
-              </div>
-
-              <div className="p-4 bg-slate-50 rounded-2xl border border-surface-stroke space-y-2">
-                <div className="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-500 mx-auto">
-                  <Compass className="w-6 h-6" />
-                </div>
-                <div className="text-xs font-bold text-on-background">Path Finder</div>
-                <div className="text-[9px] text-slate-500">Customized roadmap set</div>
-              </div>
-
-              <div className="p-4 bg-slate-50 rounded-2xl border border-surface-stroke space-y-2">
-                <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-500 mx-auto">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div className="text-xs font-bold text-on-background">Verified Graduate</div>
-                <div className="text-[9px] text-slate-500">Earned official certs</div>
-              </div>
+              ))}
             </div>
           </section>
 

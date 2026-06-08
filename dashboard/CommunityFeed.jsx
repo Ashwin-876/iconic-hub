@@ -27,7 +27,7 @@ export default function CommunityFeed() {
     <div className="space-y-4 text-left">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-on-background">Community Feed</h2>
-        <button className="text-xs font-bold text-vibrant-orange hover:underline flex items-center gap-1">
+        <button className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
           <Users className="w-4 h-4" />
           <span>Browse all spaces</span>
         </button>
@@ -49,7 +49,7 @@ export default function CommunityFeed() {
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 bg-orange-50 text-[10px] font-bold text-vibrant-orange rounded-md border border-orange-100">
+              <span className="px-2 py-0.5 bg-blue-50 text-[10px] font-bold text-blue-600 rounded-md border border-blue-100">
                 {post.tag}
               </span>
             </div>
@@ -59,11 +59,11 @@ export default function CommunityFeed() {
             </p>
 
             <div className="flex items-center gap-4 pt-3 border-t border-surface-stroke text-slate-500 text-[10px] font-semibold">
-              <button className="flex items-center gap-1.5 hover:text-vibrant-orange transition-colors">
+              <button className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                 <ThumbsUp className="w-3.5 h-3.5" />
                 <span>{post.likes}</span>
               </button>
-              <button className="flex items-center gap-1.5 hover:text-vibrant-orange transition-colors">
+              <button className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>{post.replies} Replies</span>
               </button>

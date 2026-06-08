@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play } from 'lucide-react';
 
 const LESSONS = [
@@ -19,6 +20,8 @@ const LESSONS = [
 ];
 
 export default function ContinueLearning() {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-4 text-left">
       <h2 className="text-xl font-bold text-on-background">Continue Learning</h2>
@@ -33,7 +36,7 @@ export default function ContinueLearning() {
               </div>
               <div className="space-y-1.5">
                 <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-vibrant-orange h-full rounded-full" style={{ width: `${lesson.progress}%` }}></div>
+                  <div className="bg-blue-600 h-full rounded-full" style={{ width: `${lesson.progress}%` }}></div>
                 </div>
                 <div className="flex justify-between items-center text-[10px] font-semibold text-slate-500">
                   <span>{lesson.progress}% Completed</span>
@@ -41,7 +44,11 @@ export default function ContinueLearning() {
                 </div>
               </div>
             </div>
-            <button className="p-3 bg-vibrant-orange hover:bg-orange-600 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0">
+            <button 
+              onClick={() => navigate('/courses/react-arch')}
+              className="p-3 bg-blue-600 hover:bg-blue-500 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0"
+              title="Play Lesson"
+            >
               <Play className="w-4 h-4 fill-current" />
             </button>
           </div>

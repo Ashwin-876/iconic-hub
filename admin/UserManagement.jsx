@@ -156,15 +156,15 @@ export default function UserManagement() {
 
         {/* KPI 3 */}
         <div className="glass-panel p-5 rounded-2xl border border-white/5 bg-slate-950/40 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/5 to-transparent rounded-full blur-xl"></div>
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Pending Verify</p>
-              <h3 className="text-xl font-extrabold text-orange-400 tracking-tight">
+              <h3 className="text-xl font-extrabold text-blue-400 tracking-tight">
                 {users.filter(u => u.status === 'Pending Verification').length}
               </h3>
             </div>
-            <div className="p-2 bg-orange-500/10 rounded-lg text-orange-400 border border-orange-500/20">
+            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400 border border-blue-500/20">
               <UserCheck className="w-4 h-4" />
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function UserManagement() {
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               placeholder="Search user name, email, path..."
-              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
+              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
             />
           </div>
 
@@ -228,7 +228,7 @@ export default function UserManagement() {
             <select 
               value={roleFilter}
               onChange={(e) => { setRoleFilter(e.target.value); setCurrentPage(1); }}
-              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
             >
               <option value="All">All Roles</option>
               <option value="Student">Students</option>
@@ -242,7 +242,7 @@ export default function UserManagement() {
             <select 
               value={statusFilter}
               onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
@@ -294,7 +294,7 @@ export default function UserManagement() {
                     type="checkbox" 
                     onChange={handleSelectAll}
                     checked={selectedUsers.length === users.length}
-                    className="accent-orange-500 w-4 h-4 cursor-pointer"
+                    className="accent-blue-500 w-4 h-4 cursor-pointer"
                   />
                 </th>
                 <th className="p-4 cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('name')}>
@@ -329,7 +329,7 @@ export default function UserManagement() {
                     <tr 
                       key={user.id} 
                       className={`hover:bg-slate-900/15 transition-colors cursor-pointer ${
-                        isSelected ? 'bg-orange-500/[0.02]' : ''
+                        isSelected ? 'bg-blue-500/[0.02]' : ''
                       }`}
                       onClick={() => setDrawerUser(user)}
                     >
@@ -339,14 +339,14 @@ export default function UserManagement() {
                           type="checkbox" 
                           checked={isSelected}
                           onChange={() => handleSelectRow(user.id)}
-                          className="accent-orange-500 w-4 h-4 cursor-pointer"
+                          className="accent-blue-500 w-4 h-4 cursor-pointer"
                         />
                       </td>
 
                       {/* User Avatar + Email details */}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-orange-500/10 to-purple-500/10 border border-white/5 flex items-center justify-center font-extrabold text-white text-xs shrink-0">
+                          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-500/10 to-purple-500/10 border border-white/5 flex items-center justify-center font-extrabold text-white text-xs shrink-0">
                             {user.avatar}
                           </div>
                           <div>
@@ -360,7 +360,7 @@ export default function UserManagement() {
                       <td className="p-4">
                         <span className={`px-2.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider ${
                           user.role === 'Student' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
-                          user.role === 'Instructor' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 
+                          user.role === 'Instructor' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 
                           'bg-purple-500/10 text-purple-400 border border-purple-500/20'
                         }`}>
                           {user.role}
@@ -390,11 +390,11 @@ export default function UserManagement() {
                       <td className="p-4">
                         <span className={`inline-flex items-center gap-1.5 ${
                           user.status === 'Active' ? 'text-emerald-400' : 
-                          user.status === 'Suspended' ? 'text-red-400' : 'text-orange-400'
+                          user.status === 'Suspended' ? 'text-red-400' : 'text-blue-400'
                         }`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${
                             user.status === 'Active' ? 'bg-emerald-500' : 
-                            user.status === 'Suspended' ? 'bg-red-500' : 'bg-orange-500 animate-pulse'
+                            user.status === 'Suspended' ? 'bg-red-500' : 'bg-blue-500 animate-pulse'
                           }`}></span>
                           {user.status}
                         </span>
@@ -468,7 +468,7 @@ export default function UserManagement() {
 
               {/* Profile card summary info */}
               <div className="flex items-center gap-4 bg-slate-900/20 p-4 rounded-2xl border border-white/5">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-orange-500 to-purple-500 flex items-center justify-center font-extrabold text-white text-base">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-extrabold text-white text-base">
                   {drawerUser.avatar}
                 </div>
                 <div>
@@ -487,7 +487,7 @@ export default function UserManagement() {
                     <select 
                       value={drawerUser.status}
                       onChange={(e) => updateDrawerUserStatus(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                     >
                       <option value="Active">Active</option>
                       <option value="Pending Verification">Pending Verify</option>
@@ -500,7 +500,7 @@ export default function UserManagement() {
                     <select 
                       value={drawerUser.role}
                       onChange={(e) => updateDrawerUserRole(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                     >
                       <option value="Student">Student</option>
                       <option value="Instructor">Instructor</option>

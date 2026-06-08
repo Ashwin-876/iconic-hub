@@ -6,29 +6,49 @@
 
 @layer base {
   body {
-    @apply bg-[#060814] text-slate-200 overflow-x-hidden font-sans;
+    background-color: #f5f7fa;
+    color: #1a1f2e;
+    @apply overflow-x-hidden font-sans;
   }
 }
 
-/* Glassmorphism panel styling */
+/* White theme card */
+.card-white {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.card-white:hover {
+  box-shadow: 0 4px 20px rgba(37,99,235,0.10);
+  transform: translateY(-2px);
+}
+
+/* Glassmorphism panel styling - light mode */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
 }
 
 .glass-panel-hover:hover {
-  background: rgba(20, 30, 54, 0.6);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.90);
+  border-color: rgba(37, 99, 235, 0.15);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.10);
   transform: translateY(-2px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Gradient text */
 .text-gradient-orange {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-500;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600;
+}
+
+.text-gradient-blue {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600;
 }
 
 .text-gradient-cyan {
@@ -48,7 +68,7 @@
 }
 
 .bg-radial-glow {
-  background: radial-gradient(circle 800px at 50% -200px, rgba(120, 50, 255, 0.15), transparent);
+  background: radial-gradient(circle 800px at 50% -200px, rgba(120, 50, 255, 0.12), transparent);
 }
 
 /* Hide scrollbar but keep functional */
@@ -60,17 +80,6 @@
   scrollbar-width: none;
 }
 
-/* Custom premium scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #060814;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
+
+
+

@@ -13,7 +13,7 @@ const LEADERBOARD = [
   { rank: 3, name: 'Marcus Holloway', points: 3800, avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTprORY5SzW2ZUbEMedRbpMPFFvZif78KWi4D261cjV7Q7712q3grpw08kXW_A7K2W0vKITwyPWhzicFQueFXX16ugr-k4cM0-dEAiKpg4K66jF_XzUvzeMQfvIFCNBqy4UQOg2B4XEJ5FVl0xJKToYowiTQmZu-5GEupiPjVmMnbDGMvYb-_nXM1Y3qafj0BPYv38WT45isKRLnQ3KUBxMFrz1hldh7YIO92oTp4UoWudiBcyZghui51djRgeGz3L9SSEiZKzT5lk' }
 ];
 
-export default function CodingChallenges() {
+export default function CodingChallenges({ onSelectChallenge }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left">
       
@@ -22,7 +22,7 @@ export default function CodingChallenges() {
         <div className="bg-white border border-surface-stroke rounded-3xl p-6 shadow-sm space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-surface-stroke">
             <h3 className="text-sm font-bold text-on-background">Daily Coding Challenges</h3>
-            <span className="text-[10px] bg-orange-50 text-vibrant-orange border border-orange-100 rounded px-2.5 py-0.5 font-bold uppercase tracking-wider">
+            <span className="text-[10px] bg-[#2563EB]/10 text-[#2563EB] border border-[#2563EB]/20 rounded px-2.5 py-0.5 font-bold uppercase tracking-wider">
               Updated Daily
             </span>
           </div>
@@ -34,7 +34,7 @@ export default function CodingChallenges() {
                   <div className="flex items-center gap-2 text-[9px] font-bold">
                     <span className={`px-2 py-0.5 rounded uppercase tracking-wider ${
                       prob.difficulty === 'Easy' ? 'bg-emerald-50 text-emerald-600' :
-                      prob.difficulty === 'Medium' ? 'bg-orange-50 text-vibrant-orange' : 'bg-red-50 text-error'
+                      prob.difficulty === 'Medium' ? 'bg-[#2563EB]/10 text-[#2563EB]' : 'bg-red-50 text-error'
                     }`}>
                       {prob.difficulty}
                     </span>
@@ -50,7 +50,11 @@ export default function CodingChallenges() {
                   </div>
                 </div>
 
-                <button className="p-3 bg-vibrant-orange hover:bg-orange-600 text-white rounded-xl shadow-md active:scale-95 transition-all">
+                <button 
+                  onClick={() => onSelectChallenge?.(prob)}
+                  className="p-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl shadow-md active:scale-95 transition-all"
+                  title="Solve Challenge"
+                >
                   <Play className="w-4 h-4 fill-current ml-0.5" />
                 </button>
               </div>
@@ -62,7 +66,7 @@ export default function CodingChallenges() {
       {/* Right 4 Columns: Leaderboard & Stats */}
       <div className="lg:col-span-4 bg-white border border-surface-stroke rounded-3xl p-6 shadow-sm space-y-6">
         <div className="flex items-center gap-2 pb-4 border-b border-surface-stroke text-on-background">
-          <Trophy className="w-5 h-5 text-vibrant-orange" />
+          <Trophy className="w-5 h-5 text-[#2563EB]" />
           <h3 className="text-sm font-bold">Top Developers</h3>
         </div>
 
@@ -72,14 +76,14 @@ export default function CodingChallenges() {
               <div className="flex items-center gap-3">
                 <span className={`w-5 h-5 text-xs font-extrabold flex items-center justify-center rounded ${
                   user.rank === 1 ? 'bg-yellow-500/10 text-yellow-600' :
-                  user.rank === 2 ? 'bg-slate-300/20 text-slate-500' : 'bg-orange-500/10 text-orange-600'
+                  user.rank === 2 ? 'bg-slate-300/20 text-slate-500' : 'bg-blue-600/10 text-blue-700'
                 }`}>
                   {user.rank}
                 </span>
                 <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
                 <span className="text-xs font-bold text-on-background">{user.name}</span>
               </div>
-              <span className="text-xs font-extrabold text-vibrant-orange">{user.points} XP</span>
+              <span className="text-xs font-extrabold text-[#2563EB]">{user.points} XP</span>
             </div>
           ))}
         </div>

@@ -8,7 +8,7 @@ export default function LearningProgress({ completedPaths = 2, learningHours = 2
       <div className="bg-white border border-surface-stroke p-5 rounded-2xl shadow-sm text-left flex flex-col justify-between space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Completed Paths</span>
-          <div className="p-2 bg-vibrant-orange/10 rounded-xl text-vibrant-orange">
+          <div className="p-2 bg-blue-600/10 rounded-xl text-blue-600">
             <BookOpen className="w-4 h-4" />
           </div>
         </div>
@@ -22,7 +22,7 @@ export default function LearningProgress({ completedPaths = 2, learningHours = 2
       <div className="bg-white border border-surface-stroke p-5 rounded-2xl shadow-sm text-left flex flex-col justify-between space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Study Hours</span>
-          <div className="p-2 bg-amber-500/10 rounded-xl text-amber-500">
+          <div className="p-2 bg-blue-500/10 rounded-xl text-blue-500">
             <Clock className="w-4 h-4" />
           </div>
         </div>

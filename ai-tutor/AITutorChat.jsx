@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Sparkles, User, Mic, Paperclip, Terminal, BookOpen, Key, AlertCircle } from 'lucide-react';
+import { callOpenRouter } from '../utils/openrouter';
 
 const EXAMPLE_QUESTIONS = [
   { text: "Explain React Hooks", icon: Terminal },
@@ -7,6 +8,40 @@ const EXAMPLE_QUESTIONS = [
   { text: "How does JWT Authentication work?", icon: Key },
   { text: "Teach me Data Structures", icon: BookOpen }
 ];
+
+function renderFormattedMessage(text) {
+  if (!text) return null;
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith('```') && part.endsWith('```')) {
+      const match = part.match(/```(\w*)\n?([\s\S]*?)```/);
+      const lang = match ? match[1] : '';
+      const codeContent = match ? match[2] : part.slice(3, -3);
+      
+      const copyToClipboard = () => {
+        navigator.clipboard.writeText(codeContent.trim());
+        alert("Code copied to clipboard! You can paste it into the Coding Playground editor.");
+      };
+
+      return (
+        <div key={idx} className="my-3 border border-slate-200 rounded-2xl overflow-hidden bg-[#1e293b] text-slate-100 font-mono text-[10px] shadow-sm text-left w-full">
+          <div className="flex justify-between items-center px-3 py-1 bg-[#0f172a] border-b border-slate-800 text-[9px] text-slate-400 font-sans">
+            <span>{lang.toUpperCase() || 'CODE'}</span>
+            <button 
+              type="button"
+              onClick={copyToClipboard}
+              className="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-bold text-[8px] transition-all"
+            >
+              Copy
+            </button>
+          </div>
+          <pre className="p-3 overflow-x-auto whitespace-pre">{codeContent}</pre>
+        </div>
+      );
+    }
+    return <span key={idx} className="whitespace-pre-wrap">{part}</span>;
+  });
+}
 
 export default function AITutorChat() {
   const [messages, setMessages] = useState([
@@ -21,7 +56,7 @@ export default function AITutorChat() {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleSend = (textToSend) => {
+  const handleSend = async (textToSend) => {
     const text = textToSend || input;
     if (!text.trim()) return;
 
@@ -31,20 +66,18 @@ export default function AITutorChat() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI response stream
-    setTimeout(() => {
-      let aiText = `Here is a comprehensive explanation for your query: "${text}".\n\n`;
-      if (text.toLowerCase().includes('react hooks')) {
-        aiText += `React Hooks were introduced in React 16.8 to allow functional components to hook into React state and lifecycle features without using classes.\n\nKey Hooks:\n- **useState**: Keeps track of component local state.\n- **useEffect**: Manages side effects (fetching data, listener setups, DOM mutations).\n- **useContext**: Directly accesses context values instead of using prop-drilling.\n\nWould you like to write a custom hooks simulation together?`;
-      } else if (text.toLowerCase().includes('jwt')) {
-        aiText += `JSON Web Tokens (JWT) are an open, industry-standard RFC 7519 method for representing claims securely between two parties.\n\nIt consists of three parts separated by dots (.):\n1. **Header**: Algorithms & token type.\n2. **Payload**: Token claims (user ID, permissions).\n3. **Signature**: Validates authenticity via secrets.\n\nTypically sent in the \`Authorization: Bearer <token>\` header for stateless API authentication.`;
-      } else {
-        aiText += `This topic relates to computer science core competencies. In engineering, conceptual understanding paired with sandbox practice builds muscle memory.\n\nHere are the core principles:\n- **Conceptual Model**: How the concept resolves developer complexity.\n- **Production Best Practices**: Caching, security checks, and optimized rendering.\n- **Step-by-Step Exercise**: I suggest testing this behavior directly inside our Interactive Playground tab.`;
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', text: aiText, timestamp: "Just now" }]);
+    try {
+      const response = await callOpenRouter(
+        newMsgs,
+        "You are an elite AI Tutor at Iconic Hub, helping student Ashwin master computer science, web development, coding concepts, and architecture."
+      );
+      setMessages(prev => [...prev, { role: 'assistant', text: response, timestamp: "Just now" }]);
+    } catch (error) {
+      console.error(error);
+      setMessages(prev => [...prev, { role: 'assistant', text: "Sorry, I had trouble processing that request. Please try again.", timestamp: "Just now" }]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleVoiceToggle = () => {
@@ -77,7 +110,7 @@ export default function AITutorChat() {
       <div className="lg:col-span-4 space-y-6 text-left">
         <div className="bg-white border border-surface-stroke rounded-3xl p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-vibrant-orange animate-pulse" />
+            <Sparkles className="w-5 h-5 text-[#2563EB] animate-pulse" />
             <h3 className="text-sm font-bold text-on-background uppercase tracking-wider">Example Questions</h3>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed">
@@ -90,9 +123,9 @@ export default function AITutorChat() {
                 <button
                   key={idx}
                   onClick={() => handleSend(q.text)}
-                  className="p-3 bg-slate-50 hover:bg-orange-50/50 border border-surface-stroke hover:border-orange-200 text-left rounded-xl transition-all flex items-center gap-3 text-xs font-bold text-on-surface-variant hover:text-vibrant-orange group"
+                  className="p-3 bg-slate-50 hover:bg-blue-50/50 border border-surface-stroke hover:border-blue-200 text-left rounded-xl transition-all flex items-center gap-3 text-xs font-bold text-on-surface-variant hover:text-[#2563EB] group"
                 >
-                  <Icon className="w-4 h-4 text-slate-400 group-hover:text-vibrant-orange transition-colors" />
+                  <Icon className="w-4 h-4 text-slate-400 group-hover:text-[#2563EB] transition-colors" />
                   <span>{q.text}</span>
                 </button>
               );
@@ -104,15 +137,15 @@ export default function AITutorChat() {
           <h4 className="text-xs font-extrabold text-on-background uppercase tracking-wider">Supported Inputs</h4>
           <ul className="text-xs text-slate-500 space-y-2">
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-vibrant-orange"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]"></span>
               <span>Natural language programming syntax</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-vibrant-orange"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]"></span>
               <span>Markdown source files upload</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-vibrant-orange"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]"></span>
               <span>Mock design blueprints parsing</span>
             </li>
           </ul>
@@ -125,7 +158,7 @@ export default function AITutorChat() {
         {/* Chat Header */}
         <div className="p-4 border-b border-surface-stroke flex justify-between items-center bg-slate-50/50">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-vibrant-orange to-amber-500 flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#2563EB] to-cyan-500 flex items-center justify-center text-white">
               <Sparkles className="w-4 h-4" />
             </div>
             <div className="text-left">
@@ -140,7 +173,7 @@ export default function AITutorChat() {
           {messages.map((m, idx) => (
             <div key={idx} className={`flex gap-3 text-xs text-left ${m.role === 'user' ? 'justify-end' : ''}`}>
               {m.role !== 'user' && (
-                <div className="w-8 h-8 rounded-xl bg-vibrant-orange/10 border border-vibrant-orange/20 text-vibrant-orange flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-[#2563EB]/10 border border-[#2563EB]/20 text-[#2563EB] flex items-center justify-center font-bold text-xs shrink-0">
                   AI
                 </div>
               )}
@@ -149,7 +182,7 @@ export default function AITutorChat() {
                   ? 'bg-slate-900 text-white rounded-tr-none'
                   : 'bg-slate-50 border border-surface-stroke text-on-surface-variant rounded-tl-none'
               }`}>
-                {m.text}
+                {renderFormattedMessage(m.text)}
               </div>
               {m.role === 'user' && (
                 <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0">
@@ -161,7 +194,7 @@ export default function AITutorChat() {
 
           {isTyping && (
             <div className="flex gap-3 text-xs text-left">
-              <div className="w-8 h-8 rounded-xl bg-vibrant-orange/10 border border-vibrant-orange/20 text-vibrant-orange flex items-center justify-center font-bold text-xs shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-[#2563EB]/10 border border-[#2563EB]/20 text-[#2563EB] flex items-center justify-center font-bold text-xs shrink-0">
                 AI
               </div>
               <div className="bg-slate-50 border border-surface-stroke p-4 rounded-3xl rounded-tl-none text-slate-400 flex items-center gap-1">
@@ -181,10 +214,10 @@ export default function AITutorChat() {
               e.preventDefault();
               handleSend();
             }}
-            className="flex items-center gap-2 bg-white border border-surface-stroke focus-within:border-vibrant-orange rounded-2xl px-3 py-2 transition-all"
+            className="flex items-center gap-2 bg-white border border-surface-stroke focus-within:border-[#2563EB] rounded-2xl px-3 py-2 transition-all"
           >
             {/* Attachment */}
-            <label className="p-2 bg-slate-50 hover:bg-slate-100 border border-surface-stroke text-slate-400 rounded-xl cursor-pointer hover:text-vibrant-orange transition-all shrink-0">
+            <label className="p-2 bg-slate-50 hover:bg-slate-100 border border-surface-stroke text-slate-400 rounded-xl cursor-pointer hover:text-[#2563EB] transition-all shrink-0">
               <Paperclip className="w-4 h-4" />
               <input type="file" className="hidden" onChange={handleFileUpload} />
             </label>
@@ -205,7 +238,7 @@ export default function AITutorChat() {
               className={`p-2 rounded-xl border transition-all shrink-0 ${
                 voiceActive 
                   ? 'bg-red-500 border-red-500 text-white animate-pulse'
-                  : 'bg-slate-50 hover:bg-slate-100 border-surface-stroke text-slate-400 hover:text-vibrant-orange'
+                  : 'bg-slate-50 hover:bg-slate-100 border-surface-stroke text-slate-400 hover:text-[#2563EB]'
               }`}
               title="Voice Input"
             >
@@ -215,7 +248,7 @@ export default function AITutorChat() {
             {/* Submit */}
             <button
               type="submit"
-              className="p-2 bg-vibrant-orange text-white hover:bg-orange-600 rounded-xl transition-all shadow-md shadow-vibrant-orange/10 shrink-0"
+              className="p-2 bg-[#2563EB] text-white hover:bg-[#1D4ED8] rounded-xl transition-all shadow-md shadow-blue-500/10 shrink-0"
             >
               <Send className="w-4 h-4" />
             </button>

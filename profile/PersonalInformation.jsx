@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   User, Award, Code, Database, Cpu, Flame, Search, Bell, Bookmark, 
   ArrowRight, BookOpen, Activity, Calendar, Shield, CreditCard, Settings, 
@@ -11,6 +11,7 @@ import Header from '../components/Header';
 
 export default function PersonalInformation() {
   const [activeTab, setActiveTab] = useState('portfolio');
+  const navigate = useNavigate();
   const [xp, setXp] = useState(14250);
   const [streak, setStreak] = useState(12);
   const [showToast, setShowToast] = useState(false);
@@ -20,6 +21,13 @@ export default function PersonalInformation() {
 
   // Personal Info Form States
   const [name, setName] = useState('Ashwin');
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setName(storedName);
+    }
+  }, []);
   const [role, setRole] = useState('AI & Frontend Systems Engineer');
   const [location, setLocation] = useState('San Francisco, CA');
   const [bio, setBio] = useState('Passionate about web architectures, deep learning pipelines, and building interactive, high-performance user experiences.');
@@ -110,6 +118,7 @@ export default function PersonalInformation() {
 
   const saveSettings = (e) => {
     e.preventDefault();
+    localStorage.setItem('userName', name);
     triggerToast('Profile information updated successfully! ✨');
   };
 
@@ -125,9 +134,9 @@ export default function PersonalInformation() {
   ];
 
   const skillMetrics = [
-    { name: "Frontend Architecture", level: 88, color: "bg-vibrant-orange", percentColor: "text-vibrant-orange" },
+    { name: "Frontend Architecture", level: 88, color: "bg-blue-600", percentColor: "text-blue-600" },
     { name: "Deep Learning (GenAI)", level: 78, color: "bg-cyan-500", percentColor: "text-cyan-500" },
-    { name: "Systems design & SQL", level: 75, color: "bg-amber-500", percentColor: "text-amber-500" },
+    { name: "Systems design & SQL", level: 75, color: "bg-blue-500", percentColor: "text-blue-500" },
     { name: "Database Engineering", level: 70, color: "bg-emerald-500", percentColor: "text-emerald-500" },
     { name: "DevOps & CI/CD", level: 55, color: "bg-purple-500", percentColor: "text-purple-500" }
   ];
@@ -140,7 +149,7 @@ export default function PersonalInformation() {
       issuer: "Kinetic Glass LMS & OpenAI Partnership",
       date: "Oct 2025",
       idCode: "KG-AIML-99882",
-      color: "from-orange-500 to-amber-500",
+      color: "from-blue-500 to-indigo-500",
       skills: ["Neural Networks", "Transformer Scaling", "LLM Fine-tuning", "PyTorch"]
     },
     {
@@ -171,7 +180,7 @@ export default function PersonalInformation() {
       desc: "Maintain a study streak of 10+ consecutive days.",
       points: "+500 XP",
       icon: Flame,
-      color: "text-orange-500 bg-orange-100 border-orange-200",
+      color: "text-blue-500 bg-blue-100 border-blue-200",
       unlocked: true,
       progress: 100
     },
@@ -181,7 +190,7 @@ export default function PersonalInformation() {
       desc: "Complete 15 advanced system design algorithms coding challenges.",
       points: "+750 XP",
       icon: Code,
-      color: "text-amber-600 bg-amber-50 border-amber-200",
+      color: "text-blue-500 bg-blue-500 border-blue-500",
       unlocked: true,
       progress: 100
     },
@@ -235,7 +244,7 @@ export default function PersonalInformation() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fff8f6] text-[#261812] font-sans pb-20 selection:bg-vibrant-orange/30 text-left">
+      <div className="min-h-screen bg-[#fff8f6] text-[#261812] font-sans pb-20 selection:bg-blue-600/30 text-left">
         <style dangerouslySetInnerHTML={{ __html: `
           .glass-card {
             background: rgba(255, 255, 255, 0.7);
@@ -270,7 +279,7 @@ export default function PersonalInformation() {
         {/* Global Toast */}
         {showToast && (
           <div className="fixed bottom-8 right-8 z-50 bg-[#261812] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-fade-in border border-white/10">
-            <Sparkles className="w-5 h-5 text-amber-400 animate-spin" />
+            <Sparkles className="w-5 h-5 text-blue-500 animate-spin" />
             <span className="text-sm font-bold">{toastMessage}</span>
           </div>
         )}
@@ -280,14 +289,14 @@ export default function PersonalInformation() {
         <main className="max-w-7xl mx-auto px-6 mt-8 space-y-8">
 
           {/* Profile Header & Hero Banner */}
-          <section className="relative rounded-[36px] overflow-hidden glass-card mesh-banner border border-white/80">
-            <div className="h-44 bg-gradient-to-r from-vibrant-orange/25 via-amber-500/20 to-orange-600/30 relative">
+          <section className="relative rounded-[36px] overflow-hidden glass-card border border-white/80">
+            <div className="h-44 bg-cover bg-center relative" style={{ backgroundImage: "url('/dashboard_banner.png')" }}>
               <div className="absolute top-6 right-6 flex items-center gap-2">
                 <button 
                   onClick={claimDailyXP}
-                  className="bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-orange-500/25 shadow-md flex items-center gap-2 hover:bg-orange-50 hover:border-orange-500/40 active:scale-95 transition-all text-xs font-extrabold text-[#261812]"
+                  className="bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-blue-500/25 shadow-md flex items-center gap-2 hover:bg-blue-50 hover:border-blue-500/40 active:scale-95 transition-all text-xs font-extrabold text-[#261812]"
                 >
-                  <Flame className="w-4 h-4 text-vibrant-orange animate-bounce" />
+                  <Flame className="w-4 h-4 text-blue-600 animate-bounce" />
                   Claim Daily Reward
                 </button>
               </div>
@@ -295,15 +304,15 @@ export default function PersonalInformation() {
             
             <div className="px-8 pb-8 pt-4 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 relative">
               <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 -mt-20">
-                <div className="w-32 h-32 rounded-[28px] bg-gradient-to-tr from-vibrant-orange to-amber-500 p-1 shadow-xl relative z-10 shrink-0">
+                <div className="w-32 h-32 rounded-[28px] bg-gradient-to-tr from-blue-600 to-indigo-500 p-1 shadow-xl relative z-10 shrink-0">
                   <div className="w-full h-full bg-white rounded-[24px] overflow-hidden flex items-center justify-center">
                     <img 
                       alt="User profile avatar" 
                       className="w-full h-full object-cover" 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9JivfbW9dCr4pdrDVYPrs1WlFjSdI3oUYsDOpFEjpiOYB39-qE5pGibnQ_mNbh5bo2ZIPM-CAmFI3zh9FfcEzRFK8ra6rbZxTHm1OGHvX4q36bQ71vL3rpDEU5WfexUtBkFOIqmuHS44xTBzJIUmUr82yPmlniMsxg_R8B955cvHqLRwglw3YISBA0zOBg9M3cK58QH3JOGqszIaF5oCCYWAFUawMZUGEapdyVBUwYIhvMCmyDVacz2MuD7T5iErBNVvYNn666thv"
+                      src="/dashboard_avatar.png"
                     />
                   </div>
-                  <span className="absolute -bottom-2 -right-2 bg-vibrant-orange text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border-2 border-white">
+                  <span className="absolute -bottom-2 -right-2 bg-blue-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border-2 border-white">
                     LVL {Math.floor(xp / 5000) + 1}
                   </span>
                 </div>
@@ -311,7 +320,7 @@ export default function PersonalInformation() {
                 <div className="text-center sm:text-left space-y-2">
                   <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3">
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-[#261812] tracking-tight">{name}</h1>
-                    <span className="px-3 py-1 rounded-full bg-vibrant-orange/10 border border-vibrant-orange/20 text-vibrant-orange text-[10px] font-extrabold uppercase tracking-wider">
+                    <span className="px-3 py-1 rounded-full bg-blue-600/10 border border-blue-600/20 text-blue-600 text-[10px] font-extrabold uppercase tracking-wider">
                       PRO SCHOLAR
                     </span>
                   </div>
@@ -320,7 +329,7 @@ export default function PersonalInformation() {
                     <span className="flex items-center gap-1">
                       <Globe className="w-3.5 h-3.5 text-slate-400" /> {location}
                     </span>
-                    <span className="flex items-center gap-1.5 font-bold text-vibrant-orange">
+                    <span className="flex items-center gap-1.5 font-bold text-blue-600">
                       <Flame className="w-3.5 h-3.5 fill-current animate-pulse" /> {streak} Day Streak
                     </span>
                   </div>
@@ -333,10 +342,10 @@ export default function PersonalInformation() {
                 <div className="bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/40 shadow-sm flex flex-col justify-between flex-grow sm:w-64">
                   <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
                     <span>XP Progress</span>
-                    <span className="text-vibrant-orange font-extrabold">{xp.toLocaleString()} / {nextLevelXp} XP</span>
+                    <span className="text-blue-600 font-extrabold">{xp.toLocaleString()} / {nextLevelXp} XP</span>
                   </div>
                   <div className="h-2.5 w-full bg-[#fcece7] rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-vibrant-orange to-amber-500 rounded-full transition-all duration-500" style={{ width: `${percentToNextLevel}%` }}></div>
+                    <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-500" style={{ width: `${percentToNextLevel}%` }}></div>
                   </div>
                   <span className="text-[10px] text-slate-500 font-semibold">{percentToNextLevel}% to Level {Math.floor(xp / 5000) + 2}</span>
                 </div>
@@ -367,7 +376,7 @@ export default function PersonalInformation() {
                     <Brain className="w-3.5 h-3.5 text-cyan-500" /> Deep Learning
                   </span>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-semibold text-[#261812] shadow-sm">
-                    <Code className="w-3.5 h-3.5 text-vibrant-orange" /> React Architecture
+                    <Code className="w-3.5 h-3.5 text-blue-600" /> React Architecture
                   </span>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-semibold text-[#261812] shadow-sm">
                     <Database className="w-3.5 h-3.5 text-emerald-500" /> PostgreSQL tuning
@@ -379,13 +388,13 @@ export default function PersonalInformation() {
               </div>
               
               <div className="flex items-center gap-3 self-end md:self-auto">
-                <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-vibrant-orange transition-colors">
+                <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 transition-colors">
                   <Github className="w-4 h-4" />
                 </a>
-                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-vibrant-orange transition-colors">
+                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 transition-colors">
                   <Linkedin className="w-4 h-4" />
                 </a>
-                <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-vibrant-orange transition-colors">
+                <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 transition-colors">
                   <Twitter className="w-4 h-4" />
                 </a>
               </div>
@@ -410,7 +419,7 @@ export default function PersonalInformation() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 pb-4 pt-1 font-bold text-sm border-b-2 transition-all duration-200 whitespace-nowrap ${
                     isActive 
-                      ? 'border-vibrant-orange text-vibrant-orange scale-105' 
+                      ? 'border-blue-600 text-blue-600 scale-105' 
                       : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -431,7 +440,7 @@ export default function PersonalInformation() {
                 {/* About me Card */}
                 <div className="glass-card p-6 rounded-3xl space-y-4">
                   <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-vibrant-orange" /> Professional Summary
+                    <Sparkles className="w-5 h-5 text-blue-600" /> Professional Summary
                   </h3>
                   <p className="text-sm text-slate-600 leading-relaxed font-sans">
                     {bio}
@@ -450,14 +459,14 @@ export default function PersonalInformation() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {projects.map((proj) => (
-                      <div key={proj.id} className="p-5 rounded-2xl bg-white border border-slate-200/60 shadow-sm flex flex-col justify-between h-52 hover:-translate-y-1 hover:border-orange-500/20 hover:shadow-md transition-all duration-300 relative group">
+                      <div key={proj.id} className="p-5 rounded-2xl bg-white border border-slate-200/60 shadow-sm flex flex-col justify-between h-52 hover:-translate-y-1 hover:border-blue-500/20 hover:shadow-md transition-all duration-300 relative group">
                         
                         <div className="absolute top-4 right-4 flex items-center gap-2">
                           <button 
                             onClick={() => toggleStarProject(proj.id)}
                             className={`p-1.5 rounded-lg border transition-all ${
                               starredProjects[proj.id]
-                                ? 'bg-orange-50 text-vibrant-orange border-orange-200' 
+                                ? 'bg-blue-50 text-blue-600 border-blue-200' 
                                 : 'bg-slate-50 text-slate-400 border-slate-200 hover:text-slate-600'
                             }`}
                             title="Star Project"
@@ -475,14 +484,14 @@ export default function PersonalInformation() {
                         </div>
 
                         <div className="space-y-2 pr-16">
-                          <h4 className="text-sm font-bold text-[#261812] group-hover:text-vibrant-orange transition-colors truncate">{proj.title}</h4>
+                          <h4 className="text-sm font-bold text-[#261812] group-hover:text-blue-600 transition-colors truncate">{proj.title}</h4>
                           <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">{proj.desc}</p>
                         </div>
 
                         <div className="space-y-3">
                           <div className="flex flex-wrap gap-1.5">
                             {proj.tech.map((t, idx) => (
-                              <span key={idx} className="px-2 py-0.5 rounded bg-[#fff1eb] text-vibrant-orange text-[9px] font-extrabold uppercase tracking-wide">
+                              <span key={idx} className="px-2 py-0.5 rounded bg-[#fff1eb] text-blue-600 text-[9px] font-extrabold uppercase tracking-wide">
                                 {t}
                               </span>
                             ))}
@@ -491,7 +500,7 @@ export default function PersonalInformation() {
                             <span className="text-[10px] text-slate-400 font-semibold flex items-center gap-1">
                               ⭐ {proj.stars} stars
                             </span>
-                            <a href={proj.link} className="text-[10px] font-bold text-vibrant-orange hover:underline inline-flex items-center gap-1">
+                            <a href={proj.link} className="text-[10px] font-bold text-blue-600 hover:underline inline-flex items-center gap-1">
                               View Repository <ArrowUpRight className="w-3 h-3" />
                             </a>
                           </div>
@@ -511,7 +520,7 @@ export default function PersonalInformation() {
                           placeholder="e.g. Serverless DB Query Scheduler"
                           value={newProjTitle}
                           onChange={(e) => setNewProjTitle(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none"
                         />
                       </div>
                       <div className="space-y-1">
@@ -521,7 +530,7 @@ export default function PersonalInformation() {
                           placeholder="e.g. Go, AWS Lambda, DynamoDB"
                           value={newProjTech}
                           onChange={(e) => setNewProjTech(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -532,10 +541,10 @@ export default function PersonalInformation() {
                         value={newProjDesc}
                         onChange={(e) => setNewProjDesc(e.target.value)}
                         rows="2"
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none"
                       />
                     </div>
-                    <button type="submit" className="px-6 py-2.5 bg-[#261812] text-white rounded-xl text-xs font-bold hover:bg-vibrant-orange transition-all flex items-center gap-2">
+                    <button type="submit" className="px-6 py-2.5 bg-[#261812] text-white rounded-xl text-xs font-bold hover:bg-blue-600 transition-all flex items-center gap-2">
                       <Plus className="w-4 h-4" /> Add to Showcase Portfolio
                     </button>
                   </form>
@@ -550,7 +559,7 @@ export default function PersonalInformation() {
                 <div className="glass-card p-6 rounded-3xl space-y-6">
                   <div>
                     <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
-                      <Award className="w-5 h-5 text-vibrant-orange" /> Verified Certificates
+                      <Award className="w-5 h-5 text-blue-600" /> Verified Certificates
                     </h3>
                     <p className="text-xs text-slate-500">Credly-compatible path completions</p>
                   </div>
@@ -559,7 +568,7 @@ export default function PersonalInformation() {
                     {certificates.map((cert) => (
                       <div 
                         key={cert.id} 
-                        className="p-4 rounded-2xl bg-white border border-slate-100 shadow-sm flex flex-col gap-3 hover:border-orange-500/10 hover:shadow-md transition-all cursor-pointer"
+                        className="p-4 rounded-2xl bg-white border border-slate-100 shadow-sm flex flex-col gap-3 hover:border-blue-500/10 hover:shadow-md transition-all cursor-pointer"
                         onClick={() => setSelectedCert(cert)}
                       >
                         <div className="flex items-center gap-3">
@@ -582,7 +591,7 @@ export default function PersonalInformation() {
 
                         <div className="flex justify-between items-center border-t border-slate-100 pt-3 text-[9px] font-bold text-slate-400">
                           <span>Issued {cert.date}</span>
-                          <span className="text-vibrant-orange hover:underline inline-flex items-center gap-0.5">
+                          <span className="text-blue-600 hover:underline inline-flex items-center gap-0.5">
                             Verify Credential <ExternalLink className="w-2.5 h-2.5" />
                           </span>
                         </div>
@@ -619,11 +628,11 @@ export default function PersonalInformation() {
                   <div className="h-52 flex items-end justify-between px-4 pt-6 border-b border-slate-200/70">
                     {weeklyHours.map((d, index) => (
                       <div key={index} className="flex flex-col items-center gap-2 w-1/12 group cursor-pointer">
-                        <span className="text-[10px] font-extrabold text-vibrant-orange opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <span className="text-[10px] font-extrabold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           {d.hours}h
                         </span>
                         <div 
-                          className="w-full bg-gradient-to-t from-vibrant-orange to-amber-500 rounded-t-lg group-hover:brightness-110 transition-all duration-300 shadow-sm"
+                          className="w-full bg-gradient-to-t from-blue-600 to-indigo-500 rounded-t-lg group-hover:brightness-110 transition-all duration-300 shadow-sm"
                           style={{ height: `${(d.hours / 7.0) * 100}%` }}
                         />
                         <span className="text-[10px] font-bold text-slate-400 mt-2">{d.day}</span>
@@ -644,10 +653,10 @@ export default function PersonalInformation() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-xs font-bold">
                         <span className="text-slate-800">AI & ML Specialist Path</span>
-                        <span className="text-vibrant-orange font-extrabold">65% Complete</span>
+                        <span className="text-blue-600 font-extrabold">65% Complete</span>
                       </div>
                       <div className="h-2 w-full bg-[#fcece7] rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-vibrant-orange to-amber-500 rounded-full" style={{ width: '65%' }}></div>
+                        <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full" style={{ width: '65%' }}></div>
                       </div>
                     </div>
 
@@ -655,10 +664,10 @@ export default function PersonalInformation() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-xs font-bold">
                         <span className="text-slate-800">Full-Stack Developer Path</span>
-                        <span className="text-amber-500 font-extrabold">40% Complete</span>
+                        <span className="text-blue-500 font-extrabold">40% Complete</span>
                       </div>
-                      <div className="h-2 w-full bg-amber-500/10 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 rounded-full" style={{ width: '40%' }}></div>
+                      <div className="h-2 w-full bg-blue-500/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full" style={{ width: '40%' }}></div>
                       </div>
                     </div>
 
@@ -729,7 +738,7 @@ export default function PersonalInformation() {
             <div className="glass-card p-6 rounded-3xl space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-vibrant-orange" /> Learning Badges & Achievements
+                  <Trophy className="w-5 h-5 text-blue-600" /> Learning Badges & Achievements
                 </h3>
                 <p className="text-xs text-slate-500 font-semibold">Gamified tasks unlocked during path completions. Claim reward milestones below.</p>
               </div>
@@ -751,7 +760,7 @@ export default function PersonalInformation() {
                           <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex flex-col items-end">
-                          <span className="text-xs font-black text-vibrant-orange">{ach.points}</span>
+                          <span className="text-xs font-black text-blue-600">{ach.points}</span>
                           {ach.unlocked ? (
                             <span className="text-[9px] font-bold text-[#00B894] uppercase flex items-center gap-0.5">
                               <CheckCircle2 className="w-2.5 h-2.5 fill-current" /> UNLOCKED
@@ -797,21 +806,21 @@ export default function PersonalInformation() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" 
                     src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=400" 
                   />
-                  <div className="absolute top-4 right-4 bg-white/80 p-2 rounded-full border border-slate-100 shadow-sm cursor-pointer hover:bg-white text-vibrant-orange">
+                  <div className="absolute top-4 right-4 bg-white/80 p-2 rounded-full border border-slate-100 shadow-sm cursor-pointer hover:bg-white text-blue-600">
                     <Bookmark className="w-4 h-4 fill-current" />
                   </div>
                 </div>
                 <div className="p-5 flex-grow flex flex-col justify-between space-y-4">
                   <div className="space-y-2 text-left">
-                    <span className="text-[10px] font-extrabold text-vibrant-orange uppercase tracking-wider">Advanced React</span>
+                    <span className="text-[10px] font-extrabold text-blue-600 uppercase tracking-wider">Advanced React</span>
                     <h4 className="text-sm font-bold text-[#261812] line-clamp-2 leading-relaxed">React Concurrent Mode & Render Optimization</h4>
                     <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">Master transitions, deferred values, suspense, and virtual lists render techniques.</p>
                   </div>
                   <div className="flex justify-between items-center border-t border-slate-100 pt-4">
                     <span className="text-xs font-bold text-[#261812] flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-vibrant-orange" /> 12.5 hrs
+                      <Clock className="w-3.5 h-3.5 text-blue-600" /> 12.5 hrs
                     </span>
-                    <Link to="/courses" className="px-4 py-2 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-vibrant-orange transition-all">
+                    <Link to="/courses" className="px-4 py-2 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-blue-600 transition-all">
                       Resume Course
                     </Link>
                   </div>
@@ -826,7 +835,7 @@ export default function PersonalInformation() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" 
                     src="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&q=80&w=400" 
                   />
-                  <div className="absolute top-4 right-4 bg-white/80 p-2 rounded-full border border-slate-100 shadow-sm cursor-pointer hover:bg-white text-vibrant-orange">
+                  <div className="absolute top-4 right-4 bg-white/80 p-2 rounded-full border border-slate-100 shadow-sm cursor-pointer hover:bg-white text-blue-600">
                     <Bookmark className="w-4 h-4 fill-current" />
                   </div>
                 </div>
@@ -838,9 +847,9 @@ export default function PersonalInformation() {
                   </div>
                   <div className="flex justify-between items-center border-t border-slate-100 pt-4">
                     <span className="text-xs font-bold text-[#261812] flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-vibrant-orange" /> 16 hrs
+                      <Clock className="w-3.5 h-3.5 text-blue-600" /> 16 hrs
                     </span>
-                    <Link to="/courses" className="px-4 py-2 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-vibrant-orange transition-all">
+                    <Link to="/courses" className="px-4 py-2 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-blue-600 transition-all">
                       Resume Course
                     </Link>
                   </div>
@@ -866,7 +875,7 @@ export default function PersonalInformation() {
                     if (activity === 1) squareColor = 'bg-[#ffd2be]';
                     if (activity === 2) squareColor = 'bg-[#ffa477]';
                     if (activity === 3) squareColor = 'bg-[#ff7632]';
-                    if (activity === 4) squareColor = 'bg-vibrant-orange';
+                    if (activity === 4) squareColor = 'bg-blue-600';
 
                     return (
                       <div 
@@ -884,7 +893,7 @@ export default function PersonalInformation() {
                     <div className="w-[11px] h-[11px] bg-[#ffd2be] rounded-[2px]" />
                     <div className="w-[11px] h-[11px] bg-[#ffa477] rounded-[2px]" />
                     <div className="w-[11px] h-[11px] bg-[#ff7632] rounded-[2px]" />
-                    <div className="w-[11px] h-[11px] bg-vibrant-orange rounded-[2px]" />
+                    <div className="w-[11px] h-[11px] bg-blue-600 rounded-[2px]" />
                     <span className="ml-1">More Study</span>
                   </div>
                 </div>
@@ -899,7 +908,7 @@ export default function PersonalInformation() {
 
                   {/* Event 1 */}
                   <div className="relative group">
-                    <div className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-vibrant-orange ring-4 ring-white shadow-sm transition-transform group-hover:scale-125" />
+                    <div className="absolute -left-[25px] top-1 w-3 h-3 rounded-full bg-blue-600 ring-4 ring-white shadow-sm transition-transform group-hover:scale-125" />
                     <div className="space-y-1">
                       <span className="text-[10px] font-bold text-slate-400">TODAY • 2:15 PM</span>
                       <p className="text-sm font-bold text-[#261812]">Completed Lab: Optimizing Index Scans</p>
@@ -941,7 +950,7 @@ export default function PersonalInformation() {
               <div className="lg:col-span-8">
                 <div className="glass-card p-6 rounded-3xl space-y-6">
                   <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
-                    <Settings className="w-5 h-5 text-vibrant-orange" /> Personal Profile Settings
+                    <Settings className="w-5 h-5 text-blue-600" /> Personal Profile Settings
                   </h3>
                   
                   <form onSubmit={saveSettings} className="space-y-4">
@@ -952,7 +961,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                       <div className="space-y-1.5 text-left">
@@ -961,7 +970,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={role}
                           onChange={(e) => setRole(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                     </div>
@@ -973,7 +982,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                       <div className="space-y-1.5 text-left">
@@ -994,7 +1003,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={githubUrl}
                           onChange={(e) => setGithubUrl(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                       <div className="space-y-1.5 text-left">
@@ -1003,7 +1012,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={linkedinUrl}
                           onChange={(e) => setLinkedinUrl(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                       <div className="space-y-1.5 text-left">
@@ -1012,7 +1021,7 @@ export default function PersonalInformation() {
                           type="text" 
                           value={twitterUrl}
                           onChange={(e) => setTwitterUrl(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                         />
                       </div>
                     </div>
@@ -1023,11 +1032,11 @@ export default function PersonalInformation() {
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
                         rows="3"
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-vibrant-orange focus:outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-blue-600 focus:outline-none bg-white"
                       />
                     </div>
 
-                    <button type="submit" className="px-8 py-3 bg-vibrant-orange text-white rounded-xl text-xs font-bold hover:brightness-110 active:scale-95 transition-all">
+                    <button type="submit" className="px-8 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold hover:brightness-110 active:scale-95 transition-all">
                       Save Profile Changes
                     </button>
                   </form>
@@ -1040,16 +1049,16 @@ export default function PersonalInformation() {
                 {/* Subscription Info Card */}
                 <div className="glass-card p-6 rounded-3xl space-y-6">
                   <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
-                    <CreditCard className="w-5 h-5 text-vibrant-orange" /> Subscription Plan
+                    <CreditCard className="w-5 h-5 text-blue-600" /> Subscription Plan
                   </h3>
 
-                  <div className="p-4 rounded-2xl bg-gradient-to-tr from-vibrant-orange/10 to-amber-500/10 border border-vibrant-orange/30 space-y-4">
+                  <div className="p-4 rounded-2xl bg-gradient-to-tr from-blue-600/10 to-indigo-500/10 border border-blue-600/30 space-y-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className="text-[10px] font-extrabold text-vibrant-orange uppercase tracking-wide">Active Subscription</span>
+                        <span className="text-[10px] font-extrabold text-blue-600 uppercase tracking-wide">Active Subscription</span>
                         <h4 className="text-base font-bold text-[#261812]">Iconic Hub Pro</h4>
                       </div>
-                      <span className="text-lg font-black text-vibrant-orange">$29<span className="text-[10px] font-bold text-slate-500">/mo</span></span>
+                      <span className="text-lg font-black text-blue-600">$29<span className="text-[10px] font-bold text-slate-500">/mo</span></span>
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed">
@@ -1057,13 +1066,35 @@ export default function PersonalInformation() {
                     </p>
 
                     <div className="flex flex-col gap-2">
-                      <button type="button" className="w-full py-2.5 bg-vibrant-orange text-white rounded-xl text-xs font-bold hover:brightness-110 transition-all">
+                      <button type="button" className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold hover:brightness-110 transition-all">
                         Manage Payment
                       </button>
                       <button type="button" className="w-full py-2.5 border border-slate-200 hover:border-red-500 hover:text-red-500 rounded-xl text-xs font-bold text-slate-600 bg-white transition-all">
                         Cancel Subscription
                       </button>
                     </div>
+                  </div>
+                </div>
+
+                {/* Account Actions Card */}
+                <div className="glass-card p-6 rounded-3xl space-y-6">
+                  <h3 className="text-lg font-bold text-[#261812] flex items-center gap-2">
+                    <User className="w-5 h-5 text-blue-600" /> Account Actions
+                  </h3>
+                  <div className="space-y-4">
+                    <p className="text-xs text-slate-500 leading-relaxed text-left">
+                      Sign out of your session on this device. Your local progress metrics are automatically synchronized.
+                    </p>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        alert('Logging out...');
+                        navigate('/');
+                      }}
+                      className="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 hover:border-red-300 rounded-xl text-xs font-bold transition-all"
+                    >
+                      Logout Session
+                    </button>
                   </div>
                 </div>
 
@@ -1086,12 +1117,12 @@ export default function PersonalInformation() {
               </button>
               
               <div className="text-center space-y-4">
-                <div className="mx-auto w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-vibrant-orange">
+                <div className="mx-auto w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                   <Award className="w-8 h-8" />
                 </div>
                 
                 <div className="space-y-1">
-                  <span className="text-[10px] font-extrabold text-vibrant-orange uppercase tracking-wider">VERIFIED DIPLOMA</span>
+                  <span className="text-[10px] font-extrabold text-blue-600 uppercase tracking-wider">VERIFIED DIPLOMA</span>
                   <h3 className="text-xl font-black text-[#261812]">{selectedCert.title}</h3>
                   <p className="text-xs text-slate-500">Issued to Ashwin by {selectedCert.issuer}</p>
                 </div>
@@ -1099,7 +1130,7 @@ export default function PersonalInformation() {
                 {/* Certificate visual mock */}
                 <div className="border-[8px] border-double border-slate-200 p-6 bg-slate-50 rounded-2xl relative overflow-hidden">
                   {/* Subtle seal */}
-                  <div className="absolute right-4 bottom-4 w-12 h-12 rounded-full border-2 border-orange-200/50 flex items-center justify-center text-[8px] font-bold text-orange-400/50 rotate-12">
+                  <div className="absolute right-4 bottom-4 w-12 h-12 rounded-full border-2 border-blue-200/50 flex items-center justify-center text-[8px] font-bold text-blue-400/50 rotate-12">
                     GOLD SEAL
                   </div>
                   <div className="text-center space-y-2 select-none">
@@ -1107,7 +1138,7 @@ export default function PersonalInformation() {
                     <span className="text-xs font-serif italic text-slate-600 block">This credentials certify that</span>
                     <span className="text-lg font-bold text-[#261812] block tracking-wide">{name}</span>
                     <span className="text-xs font-serif italic text-slate-600 block">has successfully mastered all milestones in the career path</span>
-                    <span className="text-sm font-extrabold text-vibrant-orange block">{selectedCert.title}</span>
+                    <span className="text-sm font-extrabold text-blue-600 block">{selectedCert.title}</span>
                   </div>
                 </div>
 
@@ -1122,7 +1153,7 @@ export default function PersonalInformation() {
                       triggerToast('Credential URL copied to clipboard! 📋');
                       setSelectedCert(null);
                     }}
-                    className="flex-1 py-3 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-vibrant-orange transition-all"
+                    className="flex-1 py-3 bg-[#261812] text-white text-xs font-bold rounded-xl hover:bg-blue-600 transition-all"
                   >
                     Copy Shareable Link
                   </button>
@@ -1131,7 +1162,7 @@ export default function PersonalInformation() {
                       triggerToast('Downloading PDF credential file...');
                       setSelectedCert(null);
                     }}
-                    className="flex-1 py-3 border border-slate-200 hover:border-vibrant-orange hover:text-vibrant-orange text-xs font-bold rounded-xl text-slate-600 bg-white transition-all"
+                    className="flex-1 py-3 border border-slate-200 hover:border-blue-600 hover:text-blue-600 text-xs font-bold rounded-xl text-slate-600 bg-white transition-all"
                   >
                     Download PDF
                   </button>

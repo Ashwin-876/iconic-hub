@@ -83,7 +83,7 @@ export default function Quizzes() {
                 
                 let optionStyle = 'border-surface-stroke bg-slate-50 text-on-surface-variant hover:border-slate-300';
                 if (isSelected) {
-                  optionStyle = 'border-vibrant-orange bg-orange-500/5 text-vibrant-orange font-semibold';
+                  optionStyle = 'border-blue-600 bg-blue-500/5 text-blue-600 font-semibold';
                 }
                 if (submitted) {
                   if (isCorrect) {
@@ -121,7 +121,7 @@ export default function Quizzes() {
             <button
               onClick={handleSubmit}
               disabled={Object.keys(selectedAnswers).length < QUESTIONS.length}
-              className={`px-6 py-2.5 bg-vibrant-orange text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5 ${
+              className={`px-6 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5 ${
                 Object.keys(selectedAnswers).length < QUESTIONS.length ? 'opacity-40 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
               }`}
             >
@@ -132,7 +132,7 @@ export default function Quizzes() {
         ) : (
           <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-50 rounded-2xl border border-surface-stroke">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-vibrant-orange/10 rounded-xl text-vibrant-orange">
+              <div className="p-3 bg-blue-600/10 rounded-xl text-blue-600">
                 <Award className="w-6 h-6" />
               </div>
               <div className="text-left space-y-0.5">

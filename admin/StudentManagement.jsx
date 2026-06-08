@@ -178,9 +178,9 @@ export default function StudentManagement() {
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Total Learning Hours</p>
-              <h3 className="text-xl font-extrabold text-orange-400 tracking-tight">384 hrs</h3>
+              <h3 className="text-xl font-extrabold text-blue-400 tracking-tight">384 hrs</h3>
             </div>
-            <div className="p-2 bg-orange-500/10 rounded-lg text-orange-400 border border-orange-500/20">
+            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400 border border-blue-500/20">
               <Clock className="w-4 h-4" />
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function StudentManagement() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search student name or email..."
-              className="w-full bg-slate-950 border border-slate-900 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
+              className="w-full bg-slate-950 border border-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
             />
           </div>
 
@@ -226,7 +226,7 @@ export default function StudentManagement() {
             <select 
               value={pathFilter}
               onChange={(e) => setPathFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
             >
               <option value="All">All Learning Paths</option>
               <option value="AI Engineer">AI Engineer</option>
@@ -241,7 +241,7 @@ export default function StudentManagement() {
             <select 
               value={skillFilter}
               onChange={(e) => setSkillFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
             >
               <option value="All">All Skill Levels</option>
               <option value="Beginner">Beginners</option>
@@ -255,7 +255,7 @@ export default function StudentManagement() {
             <select 
               value={progressFilter}
               onChange={(e) => setProgressFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+              className="bg-slate-950 border border-slate-900 text-xs text-slate-300 rounded-xl pl-9 pr-8 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
             >
               <option value="All">All Progress Percent</option>
               <option value="high">High (&ge;70%)</option>
@@ -293,7 +293,7 @@ export default function StudentManagement() {
                 >
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500/10 to-orange-500/10 border border-white/5 flex items-center justify-center font-extrabold text-white text-xs shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500/10 to-blue-500/10 border border-white/5 flex items-center justify-center font-extrabold text-white text-xs shrink-0">
                         {student.avatar}
                       </div>
                       <div>
@@ -306,7 +306,7 @@ export default function StudentManagement() {
                   <td className="p-4">
                     <span className={`px-2 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider ${
                       student.skillLevel === 'Beginner' ? 'bg-cyan-500/10 text-cyan-400' :
-                      student.skillLevel === 'Intermediate' ? 'bg-orange-500/10 text-orange-400' : 'bg-purple-500/10 text-purple-400'
+                      student.skillLevel === 'Intermediate' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'
                     }`}>
                       {student.skillLevel}
                     </span>
@@ -314,7 +314,7 @@ export default function StudentManagement() {
                   <td className="p-4">
                     <div className="flex items-center gap-2">
                       <div className="w-16 bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-orange-500 h-full" style={{ width: `${student.progress}%` }}></div>
+                        <div className="bg-blue-500 h-full" style={{ width: `${student.progress}%` }}></div>
                       </div>
                       <span className="font-mono text-[10px] text-slate-400">{student.progress}%</span>
                     </div>
@@ -369,7 +369,7 @@ export default function StudentManagement() {
 
               {/* Student basic profile card */}
               <div className="flex items-center gap-4 bg-slate-900/20 p-4 rounded-2xl border border-white/5">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-500 to-orange-500 flex items-center justify-center font-extrabold text-white text-base">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center font-extrabold text-white text-base">
                   {selectedStudent.avatar}
                 </div>
                 <div>
@@ -386,7 +386,7 @@ export default function StudentManagement() {
                 </div>
                 <div className="p-3 bg-slate-900/40 border border-slate-900 rounded-xl">
                   <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Learning Hours</span>
-                  <p className="text-sm font-bold text-orange-400 mt-1">{selectedStudent.learningHours} hrs</p>
+                  <p className="text-sm font-bold text-blue-400 mt-1">{selectedStudent.learningHours} hrs</p>
                 </div>
               </div>
 
@@ -404,7 +404,7 @@ export default function StudentManagement() {
                   <select 
                     value={selectedCourseToAssign}
                     onChange={(e) => setSelectedCourseToAssign(e.target.value)}
-                    className="flex-1 bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-orange-500 appearance-none cursor-pointer"
+                    className="flex-1 bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl px-3 py-2.5 outline-none focus:border-blue-500 appearance-none cursor-pointer"
                   >
                     <option>Docker Orchestration</option>
                     <option>Generative AI Mastery</option>
@@ -414,7 +414,7 @@ export default function StudentManagement() {
                   
                   <button 
                     onClick={handleAssignCourse}
-                    className="px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center gap-1 shrink-0"
+                    className="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center gap-1 shrink-0"
                   >
                     <PlusCircle className="w-3.5 h-3.5" /> Assign
                   </button>
@@ -466,11 +466,11 @@ export default function StudentManagement() {
                     value={notifText}
                     onChange={(e) => setNotifText(e.target.value)}
                     placeholder="Message student e.g. Great progress on Docker sandbox!"
-                    className="w-full bg-slate-900 border border-slate-800 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
+                    className="w-full bg-slate-900 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl py-2.5 px-4 text-xs text-white placeholder-slate-600 outline-none transition-all"
                   />
                   <button 
                     type="submit"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-orange-500 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-blue-500 transition-colors"
                   >
                     <Send className="w-4 h-4" />
                   </button>

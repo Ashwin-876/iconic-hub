@@ -8,9 +8,55 @@ export default function Certificates({ studentName = 'Ashwin', courseTitle = 'Ad
 
   return (
     <div className="space-y-6 text-left max-w-4xl mx-auto">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          html, body {
+            width: 297mm;
+            height: 210mm;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden;
+            background: white !important;
+            visibility: hidden;
+          }
+          /* Hide normal screen elements */
+          header, nav, footer, aside, button, .no-print {
+            display: none !important;
+          }
+          #printable-certificate {
+            visibility: visible;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 265mm !important;
+            height: 180mm !important;
+            box-sizing: border-box;
+            margin: 0 !important;
+            padding: 2.5rem !important;
+            border: 12px double #e2e8f0 !important;
+            border-radius: 24px !important;
+            box-shadow: none !important;
+            background-color: white !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          #printable-certificate * {
+            visibility: visible;
+          }
+          @page {
+            size: A4 landscape;
+            margin: 0;
+          }
+        }
+      `}} />
       
       {/* Control Buttons */}
-      <div className="flex justify-between items-center pb-4 border-b border-surface-stroke">
+      <div className="flex justify-between items-center pb-4 border-b border-surface-stroke no-print">
         <div>
           <h3 className="text-sm font-bold text-on-background">Your Certificate</h3>
           <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mt-0.5">Verified Completion Credential</p>
@@ -26,17 +72,17 @@ export default function Certificates({ studentName = 'Ashwin', courseTitle = 'Ad
           </button>
         </div>
       </div>
-
+ 
       {/* Verified Certificate Card Graphic Frame */}
-      <div className="w-full bg-white border-[12px] border-double border-surface-stroke rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-md flex flex-col items-center justify-between text-center min-h-[500px] border-slate-200">
+      <div id="printable-certificate" className="w-full bg-white border-[12px] border-double border-surface-stroke rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-md flex flex-col items-center justify-between text-center min-h-[500px] border-slate-200">
         
         {/* Aesthetic background badges */}
-        <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-vibrant-orange/5 rounded-full blur-[80px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-amber-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/5 rounded-full blur-[80px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-blue-500/5 rounded-full blur-[80px] pointer-events-none"></div>
 
         {/* Certificate Header logo */}
         <div className="space-y-2 relative z-10 flex flex-col items-center">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-vibrant-orange to-amber-500 flex items-center justify-center text-white shadow-md shadow-vibrant-orange/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-blue-600/20">
             <Terminal className="w-6 h-6" />
           </div>
           <span className="text-sm font-extrabold tracking-widest text-slate-500 uppercase">Iconic Hub Academy</span>
@@ -52,7 +98,7 @@ export default function Certificates({ studentName = 'Ashwin', courseTitle = 'Ad
           <p className="text-xs text-slate-500 max-w-lg leading-relaxed mx-auto">
             has successfully completed the coursework requirements and practical sandbox evaluator labs for the verified syllabus
           </p>
-          <h3 className="text-lg font-bold text-vibrant-orange max-w-xl mx-auto leading-snug">
+          <h3 className="text-lg font-bold text-blue-600 max-w-xl mx-auto leading-snug">
             {courseTitle}
           </h3>
         </div>

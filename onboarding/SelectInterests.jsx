@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layers } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 
 const INTERESTS = [
@@ -36,33 +35,34 @@ export default function SelectInterests() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#060814] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute bottom-[20%] left-[20%] w-[350px] h-[350px] bg-purple-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="min-h-screen bg-white text-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="w-full max-w-3xl relative z-10 space-y-8 text-center">
           {/* Header */}
           <div className="space-y-4">
-            <div className="inline-flex items-center space-x-2 bg-slate-800/85 border border-slate-700/50 rounded-full py-1 px-4 self-center backdrop-blur-md">
-              <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">Step 4 of 6: Interests</span>
+            <div className="inline-flex items-center bg-blue-50 border border-blue-200 rounded-full py-1.5 px-4 self-center">
+              <span className="text-xs font-bold tracking-wider uppercase text-blue-600">Step 4 of 6: Interests</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white">What fields are you interested in?</h1>
-            <p className="text-sm text-slate-400 max-w-lg mx-auto">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">What fields are you interested in?</h1>
+            <p className="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
               Select one or more topics you wish to explore. We'll curate supplementary reading guides.
             </p>
           </div>
 
           {/* Chips Grid */}
-          <div className="flex flex-wrap justify-center gap-3.5 max-w-2xl mx-auto py-4">
+          <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto py-4">
             {INTERESTS.map((interest) => {
               const isSelected = selected.includes(interest.id);
               return (
                 <button
                   key={interest.id}
                   onClick={() => handleToggle(interest.id)}
-                  className={`px-5 py-3.5 rounded-2xl border text-sm font-semibold transition-all duration-300 ${
+                  className={`px-5 py-3 rounded-2xl border text-sm font-semibold transition-all duration-200 ${
                     isSelected
-                      ? 'border-orange-500 bg-orange-500/10 text-white shadow-md shadow-orange-500/5'
-                      : 'border-white/5 bg-slate-900/25 hover:border-slate-800 text-slate-400 hover:text-slate-200'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm shadow-blue-100'
+                      : 'border-slate-200 bg-white hover:border-blue-300 text-slate-600 hover:text-slate-800'
                   }`}
                 >
                   {interest.label}
@@ -72,17 +72,17 @@ export default function SelectInterests() {
           </div>
 
           {/* Controls */}
-          <div className="flex justify-between items-center max-w-2xl mx-auto pt-6 border-t border-slate-900">
+          <div className="flex justify-between items-center max-w-2xl mx-auto pt-6 border-t border-slate-100">
             <button
               onClick={() => navigate('/onboarding/skill-level')}
-              className="px-6 py-3 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 font-semibold rounded-xl transition-all"
+              className="px-6 py-3 bg-white border border-slate-200 hover:border-slate-300 text-slate-600 font-semibold rounded-xl transition-all hover:shadow-sm"
             >
               Back
             </button>
             <button
               onClick={handleNext}
               disabled={selected.length === 0}
-              className={`px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl shadow-lg transition-all ${
+              className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-md shadow-blue-100 transition-all ${
                 selected.length === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
               }`}
             >

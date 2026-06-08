@@ -57,8 +57,8 @@ export default function Assignments() {
         <h3 className="text-sm font-bold text-on-background uppercase tracking-wider font-sans">Upload Solution</h3>
 
         {status === 'pending' && (
-          <label className="border-2 border-dashed border-surface-stroke hover:border-vibrant-orange hover:bg-orange-500/[0.02] rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300">
-            <Upload className="w-8 h-8 text-vibrant-orange animate-bounce" style={{ animationDuration: '3s' }} />
+          <label className="border-2 border-dashed border-surface-stroke hover:border-blue-600 hover:bg-blue-500/[0.02] rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300">
+            <Upload className="w-8 h-8 text-blue-600 animate-bounce" style={{ animationDuration: '3s' }} />
             <div className="text-center space-y-1">
               <span className="text-xs font-bold text-on-background">Drag & drop files here</span>
               <p className="text-[10px] text-slate-500">or click to browse your folders</p>
@@ -71,7 +71,7 @@ export default function Assignments() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="p-4 bg-slate-50 border border-surface-stroke rounded-2xl flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <FileText className="w-8 h-8 text-vibrant-orange shrink-0" />
+                <FileText className="w-8 h-8 text-blue-600 shrink-0" />
                 <div className="text-left min-w-0">
                   <h4 className="text-xs font-bold text-on-background truncate">{file.name}</h4>
                   <p className="text-[9px] text-slate-500">{(file.size / 1024).toFixed(1)} KB</p>
@@ -85,7 +85,7 @@ export default function Assignments() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 bg-vibrant-orange hover:bg-orange-600 text-white text-xs font-bold rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
               {submitting ? (
                 <span className="w-4 h-4 rounded-full border-2 border-t-transparent border-white animate-spin"></span>

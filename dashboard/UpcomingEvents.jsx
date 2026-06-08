@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, Award, Video } from 'lucide-react';
 
 const EVENTS = [
@@ -10,7 +11,7 @@ const EVENTS = [
     time: 'Starts in 2 hrs',
     date: 'Today, 8:00 PM',
     registered: false,
-    color: 'text-orange-500 bg-orange-50'
+    color: 'text-blue-500 bg-blue-50'
   },
   {
     id: 'e2',
@@ -25,8 +26,10 @@ const EVENTS = [
 ];
 
 export default function UpcomingEvents() {
-  const handleRegister = (title) => {
-    alert(`Successfully registered for: ${title}!`);
+  const navigate = useNavigate();
+
+  const handleRegister = (id) => {
+    navigate(`/events/register/${id}`);
   };
 
   return (
@@ -45,8 +48,8 @@ export default function UpcomingEvents() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">{event.type}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-vibrant-orange animate-ping"></span>
-                    <span className="text-[10px] font-bold text-vibrant-orange">{event.time}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span>
+                    <span className="text-[10px] font-bold text-blue-600">{event.time}</span>
                   </div>
                   <h3 className="text-sm font-bold text-on-background">{event.title}</h3>
                   <div className="text-[10px] font-medium text-slate-500">{event.date}</div>
@@ -54,7 +57,7 @@ export default function UpcomingEvents() {
               </div>
 
               <button
-                onClick={() => handleRegister(event.title)}
+                onClick={() => handleRegister(event.id)}
                 className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
                   event.registered
                     ? 'bg-slate-100 text-slate-500 cursor-default'

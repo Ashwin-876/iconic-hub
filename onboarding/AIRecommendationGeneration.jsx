@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cpu, Terminal, Sparkles } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 
 const LOGS = [
@@ -18,87 +17,85 @@ export default function AIRecommendationGeneration() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Increment progress counter
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
+        if (prev >= 100) { clearInterval(progressInterval); return 100; }
         return prev + 1;
       });
     }, 45);
-
     return () => clearInterval(progressInterval);
   }, []);
 
   useEffect(() => {
-    // Select log strings based on progress
-    const logIndex = Math.min(
-      Math.floor((progress / 100) * LOGS.length),
-      LOGS.length - 1
-    );
+    const logIndex = Math.min(Math.floor((progress / 100) * LOGS.length), LOGS.length - 1);
     setCurrentLog(LOGS[logIndex]);
-
     if (progress === 100) {
-      const redirectTimer = setTimeout(() => {
-        navigate('/dashboard');
-      }, 1000);
-      return () => clearTimeout(redirectTimer);
+      const t = setTimeout(() => navigate('/dashboard'), 1000);
+      return () => clearTimeout(t);
     }
   }, [progress, navigate]);
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#060814] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Glow */}
-        <div className="absolute top-[30%] left-[30%] w-[350px] h-[350px] bg-orange-600/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
-        <div className="absolute bottom-[30%] right-[30%] w-[350px] h-[350px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+      <div className="min-h-screen bg-white text-slate-800 flex items-center justify-center p-4 relative overflow-hidden">
 
-        <div className="w-full max-w-md relative z-10 text-center space-y-8">
-          {/* Animated CPU or Sparkle */}
-          <div className="relative mx-auto w-24 h-24 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border border-orange-500/20 border-t-orange-500 animate-spin" style={{ animationDuration: '2s' }}></div>
-            <div className="absolute inset-2 rounded-full border border-cyan-500/20 border-b-cyan-500 animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }}></div>
-            <div className="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-orange-500 shadow-lg">
-              <Sparkles className="w-6 h-6 animate-pulse" />
-            </div>
-          </div>
+        {/* Main card */}
+        <div className="w-full max-w-md relative z-10">
+          <div className="bg-white border border-slate-100 rounded-3xl shadow-2xl shadow-slate-200/80 p-10 text-center space-y-8">
 
-          {/* Heading */}
-          <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white">Generating Personalized Path</h2>
-            <p className="text-xs text-slate-500 font-mono">{currentLog}</p>
-          </div>
-
-          {/* Progress Bar Container */}
-          <div className="space-y-2">
-            <div className="w-full bg-slate-950 border border-slate-900 h-3 rounded-full overflow-hidden p-0.5">
+            {/* Animated spinning rings + Logo in circle */}
+            <div className="relative mx-auto w-36 h-36 flex items-center justify-center">
+              {/* Outer spinning ring */}
               <div
-                className="bg-gradient-to-r from-orange-500 to-amber-500 h-full rounded-full transition-all duration-75"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <div className="flex justify-between items-center text-[10px] font-mono text-slate-500">
-              <span>AI COPILOT CORE V2</span>
-              <span>{progress}%</span>
-            </div>
-          </div>
+                className="absolute inset-0 rounded-full border-[3px] border-purple-100 border-t-purple-500 animate-spin"
+                style={{ animationDuration: '2s' }}
+              />
+              {/* Middle spinning ring */}
+              <div
+                className="absolute inset-4 rounded-full border-[2px] border-blue-100 border-b-blue-400 animate-spin"
+                style={{ animationDuration: '3.5s', animationDirection: 'reverse' }}
+              />
+              {/* Inner glow */}
+              <div className="absolute inset-8 rounded-full bg-purple-500/10 blur-sm" />
 
-          {/* Tech Log Stack */}
-          <div className="glass-panel p-4 rounded-xl border border-white/5 bg-slate-950/60 text-left font-mono text-[10px] text-slate-500 space-y-1">
-            <div className="flex items-center space-x-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-              <span>INIT LEARNING_GRAPH ENGINE</span>
+              {/* Logo circle */}
+              <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-xl shadow-purple-200/60 flex-shrink-0 bg-white">
+                <img
+                  src="/iconic_logo.png"
+                  alt="Iconic Hub Logo"
+                  className="w-full h-full object-contain p-1"
+                />
+              </div>
             </div>
-            <div className="flex items-center space-x-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-              <span>LOAD CUSTOMIZER: {localStorage.getItem('onboarding_career_goal') || 'FULLSTACK'}</span>
+
+            {/* Heading */}
+            <div className="space-y-2">
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Generating Personalized Path</h2>
+              <p className="text-xs text-slate-400 font-mono tracking-wide animate-pulse">{currentLog}</p>
             </div>
-            <div className="flex items-center space-x-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-              <span>CALIBRATING: {localStorage.getItem('onboarding_skill_level') || 'BEGINNER'}</span>
+
+            {/* Progress Bar */}
+            <div className="space-y-2.5">
+              <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-purple-500 to-blue-500 h-full rounded-full transition-all duration-75 shadow-sm shadow-purple-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                <span>AI Copilot Core V2</span>
+                <span className="text-purple-500">{progress}%</span>
+              </div>
             </div>
+
+
+
+            {/* Brand footer */}
+            <div className="flex items-center justify-center space-x-2 pt-1">
+              <img src="/iconic_logo.png" alt="Iconic Hub" className="h-5 w-auto object-contain opacity-40" />
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Iconic Hub AI Engine</span>
+            </div>
+
           </div>
         </div>
       </div>

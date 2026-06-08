@@ -35,11 +35,11 @@ export default function DeveloperChallenges() {
               </div>
               <h3 className="text-sm font-bold text-on-background">{ch.title}</h3>
               <p className="text-[10px] text-slate-500 font-semibold flex items-center gap-1">
-                <Award className="w-3.5 h-3.5 text-vibrant-orange" />
+                <Award className="w-3.5 h-3.5 text-blue-600" />
                 <span>Earn {ch.points} XP / Points</span>
               </p>
             </div>
-            <button className="p-3 bg-vibrant-orange hover:bg-orange-600 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0">
+            <button className="p-3 bg-blue-600 hover:bg-blue-600 active:scale-95 transition-all text-white rounded-xl shadow-md shrink-0">
               <Play className="w-4 h-4 fill-current" />
             </button>
           </div>
