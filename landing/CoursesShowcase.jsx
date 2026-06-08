@@ -377,7 +377,7 @@ export default function CoursesShowcase() {
                       </div>
 
                       <Link 
-                        to={`/courses/${course.id}`}
+                        to="/dashboard"
                         className="text-xs font-bold text-[#6E2ED8] group-hover:text-[#5921B6] flex items-center space-x-1 py-1.5 px-3 rounded-lg hover:bg-purple-50 transition-all duration-300"
                       >
                         <span>Explore</span>
@@ -394,7 +394,7 @@ export default function CoursesShowcase() {
         {/* View All Button */}
         <div className="mt-16 text-center animate-fade-up">
           <Link 
-            to="/courses"
+            to="/dashboard"
             className="inline-flex items-center space-x-3 px-8 py-4 bg-[#0B1530] hover:bg-[#1E293B] text-white font-bold rounded-2xl shadow-xl hover:shadow-slate-900/10 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 group text-sm"
           >
             <span>Browse All Courses</span>

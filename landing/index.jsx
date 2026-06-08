@@ -26,7 +26,7 @@ export default function LandingPage() {
           {/* Nav links Desktop */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <a href="#" className="text-[#6E2ED8] font-bold">Home</a>
-            <Link to="/courses" className="text-[#64748B] hover:text-[#6E2ED8] font-semibold transition-colors">Course</Link>
+            <Link to="/dashboard" className="text-[#64748B] hover:text-[#6E2ED8] font-semibold transition-colors">Course</Link>
             <a href="#monitors" className="text-[#64748B] hover:text-[#6E2ED8] font-semibold transition-colors">Monitors</a>
             <a href="#testimonials" className="text-[#64748B] hover:text-[#6E2ED8] font-semibold transition-colors">Testimonials</a>
             <a href="#blog" className="text-[#64748B] hover:text-[#6E2ED8] font-semibold transition-colors">Blog</a>
@@ -81,7 +81,7 @@ export default function LandingPage() {
           <div>
             <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Platform</h5>
             <ul className="space-y-2 text-xs text-slate-500">
-              <li><Link to="/courses" className="hover:text-slate-300">Courses & Paths</Link></li>
+              <li><Link to="/dashboard" className="hover:text-slate-300">Courses & Paths</Link></li>
               <li><Link to="/dashboard" className="hover:text-slate-300">Code Sandbox</Link></li>
               <li><Link to="/ai-tutor" className="hover:text-slate-300">Ask AI Tutor</Link></li>
               <li><Link to="/community" className="hover:text-slate-300">Discussion Boards</Link></li>
