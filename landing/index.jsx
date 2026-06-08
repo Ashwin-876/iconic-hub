@@ -70,7 +70,7 @@ export default function LandingPage() {
           {/* Logo & description column */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <img src="/iconic_logo.png" alt="Iconic Hub" className="h-9 w-auto object-contain brightness-0 invert" />
+              <img src="/iconic_logo.png" alt="Iconic Hub" className="h-9 w-auto object-contain" />
             </div>
             <p className="text-xs text-slate-500 leading-relaxed">
               Accelerate your engineering journey. Write, learn, and build with cutting-edge tools and a 24/7 AI tutor co-pilot.
