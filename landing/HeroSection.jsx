@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play, ArrowRight, Users, BookOpen, Star, Award, Globe, Code, Headphones } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -44,6 +45,9 @@ function AnimatedCounter({ value, duration = 1500, suffix = "" }) {
 }
 
 export default function HeroSection() {
+  const navigate = useNavigate();
+  const [showVideo, setShowVideo] = useState(false);
+
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
   const descRef = useRef(null);
@@ -51,11 +55,11 @@ export default function HeroSection() {
   const cardsRef = useRef([]);
 
   const handleWatchVideo = () => {
-    alert('Playing introductory video...');
+    setShowVideo(true);
   };
 
   const handleGetStarted = () => {
-    alert('Getting started...');
+    navigate('/create-account');
   };
 
   useEffect(() => {
@@ -282,6 +286,28 @@ export default function HeroSection() {
           ))}
         </div>
       </div>
+
+      {/* Video Modal Overlay */}
+      {showVideo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 transition-all duration-300">
+          <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+            <button 
+              onClick={() => setShowVideo(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center font-bold text-sm transition-all"
+            >
+              ✕
+            </button>
+            <div className="aspect-video w-full bg-black flex items-center justify-center">
+              <video 
+                src="/AI_Video_Prompt_–_LMS_Learning.mp4" 
+                controls 
+                autoPlay 
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
