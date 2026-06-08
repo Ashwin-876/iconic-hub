@@ -7,6 +7,42 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+function AnimatedCounter({ value, duration = 1500, suffix = "" }) {
+  const [count, setCount] = React.useState(0);
+  const isFloat = String(value).includes('.');
+
+  React.useEffect(() => {
+    let startTime = null;
+    const end = parseFloat(String(value));
+
+    function animate(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percent = Math.min(progress / duration, 1);
+      // Ease out quad
+      const ease = percent * (2 - percent);
+      const current = ease * end;
+      
+      setCount(current);
+
+      if (progress < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }, [value, duration]);
+
+  const formatNumber = (num) => {
+    if (isFloat) return num.toFixed(1);
+    return Math.round(num).toLocaleString();
+  };
+
+  return <span>{formatNumber(count)}{suffix}</span>;
+}
+
 export default function HeroSection() {
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
@@ -204,18 +240,20 @@ export default function HeroSection() {
       <div className="w-full max-w-6xl mx-auto px-6 mt-16 z-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 bg-white/80 backdrop-blur-md border border-slate-200/50 p-6 rounded-[32px] shadow-sm">
           {[
-            { value: '50,000+', label: 'Active Learners', icon: <Users className="w-4 h-4 text-purple-600" />, color: 'bg-purple-100' },
-            { value: '1,500+', label: 'Expert Courses', icon: <BookOpen className="w-4 h-4 text-emerald-600" />, color: 'bg-emerald-100' },
-            { value: '4.8/5', label: 'Learner Rating', icon: <Star className="w-4 h-4 text-amber-600 fill-current" />, color: 'bg-amber-100' },
-            { value: '25,000+', label: 'Certifications Issued', icon: <Award className="w-4 h-4 text-blue-600" />, color: 'bg-blue-100' },
-            { value: '120+', label: 'Countries Reached', icon: <Globe className="w-4 h-4 text-pink-600" />, color: 'bg-pink-100' }
+            { value: 50000, suffix: '+', label: 'Active Learners', icon: <Users className="w-4 h-4 text-purple-600" />, color: 'bg-purple-100' },
+            { value: 1500, suffix: '+', label: 'Expert Courses', icon: <BookOpen className="w-4 h-4 text-emerald-600" />, color: 'bg-emerald-100' },
+            { value: 4.8, suffix: '/5', label: 'Learner Rating', icon: <Star className="w-4 h-4 text-amber-600 fill-current" />, color: 'bg-amber-100' },
+            { value: 25000, suffix: '+', label: 'Certifications Issued', icon: <Award className="w-4 h-4 text-blue-600" />, color: 'bg-blue-100' },
+            { value: 120, suffix: '+', label: 'Countries Reached', icon: <Globe className="w-4 h-4 text-pink-600" />, color: 'bg-pink-100' }
           ].map((stat, i) => (
             <div key={i} className="flex items-center gap-3 justify-start md:border-r last:border-0 border-slate-200/50 last:pr-0 pr-2">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0 ${stat.color}`}>
                 {stat.icon}
               </div>
               <div className="text-left">
-                <div className="text-sm font-extrabold text-[#0B1530]">{stat.value}</div>
+                <div className="text-sm font-extrabold text-[#0B1530]">
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                </div>
                 <div className="text-[10px] text-slate-500 font-bold leading-tight">{stat.label}</div>
               </div>
             </div>
